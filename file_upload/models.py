@@ -19,7 +19,7 @@ class picture(models.Model):
 	uploaded = models.DateTimeField(default = datetime.now) # time in which the picture was taken
 	description = models.TextField(default = " ", null=True) 
 	user = models.ForeignKey(AirpactUser, on_delete=models.CASCADE) #user object representing who uploaded this image
-	algorithmType = models.TextField(default = "uknown", null= True) # should only be "near_far" or "object_sky" and tells which algorithm to use to compute VR
+	algorithmType = models.TextField(default = "near_far", null= True) # should only be "near_far" or "object_sky" and tells which algorithm to use to compute VR
 	vr = models.FloatField(null=False, default=0) # user supplied estimation of what they think VR is
 	vrUnits = models.CharField(null = True, default = 'K', max_length = 1) # should only ever be "K" or "M" defining kilometers and miles and is used for display purposes only, everything is converted to KM on upload
 	objectSkyVr = models.FloatField(null = True, default = 0) # storage for object sky vr
@@ -109,19 +109,19 @@ class picture(models.Model):
 		#save the image
 		suf = SimpleUploadedFile(os.path.split(self.pic.name)[-1],tempHandle.read(),content_type=djangoType)
 		self.pictureWithCircles.save('%s.%s'%(os.path.splitext(suf.name)[0],fileExtension), suf, save=False)
-		print("CIRCLES URL IS:")
-		print(self.pictureWithCircles.url)
 	
 	def findTwoTargetContrastVr(self):
 		self.pic.seek(0)
 		#open image
 		image = Image.open(StringIO(self.pic.read()))
 
-		print("I have an image")
+		print("Have the image.")
+
 		#convert to RGB values for each pixel
 		pixelData = image.convert('RGB')
 
-		print("I have pixel data")
+
+		print("Have the pixel data")
 
 		#set up containers for red green and blue for each target
 		hRed = []
@@ -132,10 +132,12 @@ class picture(models.Model):
 		lBlue = []
 
 		#find the top left of the bounding box (this is based on the 200x200 px that we have all agreed upon it's probalbly going to have to change)
-		newHX = int(self.highX - 100)
-		newHY = int(self.highY - 100)
-		newLX = int(self.lowX - 100)
-		newLY = int(self.lowY - 100)
+		newHX = int(self.highX)
+		newHY = int(self.highY)
+		newLX = int(self.lowX)
+		newLY = int(self.lowY)
+
+		print("newHx: %d, newHY %d, newLx %d new LY %d", newHX, newHY, newLX, newLY)
 
 		if newHX < 0:
 			newHX  = 0;
@@ -146,11 +148,9 @@ class picture(models.Model):
 		if newLY < 0:
 			newLY = 0;
 
-		print("line 135")
-		print(pixelData)
 		#process high or "Far" target first
-		for x in range(newHX,201):
-			for y in range(newHY,201):
+		for x in range(newHX-100,newHX+100):
+			for y in range(newHY-100,newHY+100):
 				try:
 					R,G,B = pixelData.getpixel((x,y))
 					hRed.append(R)
@@ -159,11 +159,10 @@ class picture(models.Model):
 				except Exception:
 					print("Out of bounds when getting pixel data")
 
-		print("line 144")
 
 		#do the same for the low or "close" target
-		for x in range(newLX, 201):
-			for y in range(newLY, 201):
+		for x in range(newLX-100, newLX+100):
+			for y in range(newLY-100, newLY+100):
 				try:
 					R,G,B = pixelData.getpixel((x,y))
 					lRed.append(R)
@@ -172,13 +171,11 @@ class picture(models.Model):
 				except Exception:
 					print("Out of bounds at x:" + str(x) + "y:"+str(y))
 
-		print("line 154")
 		#now we need to run the function 3 times one for each color band then average them together
 		vrR = TwoTargetContrast(hRed,lRed,self.farTargetDistance,self.nearTargetDistance)
 		vrG = TwoTargetContrast(hGreen,lGreen,self.farTargetDistance,self.nearTargetDistance)
 		vrB = TwoTargetContrast(hBlue,lBlue,self.farTargetDistance,self.nearTargetDistance)
 
-		print("line 160")
 
 		print("answer: ")
 		print((abs((vrR[0] + vrG[0] + vrB[0]) / 3)))
@@ -196,15 +193,10 @@ class picture(models.Model):
 			self.skyDistance *= 1.60934
 
 	def save(self):
-		print("strating km conversion")
 		self.convertToKM()
-		print("starting cleaning of description")
 		self.cleanDescription()
-		print("saving circles")
 		self.generateCircles()
-		print("saving thumbnail")
 		self.generateThumbnail()
-		print("finding vr")
 
 		try:
 			if self.algorithmType == "near_far":
@@ -214,7 +206,6 @@ class picture(models.Model):
 		#else:
 			#self.findObjectSkyVr() // need to create this function
 
-		print("trying to save")
 		super(picture,self).save()
 
 	
