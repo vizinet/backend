@@ -115,13 +115,13 @@ class picture(models.Model):
 		#open image
 		image = Image.open(StringIO(self.pic.read()))
 
-		print("Have the image.")
+		#print("Have the image.")
 
 		#convert to RGB values for each pixel
 		pixelData = image.convert('RGB')
 
 
-		print("Have the pixel data")
+		#print("Have the pixel data")
 
 		#set up containers for red green and blue for each target
 		hRed = []
@@ -137,7 +137,7 @@ class picture(models.Model):
 		newLX = int(self.lowX)
 		newLY = int(self.lowY)
 
-		print("newHx: %d, newHY %d, newLx %d new LY %d", newHX, newHY, newLX, newLY)
+		#print("newHx: %d, newHY %d, newLx %d new LY %d", newHX, newHY, newLX, newLY)
 
 		if newHX < 0:
 			newHX  = 0;
@@ -177,8 +177,8 @@ class picture(models.Model):
 		vrB = TwoTargetContrast(hBlue,lBlue,self.farTargetDistance,self.nearTargetDistance)
 
 
-		print("answer: ")
-		print((abs((vrR[0] + vrG[0] + vrB[0]) / 3)))
+		#print("answer: ")
+		#print((abs((vrR[0] + vrG[0] + vrB[0]) / 3)))
 		#finally average the numbers togther
 		self.twoTargetContrastVr = (abs((vrR[0] + vrG[0] + vrB[0]) / 3))
 	

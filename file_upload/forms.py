@@ -16,7 +16,7 @@ def getChoices():
 	x = []
 	for g in T:
 		for i,k in g.items():
-			print(i)
+			#print(i)
 			x.append((k,k))
 	return x
 

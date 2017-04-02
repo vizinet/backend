@@ -1,6 +1,12 @@
 /* AIRPCTFIRE/STATIC*/
 body{
-  background-color: #e5e5e5;
+  background: url("/static/media/decoration/renier2.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  color:#000;
+    background-color:#333;
   width:100%;
   height: 100%;
 }
@@ -191,9 +197,12 @@ body{
 textarea#id_comment {height:50px; }
 
 .nav li a{
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
+}
+.navbar-default{
+  z-index:100;
 }
 
 .heading
