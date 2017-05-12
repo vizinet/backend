@@ -28,14 +28,14 @@ from convos.models import convoPage
 def index(request):
 	if request.user.is_certified is False:
 		return render_to_response('not_certified.html')
-	#if there is a file to upload
-
+	
+	#if there is a picture to upload
 	if request.method == 'POST':
 
 		form = picture_upload_form(request.POST, request.FILES)
 		
+		# Create a new picture object
 		if form.is_valid():
-			print("highX %d, highY %d, lowX %d, lowY %d," % (form.cleaned_data.get('highColorX'), form.cleaned_data.get('highColorY'), form.cleaned_data.get('lowColorX'), form.cleaned_data.get('lowColorY'))) 
 			newPic = picture(
 				pic = request.FILES['pic'], 
 				user=request.user, 
@@ -46,9 +46,12 @@ def index(request):
 				lowX=form.cleaned_data.get('lowColorX'), 
 				lowY=form.cleaned_data.get('lowColorY'), 
 				nearTargetDistance = form.cleaned_data.get('nearDistance'),
-				farTargetDistance = form.cleaned_data.get('farDistance'))
+				farTargetDistance = form.cleaned_data.get('farDistance'),
+				radiusHigh = form.cleaned_data.get('radiusFar'),
+				radiusLow = form.cleaned_data.get('radiusLow'));
 			newPic.save()
-
+			print("Value of the far radius: ");
+			print(form.cleaned_data.get('radiusFar'))
 			#Creating some conversation stuffs
 			conversations = convoPage(picture = newPic)
 			conversations.save()

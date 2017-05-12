@@ -2,12 +2,6 @@ from django import forms
 
 from file_upload.models import picture
 from file_upload.models import tag
-
-#from django.contrib.gis.geos import GEOSGeometry
-#from django.contrib.gis.db import models
-#from django.contrib.gis import forms 
-
-#from simple_autocomplete.widgets import AutoCompleteWidget
 from dal import autocomplete
 
 def getChoices():
@@ -34,11 +28,9 @@ class picture_upload_form(forms.Form):
 	highColorX = forms.DecimalField(label = "far Object X Coordinate", widget=forms.HiddenInput())
 	highColorY = forms.DecimalField(label = "far Object Y Coordinate", widget=forms.HiddenInput())
 
-	# Radius of our circle
-	radius = forms.DecimalField(widget=forms.HiddenInput())
-
-
-	#location = forms.DecimalField(label="location")
+	# Radius of our circles
+	radiusFar = forms.DecimalField(widget=forms.HiddenInput())
+	radiusNear = forms.DecimalField(widget=forms.HiddenInput())
 
 
 def getNames():
