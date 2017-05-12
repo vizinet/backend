@@ -34,6 +34,10 @@ class picture_upload_form(forms.Form):
 	highColorX = forms.DecimalField(label = "far Object X Coordinate", widget=forms.HiddenInput())
 	highColorY = forms.DecimalField(label = "far Object Y Coordinate", widget=forms.HiddenInput())
 
+	# Radius of our circle
+	radius = forms.DecimalField(widget=forms.HiddenInput())
+
+
 	#location = forms.DecimalField(label="location")
 
 

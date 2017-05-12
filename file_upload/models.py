@@ -35,6 +35,9 @@ class picture(models.Model):
 	geoX = models.FloatField(default = 46.7298) #GPS locations of where picture was taken, defaults to pullman
 	geoY = models.FloatField(default =  -117.181738)
 
+	radiusHigh = models.FloatField(null=True)
+	radiusLow = models.FloatField(null = True)
+
 	def generateThumbnail(self):
 		thumbnailSize = (200,200)
 
@@ -66,6 +69,7 @@ class picture(models.Model):
 
 	# creates a copy of the image with the circle points drawn on them 
 	def generateCircles(self):
+		
 		#see what kind of file we are dealing with 
 		if self.pic.name.endswith(".jpg"):
 			pilImageType = "jpeg"

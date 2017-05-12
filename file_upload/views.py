@@ -22,7 +22,8 @@ from django.contrib.auth.decorators import login_required
 from convos.models import convoPage
 
 
-
+# index is responsible for the main upload page
+# Url: /file_upload
 @login_required
 def index(request):
 	if request.user.is_certified is False:
@@ -61,13 +62,11 @@ def index(request):
 
 			return HttpResponseRedirect(reverse('file_upload.views.index'))
 
-		# Not sure why this is neccesary 
-		return render_to_response('index.html', {'form':form}, context_instance=RequestContext(request))
-
 	# If Get Request
 	else:
 		form = picture_upload_form()
-		return render_to_response('index.html',{'form': form}, context_instance=RequestContext(request))
+	
+	return render_to_response('file_upload_page.html',{'form': form}, context_instance=RequestContext(request))
 
 # used specifically for the apps to send data
 @csrf_exempt
@@ -178,7 +177,8 @@ def test(request):
 	print(userob.id)
 	return HttpResponse(userob.id)
 
-# View a specific picture
+# View a specific picture from the gallery
+# Url: /picture/view/<pic_id>/
 def view_picture(request, picId = -1):
 	pictures = None
 	if picId != -1:
@@ -198,7 +198,6 @@ def view_picture(request, picId = -1):
 			pictures.append(picture_tag.picture)
 
 		#setup range of image numbers for the 
-
 		# Picture is the main picture, pictures is the side bitches. 
 		return render_to_response( 'convos.html', {'picture': p,'pictures':pictures, 'convos':conversation, 
 			'convo_id':conversation.pk,'tag':cur_tag[0]}, context_instance=RequestContext(request))
