@@ -1,0 +1,144 @@
+{% extends "base/newbase.html" %}
+{% block airpact-content %}
+
+
+<div class="col-md-2" style="">
+<p><h2> Instructions: </h2></p>
+<p> Red Circle = Far target</p>
+<p> Blue Circle = Near Target</p>
+<p> Program will measure both circles based on the smallest radius </p>
+<form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" id="submitButton" value="Upload" /></p>
+</form>
+</div> 
+
+<div class="col-md-10" style="">
+    <canvas id="canvas" style=" max-width: 100%;"></canvas>
+</div>
+
+<div id = "cords"></div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<div id = "near_circle" class="ui-widget-content" ondrag="dragging(event)"></div>
+<div id = "far_circle" class="ui-widget-content" ondrag="dragging(event)"></div>
+<script>
+
+$( "#near_circle" ).draggable({ containment: "#canvas" });
+$( "#near_circle" ).hide();
+
+// Make the far circle resizable and draggable
+$( "#far_circle" ).resizable({ aspectRatio: 1 / 1 });
+$( "#far_circle" ).draggable({ containment: "#canvas" });
+$( "#far_circle" ).hide();
+
+// Global Variables
+var imgurl = "";
+var picture = new Image();
+
+
+// Vars that effect the python algorithm
+var nearCordX = $('input[name="lowColorX"]');
+var nearCordY = $('input[name="lowColorY"]');
+var farCordX = $('input[name="highColorX"]');
+var farCordY = $('input[name="highColorY"]');
+var radius = $('input[name="radius"]');
+var debug_r = 0
+
+// Make the near circle resizable and draggable
+$( "#near_circle" ).resizable({
+    aspectRatio: 1 / 1, 
+    stop: function(event, ui) { radius.val(ui.size.width()/2);}   
+});
+
+// ?
+nearCordY.val(0);
+nearCordX.val(0);
+farCordY.val(0);
+farCordX.val(0);
+
+// On image load
+function imgLoad()
+{
+    var canvas = $('#canvas')[0];
+    var context = canvas.getContext('2d');
+    context.drawImage(picture,0,0);
+}
+
+// Load a file
+function fileOnLoad(e)
+{
+    var img = $('<img>', {src: e.target.result});
+    img.load(function(){
+        var canvas = $('#canvas')[0];
+        var context = canvas.getContext('2d');
+        canvas.width = this.naturalWidth;
+        canvas.height = this.naturalHeight;
+        context.drawImage(this,0,0);
+    });
+}
+
+// Grabs mouse position relative to image/Canvas
+function getMousePosition(canvas, evt){
+    var rect = canvas.getBoundingClientRect();
+    scaleX = canvas.width/rect.width;
+    scaleY = canvas.height/rect.height;
+
+    return { x: (evt.clientX - rect.left) * scaleX, y: (evt.clientY - rect.top) * scaleY}
+}
+
+// Whenever the image changes
+$('#id_pic').change(function(e){
+    var file = e.target.files[0], imageType=/image.*/;
+    imgurl = URL.createObjectURL(e.target.files[0]);
+    if(!file.type.match(imageType))
+    {
+        return;
+    }
+
+    // Load the picture
+    var reader = new FileReader();
+    reader.onload = fileOnLoad;
+    reader.readAsDataURL(file);
+    picture.src = imgurl;
+    picture.onload = imgLoad();
+    $("#near_circle").show();
+    $("#far_circle").show();
+});
+
+// The dragging event for our circles
+function dragging(event) {
+    var near_cirle = $("#near_cirle")[0];
+    var near_circle_rect = near_circle.getBoundingClientRect();
+    var canvas_rect = canvas.getBoundingClientRect();
+
+     $('#debugging').text("radius is: " + radius.val());
+
+}
+
+
+$(document).ready(function(){
+    $('#form').submit(function(){
+        var near_cirle = $("#near_cirle")[0];
+        var near_circle_rect = near_circle.getBoundingClientRect();
+        
+        var far_cirle = $("#far_cirle")[0];      
+        var far_circle_rect = near_circle.getBoundingClientRect();
+        
+        var canvas_rect = canvas.getBoundingClientRect();
+        
+        nearCordY = near_circle_rect.top - canvas_rect.top;
+        nearCordX = near_cirle_rect.left - canvas_rect.left;
+        farCordY = far_cirle_rect.top - canvas_rect.top;
+        farCordX = far_cirle_rect.left - canvas_rect.left;
+        $('#submitButton').attr("disabled", "disabled");
+    });
+});
+
+</script>
+
+
+
+<p id="debugging"></p>
+{% endblock %}
