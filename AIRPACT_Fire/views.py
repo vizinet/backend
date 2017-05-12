@@ -20,8 +20,10 @@ from dal import autocomplete
 def index(request):
 	newestPictures = picture.objects.all().order_by("-uploaded")[:20]
 	return render_to_response('index2.html',{'newestPictures' : newestPictures}, context_instance=RequestContext(request))
+	
 def main(request):
 	return render_to_response('welcome.html', context_instance=RequestContext(request))
+
 def forum(request):
 	return render_to_response('forum.html', context_instance=RequestContext(request))
 
@@ -175,6 +177,7 @@ def downloads(request):
 def about(request):
 	newestPictures = picture.objects.all().order_by("-uploaded")[:4]
 	return render_to_response("about.html", {'newestPictures' : newestPictures}, context_instance=RequestContext(request))
+	
 @csrf_exempt
 def getPythonScripts(request):
 	opener = urllib.URLopener()

@@ -1,5 +1,10 @@
 from math import log
 from decimal import *
+
+# 
+# TwoTargetContrast.py 
+# Mathmatical computations for visual range
+# 
 def TwoTargetContrast(farValues, nearValues, farDistance, nearDistance):
 	#print("FAR VALUES ARE:")
 	#for x in range(len(farValues)):

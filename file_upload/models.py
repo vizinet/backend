@@ -38,7 +38,6 @@ class picture(models.Model):
 	def generateThumbnail(self):
 		thumbnailSize = (200,200)
 
-
 		#see what kind of file we are dealing with 
 		if self.pic.name.endswith(".jpg"):
 			pilImageType = "jpeg"
@@ -120,9 +119,6 @@ class picture(models.Model):
 		#convert to RGB values for each pixel
 		pixelData = image.convert('RGB')
 
-
-		#print("Have the pixel data")
-
 		#set up containers for red green and blue for each target
 		hRed = []
 		hGreen = []
@@ -176,10 +172,6 @@ class picture(models.Model):
 		vrG = TwoTargetContrast(hGreen,lGreen,self.farTargetDistance,self.nearTargetDistance)
 		vrB = TwoTargetContrast(hBlue,lBlue,self.farTargetDistance,self.nearTargetDistance)
 
-
-		#print("answer: ")
-		#print((abs((vrR[0] + vrG[0] + vrB[0]) / 3)))
-		#finally average the numbers togther
 		self.twoTargetContrastVr = (abs((vrR[0] + vrG[0] + vrB[0]) / 3))
 	
 	#escapes special characters that can affect javascript

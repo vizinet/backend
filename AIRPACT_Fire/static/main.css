@@ -17,6 +17,29 @@ body{
 	max-height: 300px;
 }
 
+#near_circle { 
+width: 100px; 
+height: 100px;
+left: 250px;
+top: 50px;
+border-radius: 100px; 
+border-color: blue;
+background-color: transparent; 
+position: absolute;
+}
+
+
+#far_circle { 
+width: 100px; 
+height: 100px;
+left: 250px;
+top: 130px;
+border-radius: 100px; 
+border-color: red;
+background-color: transparent; 
+position: absolute;
+}
+
 .adminTable{
    width: 800px;
    height: 60px;
@@ -176,6 +199,7 @@ body{
 /*  height: 50px;
   min-height: 50px;*/
 }
+
 #timelineLeftArrow
 {
   width:45px;
@@ -185,6 +209,7 @@ body{
   background-repeat:   no-repeat;
   background-position: center center;
 }
+
 #timelineRightArrow
 {
   width:45px;

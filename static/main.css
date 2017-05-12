@@ -1,6 +1,15 @@
 body{
-background: url("http://www.google.com") no-repeat scroll 0px 100% / cover transparent;
-background-size: cover;
+  background: url("http://www.google.com") no-repeat scroll 0px 100% / cover transparent;
+  background-size: cover;
+}
+
+#myAffix{
+  position: absolute;
+  z-index: -2;
+}
+
+.banner_img {
+    background-image: url('/static/media/decoration/banner_large.png');
 }
 
 .cover{
@@ -197,7 +206,8 @@ background-size: cover;
 
 .navbar-fixed-left {
   width: 140px;
-  position: fixed;
+  position: relative;
+  z-index: -1;
   border-radius: 0;
   height: 100%;
 }

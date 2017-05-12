@@ -30,11 +30,21 @@ def index(request):
 	#if there is a file to upload
 
 	if request.method == 'POST':
+
 		form = picture_upload_form(request.POST, request.FILES)
+		
 		if form.is_valid():
 			print("highX %d, highY %d, lowX %d, lowY %d," % (form.cleaned_data.get('highColorX'), form.cleaned_data.get('highColorY'), form.cleaned_data.get('lowColorX'), form.cleaned_data.get('lowColorY'))) 
-			newPic = picture(pic = request.FILES['pic'], user=request.user, vr=form.cleaned_data.get('vr'), description=form.cleaned_data.get('description'),
-				highX=form.cleaned_data.get('highColorX'), highY=form.cleaned_data.get('highColorY'), lowX=form.cleaned_data.get('lowColorX'), lowY=form.cleaned_data.get('lowColorY'), nearTargetDistance = form.cleaned_data.get('nearDistance'),
+			newPic = picture(
+				pic = request.FILES['pic'], 
+				user=request.user, 
+				vr=form.cleaned_data.get('vr'), 
+				description=form.cleaned_data.get('description'),
+				highX=form.cleaned_data.get('highColorX'), 
+				highY=form.cleaned_data.get('highColorY'), 
+				lowX=form.cleaned_data.get('lowColorX'), 
+				lowY=form.cleaned_data.get('lowColorY'), 
+				nearTargetDistance = form.cleaned_data.get('nearDistance'),
 				farTargetDistance = form.cleaned_data.get('farDistance'))
 			newPic.save()
 
@@ -47,23 +57,27 @@ def index(request):
 			#20 dollars in my pocket
 			newTag = tag(picture = newPic, text = t.lower())
 			newTag.save()
-			print(newPic.twoTargetContrastVr)
+			
+
 			return HttpResponseRedirect(reverse('file_upload.views.index'))
+
+		# Not sure why this is neccesary 
 		return render_to_response('index.html', {'form':form}, context_instance=RequestContext(request))
+
+	# If Get Request
 	else:
 		form = picture_upload_form()
-
-		return render_to_response(
-        'index.html',
-        {'form': form},
-        context_instance=RequestContext(request))
+		return render_to_response('index.html',{'form': form}, context_instance=RequestContext(request))
 
 # used specifically for the apps to send data
 @csrf_exempt
 def upload(request):
 	if request.method == 'POST':
 		response_data = {}
+
+		# S is our JSON object
 		s = json.loads(request.body);
+
 		toke = AuthToken.objects.filter(token=s['secretKey'])
 		if toke.count() > 0:
 			AuthToken.objects.get(token=s['secretKey']).delete()
@@ -105,8 +119,6 @@ def upload(request):
 				if s['description'] is not None:
 					desc = s['description']
 
-			#create a picture
-			print("creating picture object")
 			try:
 				newPic = picture(pic = ContentFile(image_data,str(str(time())+".jpg")), 
 								description = desc, 
@@ -129,9 +141,7 @@ def upload(request):
 			except Exception as e:
 				print(e.message)
 
-			print("starting save")
 			newPic.save()
-			print("SAVED THE IMAGE")
 			conversations = convoPage(picture = newPic)
 			conversations.save()
 
@@ -141,8 +151,6 @@ def upload(request):
 			for t in tags:
 				newTag = tag(picture = newPic, text = t.lower())
 				newTag.save()
-
-			#lets make pop some tags yall
 
 			response_data['status'] = 'success'
 			response_data['TwoTargetContrastOutput'] = newPic.twoTargetContrastVr
@@ -197,7 +205,6 @@ def view_picture(request, picId = -1):
 
 
 	else:
-	    #fuck you, return
 		return HttpResponseRedirect("/gallery")
 		#redirect back to gallery
 

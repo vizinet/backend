@@ -15,16 +15,15 @@
 </head>
 
 <body>
-<div id="overlay" style="background-color: #9c0009"> </div>
-<nav class="navbar" style="background-color:#9c0009; border-bottom: 1px solid black; max-height: 100px;min-height: 100px; height: 100px;" role="navigation">
+<div id="overlay" style="background-color: #FFF"> </div>
+<nav class="navbar" style="background-color:#FFF; border-bottom: 1px solid black; max-height: 100px;min-height: 100px; height: 100px;" role="navigation">
 	
-		<div class="navbar-header" style="background-color: #9c0009; padding-right:25px; padding-left:25px;height:48px;">
-			<a href="#" class="navbar-left" style="background-color: #9c0009;"> <img class="img-responsive" style="height:90px; padding-top:5px;" src="{% static '/static/media/decoration/apflogo.png' %}" > </a>
+		<div class="navbar-header" style="background-color: #FFF; padding-right:25px; padding-left:25px;height:48px;">
+			<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:90px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > </a>
 
 		</div>
 
 		<div class= "navbar-left" style=" position:absolute;bottom:0;left:10; margin-left: 110px; color:#FFF" >
-			<p class="navbar-text" style=""><h1><strong> AIRPACT</strong>Fire</h1> <h4> A Project Under <a href="http://lar.wsu.edu/">LAR </a> </h4> </p>
 		</div>
 		
 
@@ -40,11 +39,10 @@
 </nav>
 
 
-
 	<div class="container-fluid" >
 		<nav class="col-md-1 nav" >
 			<div class="text-right" >
-				<div id="myAffix">
+				<div id="myAffix" >
 <!-- 			<img class="img-responsive" src="{% static '/static/media/decoration/logo.png' %}"/>
 				<span class="icon-bar"></span> -->
 				<ul class="nav navbar-default navbar-fixed-side">
@@ -62,7 +60,7 @@
 			</div>
 		</nav>
 
-	<div class="col-md-9 col-lg-9 content" style="background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px;">
+	<div class="col-md-9 col-lg-9 content" style="position: relative; z-index: 10; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px;">
 		{% block airpact-content %}
 		{% endblock %}
 	</div>

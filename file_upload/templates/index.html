@@ -3,21 +3,39 @@
 
 
 <div class="col-md-2" style="">
+<p><h2> Instructions: </h2></p>
+<p> Red Circle = Far target</p>
+<p> Blue Circle = Near Target</p>
+<p> Program will measure both circles based on the smallest radius </p>
 <form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" id="submitButton" value="Upload" /></p>
 </form>
-
 </div> 
+
 <div class="col-md-10" style="">
-    <div> Select Target to Place: Near Object <input type="radio" name="target" value="nearObject" > Far Object <input type="radio" name="target" value="farObject" checked> </div> 
     <canvas id="canvas" style=" max-width: 100%;"></canvas>
 </div>
-<div id = "cords"></div>
 
+<div id = "cords"></div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<div id = "near_circle" class="ui-widget-content" ondrag="dragging(event)"></div>
+<div id = "far_circle" class="ui-widget-content" ondrag="dragging(event)"></div>
 <script>
 
+// Make the circle resizable and draggable
+$( "#near_circle" ).resizable({ aspectRatio: 1 / 1 });
+$( "#near_circle" ).draggable({ containment: "#canvas" });
+$( "#near_circle" ).hide();
+
+// Make the circle resizable and draggable
+$( "#far_circle" ).resizable({ aspectRatio: 1 / 1 });
+$( "#far_circle" ).draggable({ containment: "#canvas" });
+$( "#far_circle" ).hide();
+
+// Global Variables
 var nearCordX = 0;
 var nearCordY = 0;
 var farCordX = 0;
@@ -26,17 +44,50 @@ var imgurl = "";
 var nearRect = {x:-100,y:-100};
 var farRect = {x:-100,y:-100};
 var picture = new Image();
-
+var near_cirle = document.getElementById("near_cirle");
+// Vars that effect the python algorithm
 var nearCordX = $('input[name="lowColorX"]');
 var nearCordY = $('input[name="lowColorY"]');
 var farCordX = $('input[name="highColorX"]');
 var farCordY = $('input[name="highColorY"]');
 
+// ?
 nearCordY.val(0);
 nearCordX.val(0);
 farCordY.val(0);
 farCordX.val(0);
 
+// On image load
+function imgLoad()
+{
+    var canvas = $('#canvas')[0];
+    var context = canvas.getContext('2d');
+    context.drawImage(picture,0,0);
+}
+
+// Load a file
+function fileOnLoad(e)
+{
+    var img = $('<img>', {src: e.target.result});
+    img.load(function(){
+        var canvas = $('#canvas')[0];
+        var context = canvas.getContext('2d');
+        canvas.width = this.naturalWidth;
+        canvas.height = this.naturalHeight;
+        context.drawImage(this,0,0);
+    });
+}
+
+// Grabs mouse position relative to image/Canvas
+function getMousePosition(canvas, evt){
+    var rect = canvas.getBoundingClientRect();
+    scaleX = canvas.width/rect.width;
+    scaleY = canvas.height/rect.height;
+
+    return { x: (evt.clientX - rect.left) * scaleX, y: (evt.clientY - rect.top) * scaleY}
+}
+
+// Whenever the image changes
 $('#id_pic').change(function(e){
     var file = e.target.files[0], imageType=/image.*/;
     imgurl = URL.createObjectURL(e.target.files[0]);
@@ -45,87 +96,26 @@ $('#id_pic').change(function(e){
         return;
     }
 
+    // Load the picture
     var reader = new FileReader();
     reader.onload = fileOnLoad;
     reader.readAsDataURL(file);
     picture.src = imgurl;
     picture.onload = imgLoad();
+    //$("#near_circle").style.left = '100px';
+    $("#near_circle").show();
+    $("#far_circle").show();
 });
 
-function imgLoad()
-{
-    var canvas = $('#canvas')[0];
-    var context = canvas.getContext('2d');
+// The dragging event for our circles
+function dragging(event) {
+    var near_cirle = $("#near_cirle")[0];
+    var near_circle_rect = near_circle.getBoundingClientRect();
+    var canvas_rect = canvas.getBoundingClientRect();
 
-    context.drawImage(picture,0,0);
+    document.getElementById("debugging").innerHTML = "Our current position is: " + (near_circle_rect.left - canvas_rect.left);
 }
 
-function fileOnLoad(e)
-{
-    var img = $('<img>', {src: e.target.result});
-    img.load(function(){
-        var canvas = $('#canvas')[0];
-        var context = canvas.getContext('2d');
-
-        canvas.width = this.naturalWidth;
-        canvas.height = this.naturalHeight;
-        context.drawImage(this,0,0);
-    });
-}
-
-
-function getMousePosition(canvas, evt){
-
-    var rect = canvas.getBoundingClientRect(),
-        scaleX = canvas.width/rect.width,
-        scaleY = canvas.height/rect.height;
-
-    return { x: (evt.clientX - rect.left) * scaleX, y: (evt.clientY - rect.top) * scaleY}
-}
-
-$('#canvas').mousedown(function(e){
-    var canvas = $('#canvas')[0];
-    var context = canvas.getContext('2d');
-    var mouseCords = getMousePosition(canvas, e);
-    var selectedTarget = $('input[name=target]:checked').val();
-
-    if (selectedTarget === "nearObject")
-    {
-        nearRect['x'] = mouseCords['x'];
-        nearRect['y'] = mouseCords['y'];
-
-        nearCordX.val(mouseCords['x']);
-        nearCordY.val(mouseCords['y']);
-        
-    }
-    else
-    {
-        farRect['x'] = mouseCords['x'];
-        farRect['y'] = mouseCords['y'];
-
-        farCordX.val(mouseCords['x']);
-        farCordY.val(mouseCords['y']);
-        
-    }
-
-    context.clearRect(0,0,canvas.width,canvas.height);
-
-    context.drawImage(picture,0,0);
-    context.lineWidth = 10;
-    context.beginPath();
-    // sqrt of distance from center to rectangle corner squared
-    context.arc(nearRect['x'], nearRect['y'] , Math.sqrt(20000),0,2*Math.PI);
-    context.stroke();
-    context.closePath();
-    context.beginPath();
-    context.arc(farRect['x'], farRect['y'], Math.sqrt(20000),0,2*Math.PI);
-    
-    // context.rect(nearRect['x'] - 100, nearRect['y'] - 100, 200,200);
-    // context.rect(farRect['x'] - 100, farRect['y'] - 100, 200,200);
-    context.stroke();
-    context.closePath();
-
-});
 
 
 $(document).ready(function(){
@@ -133,5 +123,10 @@ $(document).ready(function(){
         $('#submitButton').attr("disabled", "disabled");
     });
 });
+
 </script>
+
+
+
+<p id="debugging"></p>
 {% endblock %}

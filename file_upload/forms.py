@@ -21,16 +21,18 @@ def getChoices():
 	return x
 
 class picture_upload_form(forms.Form):
-	pic = forms.FileField(label="select picture")
-	vr = forms.DecimalField(label="visual range")
-	nearDistance = forms.DecimalField(label="distance to near Target")
-	farDistance = forms.DecimalField(label = "distance to far Target")
+	pic = forms.FileField(label="Select Picture")
+	vr = forms.DecimalField(label="Estimated Visual Range")
+	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
+	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
 	location = forms.CharField(label='Location', required=True)
 	description = forms.CharField(label='Description', required=True)
-	lowColorX = forms.DecimalField(label="Near Object X Coordinate", widget=forms.HiddenInput())
-	lowColorY = forms.DecimalField(label="Near Object Y Coordinate", widget=forms.HiddenInput())
-	highColorX = forms.DecimalField(label="far Object X Coordinate", widget=forms.HiddenInput())
-	highColorY = forms.DecimalField(label="far Object Y Coordinate", widget=forms.HiddenInput())
+	
+	# Deals with circle locations
+	lowColorX = forms.DecimalField(label = "Near Object X Coordinate", widget=forms.HiddenInput())
+	lowColorY = forms.DecimalField(label = "Near Object Y Coordinate", widget=forms.HiddenInput())
+	highColorX = forms.DecimalField(label = "far Object X Coordinate", widget=forms.HiddenInput())
+	highColorY = forms.DecimalField(label = "far Object Y Coordinate", widget=forms.HiddenInput())
 
 	#location = forms.DecimalField(label="location")
 
