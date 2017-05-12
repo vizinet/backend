@@ -131,7 +131,8 @@ class picture(models.Model):
 		lGreen = []
 		lBlue = []
 
-		#find the top left of the bounding box (this is based on the 200x200 px that we have all agreed upon it's probalbly going to have to change)
+		# 
+		#(this is based on the 200x200 px that we have all agreed upon it's probalbly going to have to change)
 		newHX = int(self.highX)
 		newHY = int(self.highY)
 		newLX = int(self.lowX)
