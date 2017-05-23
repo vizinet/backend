@@ -19,6 +19,7 @@
 </div>
 
 <div id = "cords"></div>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 <div id = "near_circle" class="ui-widget-content"></div>
@@ -31,16 +32,21 @@ var imgurl = "";
 var picture = new Image();
 
 // Vars that effect the python algorithm
-var nearCordX = $('input[name="lowColorX"]');
-var nearCordY = $('input[name="lowColorY"]');
-var farCordX = $('input[name="highColorX"]');
-var farCordY = $('input[name="highColorY"]');
+var nearX = $('input[name="nearX"]');
+var nearY = $('input[name="nearY"]');
+var farX = $('input[name="farX"]');
+var farY = $('input[name="farY"]');
 var radiusNear = $('input[name="radiusNear"]');
 var radiusFar = $('input[name="radiusFar"]');
 
 // Default values
-radiusFar.val(50)
-radiusNear.val(50)
+radiusFar.val(50);
+radiusNear.val(50);
+nearX.val(0);
+nearY.val(0);
+farX.val(0);
+farY.val(0);
+
 
 // Make the near circle draggable and hidden
 $( "#near_circle" ).draggable({ containment: "#canvas" });
@@ -104,7 +110,7 @@ $('#id_pic').change(function(e){
     {
         return;
     }
-    
+
     // Load the picture
     var reader = new FileReader();
     reader.onload = fileOnLoad;
@@ -128,14 +134,14 @@ $(document).ready(function(){
         var near_circle_rect = near_circle.getBoundingClientRect();
         
         var far_cirle = $("#far_cirle")[0];      
-        var far_circle_rect = near_circle.getBoundingClientRect();
+        var far_circle_rect = far_circle.getBoundingClientRect();
         
         var canvas_rect = canvas.getBoundingClientRect();
         
-        nearCordY.val(near_circle_rect.top - canvas_rect.top);
-        nearCordX.val(near_cirle_rect.left - canvas_rect.left);
-        farCordY.val(far_cirle_rect.top - canvas_rect.top);
-        farCordX.val(far_cirle_rect.left - canvas_rect.left);
+        nearY.val(near_circle_rect.top - canvas_rect.top);
+        nearX.val(near_circle_rect.left - canvas_rect.left);
+        farY.val(far_circle_rect.top - canvas_rect.top);
+        farX.val(far_circle_rect.left - canvas_rect.left);
         $('#submitButton').attr("disabled", "disabled");
     });
 });

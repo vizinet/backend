@@ -36,22 +36,28 @@ def index(request):
 		
 		# Create a new picture object
 		if form.is_valid():
+			print("Near x: " + str(form.cleaned_data.get('nearX')))
+			print("Near y: " + str(form.cleaned_data.get('nearY')))
+			print("Far x: " + str(form.cleaned_data.get('farX')))
+			print("Far y: " + str(form.cleaned_data.get('farY')))
+
 			newPic = picture(
 				pic = request.FILES['pic'], 
 				user=request.user, 
 				vr=form.cleaned_data.get('vr'), 
 				description=form.cleaned_data.get('description'),
-				highX=form.cleaned_data.get('highColorX'), 
-				highY=form.cleaned_data.get('highColorY'), 
-				lowX=form.cleaned_data.get('lowColorX'), 
-				lowY=form.cleaned_data.get('lowColorY'), 
+				highX=form.cleaned_data.get('farX'), 
+				highY=form.cleaned_data.get('farY'), 
+				lowX=form.cleaned_data.get('nearX'), 
+				lowY=form.cleaned_data.get('nearY'), 
 				nearTargetDistance = form.cleaned_data.get('nearDistance'),
 				farTargetDistance = form.cleaned_data.get('farDistance'),
 				radiusHigh = form.cleaned_data.get('radiusFar'),
-				radiusLow = form.cleaned_data.get('radiusLow'));
+				radiusLow = form.cleaned_data.get('radiusNear'));
 			newPic.save()
 			print("Value of the far radius: ");
 			print(form.cleaned_data.get('radiusFar'))
+			
 			#Creating some conversation stuffs
 			conversations = convoPage(picture = newPic)
 			conversations.save()
@@ -185,7 +191,7 @@ def test(request):
 def view_picture(request, picId = -1):
 	pictures = None
 	if picId != -1:
-		
+
 		# good picture id
 		p = picture.objects.get(id = picId)
 
@@ -200,9 +206,17 @@ def view_picture(request, picId = -1):
 		for picture_tag in picture_tags:
 			pictures.append(picture_tag.picture)
 
-		#setup range of image numbers for the 
+		# Are we editing the image? 
+		if request.method == 'POST':
+			picture.objects.filter(id = picId).update(field1='some value')
+		
+		# Or are we just viewing the image?
+		else:
+			pass
+
+		# Setup range of image numbers for the 
 		# Picture is the main picture, pictures is the side bitches. 
-		return render_to_response( 'convos.html', {'picture': p,'pictures':pictures, 'convos':conversation, 
+		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 'convos':conversation, 
 			'convo_id':conversation.pk,'tag':cur_tag[0]}, context_instance=RequestContext(request))
 
 

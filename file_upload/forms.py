@@ -10,10 +10,10 @@ def getChoices():
 	x = []
 	for g in T:
 		for i,k in g.items():
-			#print(i)
 			x.append((k,k))
 	return x
 
+# The form for uploading pictures
 class picture_upload_form(forms.Form):
 	pic = forms.FileField(label="Select Picture")
 	vr = forms.DecimalField(label="Estimated Visual Range")
@@ -23,15 +23,30 @@ class picture_upload_form(forms.Form):
 	description = forms.CharField(label='Description', required=True)
 	
 	# Deals with circle locations
-	lowColorX = forms.DecimalField(label = "Near Object X Coordinate", widget=forms.HiddenInput())
-	lowColorY = forms.DecimalField(label = "Near Object Y Coordinate", widget=forms.HiddenInput())
-	highColorX = forms.DecimalField(label = "far Object X Coordinate", widget=forms.HiddenInput())
-	highColorY = forms.DecimalField(label = "far Object Y Coordinate", widget=forms.HiddenInput())
+	nearX = forms.DecimalField(widget=forms.HiddenInput())
+	nearY = forms.DecimalField(widget=forms.HiddenInput())
+	farX = forms.DecimalField(widget=forms.HiddenInput())
+	farY = forms.DecimalField(widget=forms.HiddenInput())
 
 	# Radius of our circles
 	radiusFar = forms.DecimalField(widget=forms.HiddenInput())
 	radiusNear = forms.DecimalField(widget=forms.HiddenInput())
 
+# The form for editing a picture
+class picture_edit_form(forms.Form):
+	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
+	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
+	description = forms.CharField(label='Description', required=True)
+	
+	# Deals with circle locations
+	nearX = forms.DecimalField(widget=forms.HiddenInput())
+	nearY = forms.DecimalField(widget=forms.HiddenInput())
+	farX = forms.DecimalField(widget=forms.HiddenInput())
+	farY = forms.DecimalField(widget=forms.HiddenInput())
+
+	# Radius of our circles
+	radiusFar = forms.DecimalField(widget=forms.HiddenInput())
+	radiusNear = forms.DecimalField(widget=forms.HiddenInput())
 
 def getNames():
 	qs = tag.objects.all()
@@ -45,7 +60,6 @@ def getNames():
 
 # The search form for the gallery
 class GallerySortForm(forms.Form):
-
 
 	vr_choices=[(0, "None"), (1,'0-10'),(2,'10-30'), (3,'30-100'), (4,'100-500'), (5,'500+')]
 	ascending_choices = [(0,"Ascending time"), (1,"Descending time"), 

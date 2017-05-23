@@ -69,7 +69,7 @@ class picture(models.Model):
 
 	# creates a copy of the image with the circle points drawn on them 
 	def generateCircles(self):
-		
+
 		#see what kind of file we are dealing with 
 		if self.pic.name.endswith(".jpg"):
 			pilImageType = "jpeg"
@@ -132,13 +132,15 @@ class picture(models.Model):
 		lBlue = []
 
 		# 
-		#(this is based on the 200x200 px that we have all agreed upon it's probalbly going to have to change)
 		newHX = int(self.highX)
 		newHY = int(self.highY)
 		newLX = int(self.lowX)
 		newLY = int(self.lowY)
+		radius = int(self.radiusLow)
 
-		#print("newHx: %d, newHY %d, newLx %d new LY %d", newHX, newHY, newLX, newLY)
+		# The radius must be the smaller of the two radiuss
+		if(int(self.radiusHigh) < radius):
+			radius = int(self.radiusHigh)
 
 		if newHX < 0:
 			newHX  = 0;
@@ -150,8 +152,8 @@ class picture(models.Model):
 			newLY = 0;
 
 		#process high or "Far" target first
-		for x in range(newHX-100,newHX+100):
-			for y in range(newHY-100,newHY+100):
+		for x in range(newHX, newHX + radius*2):
+			for y in range(newHY,newHY+radius*2):
 				try:
 					R,G,B = pixelData.getpixel((x,y))
 					hRed.append(R)
@@ -162,8 +164,8 @@ class picture(models.Model):
 
 
 		#do the same for the low or "close" target
-		for x in range(newLX-100, newLX+100):
-			for y in range(newLY-100, newLY+100):
+		for x in range(newLX, newLX+radius*2):
+			for y in range(newLY, newLY+radius*2):
 				try:
 					R,G,B = pixelData.getpixel((x,y))
 					lRed.append(R)
@@ -190,6 +192,7 @@ class picture(models.Model):
 			self.skyDistance *= 1.60934
 
 	def save(self):
+		
 		self.convertToKM()
 		self.cleanDescription()
 		self.generateCircles()
