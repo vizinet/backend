@@ -2,20 +2,21 @@
 {% block airpact-content %}
 
 
-<div class="col-md-2" style="">
-<p><h2> Instructions: </h2></p>
-<p> Red Circle = Far target</p>
-<p> Blue Circle = Near Target</p>
-<p> Program will measure both circles based on the smallest radius </p>
-<form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <p><input type="submit" id="submitButton" value="Upload" /></p>
-</form>
+<div class="col-md-4" style="">
+    <p><h2> Instructions: </h2></p>
+    <p> Red Circle = Far target</p>
+    <p> Blue Circle = Near Target</p>
+    <p> Program will measure both circles based on the smallest radius </p>
+
+    <form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" id="submitButton" value="Upload" /></p>
+    </form>
 </div> 
 
-<div class="col-md-10" style="">
-    <canvas id="canvas" style=" max-width: 100%;"></canvas>
+<div class="col-md-9 col-lg-3" style="">
+    <canvas id="canvas"></canvas>
 </div>
 
 <div id = "cords"></div>
@@ -46,7 +47,6 @@ nearX.val(0);
 nearY.val(0);
 farX.val(0);
 farY.val(0);
-
 
 // Make the near circle draggable and hidden
 $( "#near_circle" ).draggable({ containment: "#canvas" });

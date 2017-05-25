@@ -181,7 +181,7 @@ class picture(models.Model):
 
 		self.twoTargetContrastVr = (abs((vrR[0] + vrG[0] + vrB[0]) / 3))
 	
-	#escapes special characters that can affect javascript
+	# escapes special characters that can affect javascript
 	def cleanDescription(self):
 		self.description = self.description.replace("\'", "\\\'").replace('\"',"\\\"").replace("\\","\\\\").replace("\n","")
 	
@@ -192,7 +192,6 @@ class picture(models.Model):
 			self.skyDistance *= 1.60934
 
 	def save(self):
-		
 		self.convertToKM()
 		self.cleanDescription()
 		self.generateCircles()
@@ -203,10 +202,8 @@ class picture(models.Model):
 				self.findTwoTargetContrastVr()
 		except Exception as e:
 			print("ERROR CALCULATING VR: " + e.message)
-		#else:
-			#self.findObjectSkyVr() // need to create this function
 
-		super(picture,self).save()
+		super(picture, self).save()
 
 	
 	def __str__(self):

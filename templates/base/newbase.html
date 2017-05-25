@@ -10,24 +10,18 @@
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap-theme.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static '/static/main.css' %}">
-	
-
 </head>
 
 <body>
-<div id="overlay" style="background-color: #FFF"> </div>
-<nav class="navbar" style="background-color:#FFF; border-bottom: 1px solid black; max-height: 100px;min-height: 100px; height: 100px;" role="navigation">
+
+<nav class="navbar" style=" position:fixed; z-index:100; background-color:#FFF; border-bottom: 1px solid black; max-height: 100%; min-height: 100px; min-width: 100%;" role="navigation" id="main-nav">
 	
 		<div class="navbar-header" style="background-color: #FFF; padding-right:25px; padding-left:25px;height:48px;">
 			<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:90px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > </a>
 
 		</div>
 
-		<div class= "navbar-left" style=" position:absolute;bottom:0;left:10; margin-left: 110px; color:#FFF" >
-		</div>
-		
-
-
+		<div class= "navbar-left" style=" position:relative;bottom:0;left:10; margin-left: 110px; color:#FFF" ></div>
 		<div class= "navbar-right" style=" position:absolute;bottom:0;right:0; margin-right: 25px; color:#FFF" >
 			{% if user.is_authenticated %}
 				 <a href="{% url 'view_profile' user %}"> {{ user }} </a><a href="{% url 'logout' %}"> Logout </a>
@@ -39,13 +33,14 @@
 </nav>
 
 
-	<div class="container-fluid" >
-		<nav class="col-md-1 nav" >
+	<div class="container-fluid">
+		
+		<nav class="col-md-1 nav">
 			<div class="text-right" >
 				<div id="myAffix" >
 <!-- 			<img class="img-responsive" src="{% static '/static/media/decoration/logo.png' %}"/>
 				<span class="icon-bar"></span> -->
-				<ul class="nav navbar-default navbar-fixed-side">
+				<ul class="nav navbar-default navbar-fixed-side" style = " position:fixed; top:101px; z-index:11">
 					<li><a  class = "nav-link" href="{% url 'home' %}"> Home </a> </li>
 					<li><a  href="{% url 'gallery' %}"> Gallery </a></li>
 					<li><a  href="{% url 'index' %}"> Upload</a></li>
@@ -60,12 +55,15 @@
 			</div>
 		</nav>
 
-	<div class="col-md-9 col-lg-9 content" style="position: relative; z-index: 10; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px;">
-		{% block airpact-content %}
-		{% endblock %}
+		<div id = "body_container_main" class="col-md-20 col-lg-9 content" style="position: relative; top:101px; width: 99% z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px;">
+			{% block airpact-content %}
+			{% endblock %}
+		</div>
+
 	</div>
 
-</div>
+
+
 
 
 </body>
@@ -78,6 +76,14 @@ $('#myAffix').affix({
     }
   }
 })
+
+$(function(){
+	if($(window).width() < 800) {
+		
+	} else { $('#body_container_main').css({ "left": "0px"}); }
+
+});
+
 </script>
 
 </HTML>

@@ -125,6 +125,11 @@ position: absolute;
 
 }
 
+.stickytop {
+    top:0;
+    left:0;
+}
+
 .slideShowContainer{
     min-width: 80%;
     min-height: 80%;

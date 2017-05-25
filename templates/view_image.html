@@ -2,12 +2,6 @@
 {% load comments %}
 {% block airpact-content %}
 
-	<div class="col-lg-9">
-		<p><img  class="img-responsive" src="{{ picture.pic.url }}" alt="{{ picture.pic.url}}" align = "middle" id ="mainPicture" /> </p>
-		<p> Click Image for Timeline slideshow </p> 
-		<button id="sampleToggle"> Toggle Sampled Pixels Overlay </button>
-	</div>
-	<div class="col-lg-3"> 
 		<table class="table table-striped">
 			<tr>
 				<td> Estimated Visual Range </td>
@@ -30,25 +24,36 @@
 				<td> {{ tag.text }} </td>
 			</tr>
 		</table>
-	</div>
-	<div class="col-lg-2"> 
+
+
+	<div class="col-lg-9" id ="main_image_box" style="z-index: 1;">
+		 <img class = img-responsive src="{{ picture.pic.url }}" alt="{{ picture.pic.url}}" align = "middle" id ="mainPicture" />
+
+		<p id ="timeline"> Click Here for Timeline slideshow </p> 
 	</div>
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<div id = "near_circle" class="ui-widget-content"></div>
-<div id = "far_circle" class="ui-widget-content"></div>
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	
+	<div id = "show_edit_options">
+		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
+	</div>
+
+	<div class="col-lg-12" style="padding-bottom: 5px; display:none;"> 
+		<form class="form-inline" method="POST">
+			{% csrf_token %}
+			{{ picture_form }}
+		</form>
+	</div>	
 
 	<div class="col-lg-12">
 		<a name="comment_start"></a>
-
 		<div class = "comment_form">
 
 			{% if user.is_authenticated %}
 			{% get_comment_form for convos as form %}
 			<form action = "{% comment_form_target %}" method="POST">
 			{% csrf_token %}
-
 
 			{{ form.comment }}
 
@@ -96,8 +101,6 @@
 	</div>
 </div>
 
-
-<!-- begin weird timeline slideshow stuff -->
 <div class="slideShowContainer" id="slideShowContainer">
 	<div id="slideShowMainPicture"> 
 		<div id="slideShowBottomInfoPanel"> 
@@ -121,6 +124,8 @@
 	<div id="slideShowRightNavArrow"> </div>
 </div>
 
+<div id = "near_circle" class="ui-widget-content"></div>
+<div id = "far_circle" class="ui-widget-content"></div>
 
 <script type="text/javascript">
 
@@ -128,13 +133,67 @@ var sampleToggleState = 0;
 var pictures = [];
 var starting_index = 0;
 var currentIndex = 0;
-// FIX THIS, IT SHOULD BE A JSON OBJECT SENT FROM THE VIEW!!! (but it works for now :D )
+
+// Vars that effect the python algorithm
+var nearX = $('input[name="nearX"]');
+var nearY = $('input[name="nearY"]');
+var farX = $('input[name="farX"]');
+var farY = $('input[name="farY"]');
+var radiusNear = $('input[name="radiusNear"]');
+var radiusFar = $('input[name="radiusFar"]');
+
+// Default values
+radiusFar.val(50);
+radiusNear.val(50);
+nearX.val(0);
+nearY.val(0);
+farX.val(0);
+farY.val(0);
+
+// Make the near circle draggable and hidden
+$( "#near_circle" ).draggable({ containment: "#mainPicture" });
+$( "#near_circle" ).hide();
+
+// Make the near circle resizable 
+$( "#near_circle" ).resizable({
+    aspectRatio: 1 / 1,    
+    stop: function(event, ui) { 
+        radiusNear.val(ui.size.width/2);
+    }   
+});
+
+// Make the far circle draggable and hidden
+$( "#far_circle" ).draggable({ containment: "#mainPicture" });
+$( "#far_circle" ).hide();
+
+// Make the far circle resizable
+$( "#far_circle" ).resizable({
+    aspectRatio: 1 / 1,    
+    stop: function(event, ui) { 
+        radiusFar.val(ui.size.width/2);
+    }   
+});
+
+// Upon clicking our edit button, Change the position and radius of the circle
+// to our recorded value. And toggle the display of the form
+$('#show_edit_options').click(function(){
+	 $("#near_circle").show();
+	 $("#near_circle").css({
+           "top":"{{ picture.lowY }}",
+           "left":"{{ picture.lowX }}",
+      })
+
+    $(this).next().slideToggle();
+    return false;
+});
+
+//
 {% for picture in pictures %}
 	pictures.push(new picture ({{picture.id}}, "{{picture.uploaded}}",{{picture.vr}}, "{{picture.description}}", "{{picture.pic.url}}"));
 {% endfor %}
 
-function picture (id, date, vr, description, url){
 
+function picture (id, date, vr, description, url){
 	this.id = id;
 	this.date = date;
 	this.vr= vr;
@@ -142,10 +201,12 @@ function picture (id, date, vr, description, url){
 	this.url = url;
 }
 
+// Fade effect
 function fadeScreen(){
 	$('#overlay').slideDown( function(){ 	$("#slideShowContainer").fadeIn(); });
 }
 
+// Fade back to the original page
 function fadeBack(){
 
 	$('#slideShowContainer').fadeOut( function(){ 
@@ -156,6 +217,7 @@ function fadeBack(){
 	
 }
 
+// Locate starting image for timeline
 function findStartingIndex()
 {
 	var currentPicid = {{ picture.id }}
@@ -168,6 +230,7 @@ function findStartingIndex()
 	}
 }
 
+// Move left in the timeline
 function moveLeft()
 {
 	if(currentIndex == 0)
@@ -186,6 +249,7 @@ function moveLeft()
 	});
 }
 
+// Move right in the timeline
 function moveRight()
 {
 	if(currentIndex == pictures.length-1)
@@ -231,7 +295,7 @@ $(document).ready(function(){
 	currentIndex=starting_index;
 	$("#slideShowMainPicture").css('background-image', "url("+String(pictures[starting_index].url)+")");
 	hidden = false;
-	$('#mainPicture').click(function(){
+	$('#timeline').click(function(){
 		if (hidden == false)
 		{
 			fadeScreen();
@@ -254,10 +318,10 @@ $(document).ready(function(){
 		moveRight();
 	});
 
-
 	$('#sampleToggle').click( function() {
 		toggleSampleOverlay();
 	});
+
 });
 
 </script>

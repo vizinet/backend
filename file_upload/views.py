@@ -18,6 +18,7 @@ from user_profile.models import AirpactUser
 from user_profile.views import edit_profile
 from convos.models import convoPage
 from file_upload.forms import picture_upload_form
+from file_upload.forms import picture_edit_form
 from django.contrib.auth.decorators import login_required
 from convos.models import convoPage
 
@@ -33,14 +34,9 @@ def index(request):
 	if request.method == 'POST':
 
 		form = picture_upload_form(request.POST, request.FILES)
-		
+
 		# Create a new picture object
 		if form.is_valid():
-			print("Near x: " + str(form.cleaned_data.get('nearX')))
-			print("Near y: " + str(form.cleaned_data.get('nearY')))
-			print("Far x: " + str(form.cleaned_data.get('farX')))
-			print("Far y: " + str(form.cleaned_data.get('farY')))
-
 			newPic = picture(
 				pic = request.FILES['pic'], 
 				user=request.user, 
@@ -55,8 +51,6 @@ def index(request):
 				radiusHigh = form.cleaned_data.get('radiusFar'),
 				radiusLow = form.cleaned_data.get('radiusNear'));
 			newPic.save()
-			print("Value of the far radius: ");
-			print(form.cleaned_data.get('radiusFar'))
 			
 			#Creating some conversation stuffs
 			conversations = convoPage(picture = newPic)
@@ -77,7 +71,7 @@ def index(request):
 	
 	return render_to_response('file_upload_page.html',{'form': form}, context_instance=RequestContext(request))
 
-# used specifically for the apps to send data
+# The upload url for the app
 @csrf_exempt
 def upload(request):
 	if request.method == 'POST':
@@ -107,7 +101,6 @@ def upload(request):
 			if "highColor" in s:
 				print("FOUND HIGH COLOR it's:" + s["highColor"])
 
-			print("starting checks")
 			if 'distanceUnits' in s:
 				if s['distanceUnits'] == 'miles':
 					_vrUnits = 'M'
@@ -181,6 +174,7 @@ def delete_picture(request, id):
 		img.delete()
 	return edit_profile(request)
 
+# ? ? ?
 def test(request):
 	userob = AirpactUser.objects.get(username='JZTD')
 	print(userob.id)
@@ -192,7 +186,7 @@ def view_picture(request, picId = -1):
 	pictures = None
 	if picId != -1:
 
-		# good picture id
+		# Good picture id
 		p = picture.objects.get(id = picId)
 
 		# Tell the tag db to get alist of tags from the picture
@@ -206,20 +200,45 @@ def view_picture(request, picId = -1):
 		for picture_tag in picture_tags:
 			pictures.append(picture_tag.picture)
 
-		# Are we editing the image? 
+		# POST response
 		if request.method == 'POST':
-			picture.objects.filter(id = picId).update(field1='some value')
-		
-		# Or are we just viewing the image?
+			
+			form = picture_edit_form(request.POST, request.FILES)
+			if form.is_valid:
+
+				# Updated the values
+				edited_picture = picture.objects.get(id = picId)
+				edited_picture.highX = form.cleaned_data.get('farX')
+				edited_picture.highY = form.cleaned_data.get('farY')
+				edited_picture.lowX =  form.cleaned_data.get('nearX')
+				edited_picture.lowY =  form.cleaned_data.get('nearY')
+				edited_picture.nearTargetDistance = form.cleaned_data.get('nearDistance')
+				edited_picture.farTargetDistance = form.cleaned_data.get('farDistance')
+				edited_picture.save()
+				
+			# Generate the conversation 
+			conversations = convoPage(picture = newPic)
+			conversations.save()
+
+			t = form.cleaned_data['location']
+
+			# Generate the tags
+			newTag = tag(picture = newPic, text = t.lower())
+			newTag.save()
+			
+
+			return HttpResponseRedirect(reverse('file_upload.views.index'))
+
+		# GET Response
 		else:
-			pass
+			form = picture_edit_form()
 
 		# Setup range of image numbers for the 
 		# Picture is the main picture, pictures is the side bitches. 
 		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 'convos':conversation, 
-			'convo_id':conversation.pk,'tag':cur_tag[0]}, context_instance=RequestContext(request))
+			'convo_id':conversation.pk,'tag':cur_tag[0], 'picture_form': form}, context_instance=RequestContext(request))
 
-
+	# If we have an invalid picture id
 	else:
 		return HttpResponseRedirect("/gallery")
 		#redirect back to gallery
