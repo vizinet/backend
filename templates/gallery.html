@@ -1,3 +1,4 @@
+
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
 <head>
@@ -43,40 +44,35 @@
 					{% if pictures.number == num %}
 						<li class="active pagination_submit"> <a href="" > {{ num }} </a> </li>
 					{% else %}
-						<li> <a href = "" class = "pagination_submit">{{ num }}</a>  </a> </li>
+						<li> <button class = "pagination_submit">{{ num }}</button> </li>
 					{% endif %}
 				{% endfor %}
 			{% endif %}
 		</ul>
 	</div>
 <script>
-
 // When num link is clicked, re-fire form submit
 $(".pagination_submit").click(function() {
 	page_num = $(this).text();
 	
-
 	$("#search_submit").on("click", function(e){
     	e.preventDefault();
     	$('#search_form').attr('action', "/gallery/" + page_num + "/").submit();
 	});
-
 	$("#search_submit").trigger("click");
 });
-
 $(function(){
 	$('#date1').datepicker();
 });
 $(function(){
 	$('#date2').datepicker();
 });
-
 $('#menu').click(function(){
     $(this).next().slideToggle();
     $(this).hide();
     return false;
 });
-
 </script>
 {% endblock %}
+
 

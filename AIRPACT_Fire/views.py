@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from user_profile.models import AirpactUser
 from file_upload.forms import GallerySortForm
 from dal import autocomplete
+from pprint import pprint
 
 def index(request):
 	newestPictures = picture.objects.all().order_by("-uploaded")[:20]
@@ -91,6 +92,10 @@ def gallery(request, page = 1):
 	allpictures = picture.objects.all().order_by("-uploaded")
 	alltags = tag.objects.all()
 
+	print("Get request: ")
+	pprint(request.GET)
+	print("Post request: ")
+	pprint(request.POST)
 	# Gallery search form 
 	form = GallerySortForm();
 	if request.method == 'POST':
@@ -100,33 +105,34 @@ def gallery(request, page = 1):
 		if form.is_valid():
 			
 			# Order by
-			if form.cleaned_data.get("ascending") != "":
+			if form.cleaned_data.get("ascending") != "" and form.cleaned_data.get("ascending") != 0:
 				allpictures = order_pictures(form.cleaned_data.get("ascending"), allpictures)
-				page = 1
 
 			# Find by vr
-			if form.cleaned_data.get("visual_range")  != "":
+			if form.cleaned_data.get("visual_range")  != "" and form.cleaned_data.get("visual_range") != 0:
 				allpictures = find_pictures_vr(form.cleaned_data.get("visual_range"), allpictures)
-				page = 1
+				print(form.cleaned_data.get("visual_range"))
+				#page = 1
 
 			# Find by date (beginning)
 			if form.cleaned_data.get("date1") != "":
 				d = datetime.strptime(form.cleaned_data.get("date1"),"%m/%d/%Y")
 				allpictures = allpictures.filter(uploaded__gte=d)
-				page = 1
+				#page = 1
 
 			# Find by date (end)
 			if form.cleaned_data.get("date2") != "":
 				d = datetime.strptime(form.cleaned_data.get("date2"),"%m/%d/%Y")
 				allpictures = allpictures.filter(uploaded__lte=d)
-				page = 1
+				#page = 1
 
 			# Find by location (must be last since function returns a list)
 			if form.cleaned_data.get("location") != "":
 				allpictures = find_pictures_tag(form.cleaned_data.get("location"), allpictures, alltags)
-				page = 1
-		 
-	paginator = Paginator(allpictures, 12) #show 12 per page
+				#page = 1
+	
+
+	paginator = Paginator(allpictures, 12) #Show 12 per page
 	try:
 		pictures = paginator.page(page)
 	except PageNotAnInteger:
