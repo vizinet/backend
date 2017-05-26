@@ -7,22 +7,21 @@
 <h1 class="col-lg-24">Gallery</h1>
 
 <div id = "menu">
-	<p><button type="submit" class="btn btn-info" >Show Search Features</button></p>
+	<p><button type="submit" class="btn btn-info" >Search Options</button></p>
 </div>
 
 <div id = "collapsible" style="display:none">
 	<div class="col-lg-12" style="padding-bottom: 5px;"> 
-		<form class="form-inline" method="POST">
+		<form class="form-inline" method="POST" id = "search_form">
 		Search by: <br/>
 			{% csrf_token %}
 			<div class="form-group">
-			{{ form.as_table }}
-
-		<button type="submit" class="btn btn-default"> Search </button>
+			{{ form.as_p }}
+		<button type="submit" class="btn btn-default" id = "search_submit"> Search </button>
 	</div>		
 		</form>
+		
 </div>
-
 
 </div>
 	{% for picture in pictures %}
@@ -39,31 +38,32 @@
 
 	<div class= "col-lg-12">
 		<ul class="pagination">
-			{% if pictures.number != 1 %}
-				<li>
-					<a href="{% url 'gallery' page=pictures.previous_page_number %}"> << </a>
-				</li>
-			{% endif %}
 			{% if pictures.paginator.num_pages > 1 %}
 				{% for num in pictures.paginator.page_range %}
 					{% if pictures.number == num %}
-						<li class="active"> <a href="" > {{num}}</a> </li>
+						<li class="active pagination_submit"> <a href="" > {{ num }} </a> </li>
 					{% else %}
-						<li> <a href="{% url 'gallery' page=num %}"> {{ num }} </a> </li>
+						<li> <a href = "" class = "pagination_submit">{{ num }}</a>  </a> </li>
 					{% endif %}
 				{% endfor %}
-				{% if pictures.number != pictures.paginator.num_pages %}
-					<li>
-						<a href="{% url 'gallery' page=pictures.next_page_number %}"> >> </a>
-					</li>
-				{% endif %}
 			{% endif %}
-
 		</ul>
 	</div>
-
-
 <script>
+
+// When num link is clicked, re-fire form submit
+$(".pagination_submit").click(function() {
+	page_num = $(this).text();
+	
+
+	$("#search_submit").on("click", function(e){
+    	e.preventDefault();
+    	$('#search_form').attr('action', "/gallery/" + page_num + "/").submit();
+	});
+
+	$("#search_submit").trigger("click");
+});
+
 $(function(){
 	$('#date1').datepicker();
 });
@@ -73,16 +73,9 @@ $(function(){
 
 $('#menu').click(function(){
     $(this).next().slideToggle();
+    $(this).hide();
     return false;
 });
-
-$('#menu').click(function(){
-if ($.trim($(this).text()) === 'Show Search Features') {
-    $(this).text('Hide Search Features');
-} else {
-    $(this).text('Show Search Features');        
-}
-   });
 
 </script>
 {% endblock %}

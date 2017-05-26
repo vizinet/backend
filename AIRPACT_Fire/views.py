@@ -86,11 +86,12 @@ class LocationAutocomplete(autocomplete.Select2ListView):
 
 
 #This is the gallery
+# URL: /gallery/<page_num>
 def gallery(request, page = 1):
 	allpictures = picture.objects.all().order_by("-uploaded")
 	alltags = tag.objects.all()
 
-	# DA gallery sort form! 
+	# Gallery search form 
 	form = GallerySortForm();
 	if request.method == 'POST':
 		sortByList=[];
@@ -98,30 +99,33 @@ def gallery(request, page = 1):
 		form = GallerySortForm(request.POST)
 		if form.is_valid():
 			
-			#order by...
+			# Order by
 			if form.cleaned_data.get("ascending") != "":
 				allpictures = order_pictures(form.cleaned_data.get("ascending"), allpictures)
+				page = 1
 
-			#find by vr
+			# Find by vr
 			if form.cleaned_data.get("visual_range")  != "":
 				allpictures = find_pictures_vr(form.cleaned_data.get("visual_range"), allpictures)
+				page = 1
 
-			#find by date (beginning)
+			# Find by date (beginning)
 			if form.cleaned_data.get("date1") != "":
 				d = datetime.strptime(form.cleaned_data.get("date1"),"%m/%d/%Y")
 				allpictures = allpictures.filter(uploaded__gte=d)
+				page = 1
 
-			#find by date (end)
+			# Find by date (end)
 			if form.cleaned_data.get("date2") != "":
 				d = datetime.strptime(form.cleaned_data.get("date2"),"%m/%d/%Y")
 				allpictures = allpictures.filter(uploaded__lte=d)
+				page = 1
 
-
-			#find by location (must be last since function returns a list)
+			# Find by location (must be last since function returns a list)
 			if form.cleaned_data.get("location") != "":
 				allpictures = find_pictures_tag(form.cleaned_data.get("location"), allpictures, alltags)
-		
-
+				page = 1
+		 
 	paginator = Paginator(allpictures, 12) #show 12 per page
 	try:
 		pictures = paginator.page(page)
@@ -149,7 +153,7 @@ def find_pictures_vr(x, pictures):
 		'2': pictures.filter(vr__gte=10.0, vr__lte=30.0 ),
 		'3': pictures.filter(vr__gte=30.0, vr__lte=100.0 ),
 		'4': pictures.filter(vr__gte=100.0, vr__lte=500.0 ),
-		'5': pictures.filter(vr__gte=5000.0),
+		'5': pictures.filter(vr__gte=500.0),
 	}[x]
 
 

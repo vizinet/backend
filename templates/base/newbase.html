@@ -55,7 +55,7 @@
 			</div>
 		</nav>
 
-		<div id = "body_container_main" class="col-md-20 col-lg-9 content" style="position: relative; top:101px; width: 99% z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px;">
+		<div id = "body_container_main" class="col-md-20 col-lg-9 content" style="position: relative; max-width: 2000; top:101px; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
 			{% block airpact-content %}
 			{% endblock %}
 		</div>
@@ -79,7 +79,7 @@ $('#myAffix').affix({
 
 $(function(){
 	if($(window).width() < 800) {
-		
+		 $('#body_container_main').css({ "left": "100px"});		
 	} else { $('#body_container_main').css({ "left": "0px"}); }
 
 });
