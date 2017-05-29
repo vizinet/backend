@@ -1,7 +1,6 @@
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
 
-
 <div class="col-md-4" style="">
     <p><h2> Instructions: </h2></p>
     <p> Red Circle = Far target</p>
@@ -15,7 +14,7 @@
     </form>
 </div> 
 
-<div class="col-md-9 col-lg-3" style="">
+<div class="col-md-9" style="">
     <canvas id="canvas"></canvas>
 </div>
 
@@ -77,7 +76,7 @@ function imgLoad()
 {
     var canvas = $('#canvas')[0];
     var context = canvas.getContext('2d');
-    context.drawImage(picture,0,0);
+    context.drawImage(picture, 0,0);
 }
 
 // Load a file
@@ -91,15 +90,6 @@ function fileOnLoad(e)
         canvas.height = this.naturalHeight;
         context.drawImage(this,0,0);
     });
-}
-
-// Grabs mouse position relative to image/Canvas
-function getMousePosition(canvas, evt){
-    var rect = canvas.getBoundingClientRect();
-    scaleX = canvas.width/rect.width;
-    scaleY = canvas.height/rect.height;
-
-    return { x: (evt.clientX - rect.left) * scaleX, y: (evt.clientY - rect.top) * scaleY}
 }
 
 // Whenever the image changes

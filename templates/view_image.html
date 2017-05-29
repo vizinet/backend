@@ -2,39 +2,33 @@
 {% load comments %}
 {% block airpact-content %}
 
-		<table class="table table-striped">
-			<tr>
-				<td> Estimated Visual Range </td>
-				<td> {{ picture.vr }} </td>
-			</tr>
-			<tr>
-				<td> Computed Visual Range </td>
-				<td> {{ picture.twoTargetContrastVr }}
-			</tr>
-			<tr>
-				<td> User </td>
-				<td> <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
-			</tr>
-			<tr>
-				<td> Description </td>
-				<td> {{ picture.description }} </td>
-			</tr>
-			<tr>
-				<td> Location </td>
-				<td> {{ tag.text }} </td>
-			</tr>
-		</table>
-
-
-	<div class="col-lg-9" id ="main_image_box" style="z-index: 1;">
-		 <img class = img-responsive src="{{ picture.pic.url }}" alt="{{ picture.pic.url}}" align = "middle" id ="mainPicture" />
-
-		<p id ="timeline"> Click Here for Timeline slideshow </p> 
-	</div>
-
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	
+
+	<table class="table table-striped">
+		<tr>
+			<td> Estimated Visual Range </td>
+			<td> {{ picture.vr }} </td>
+		</tr>
+		<tr>
+			<td> Computed Visual Range </td>
+			<td> {{ picture.twoTargetContrastVr }}
+		</tr>
+		<tr>
+			<td> User </td>
+			<td> <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
+		</tr>
+		<tr>
+			<td> Description </td>
+			<td> {{ picture.description }} </td>
+		</tr>
+		<tr>
+			<td> Location </td>
+			<td> {{ tag.text }} </td>
+		</tr>
+	</table>
+
 	<div id = "show_edit_options">
 		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
 	</div>
@@ -45,6 +39,12 @@
 			{{ picture_form }}
 		</form>
 	</div>	
+
+
+    <canvas id="canvas"></canvas>
+
+
+	<p id ="timeline"> Click Here for Timeline Slideshow </p> 
 
 	<div class="col-lg-12">
 		<a name="comment_start"></a>
@@ -129,12 +129,14 @@
 
 <script type="text/javascript">
 
+// General Global variables
 var sampleToggleState = 0;
 var pictures = [];
 var starting_index = 0;
 var currentIndex = 0;
+var canvas_picture = new Image();
 
-// Vars that effect the python algorithm
+// Variables obtained from the form
 var nearX = $('input[name="nearX"]');
 var nearY = $('input[name="nearY"]');
 var farX = $('input[name="farX"]');
@@ -149,6 +151,14 @@ nearX.val(0);
 nearY.val(0);
 farX.val(0);
 farY.val(0);
+
+ // Create our image
+ var canvas = $('#canvas')[0];
+ var context = canvas.getContext('2d');
+ canvas_picture.src = "{{ picture.pic.url }}";
+ canvas_picture.onload = function() {
+    context.drawImage(canvas_picture, 0, 0);
+ };
 
 // Make the near circle draggable and hidden
 $( "#near_circle" ).draggable({ containment: "#mainPicture" });
@@ -291,6 +301,7 @@ function toggleSampleOverlay()
 }
 
 $(document).ready(function(){
+    
 	findStartingIndex();
 	currentIndex=starting_index;
 	$("#slideShowMainPicture").css('background-image', "url("+String(pictures[starting_index].url)+")");
@@ -314,6 +325,7 @@ $(document).ready(function(){
 	$('#slideShowLeftNavArrow').click(function(){
 		moveLeft();
 	});
+
 	$('#slideShowRightNavArrow').click(function(){
 		moveRight();
 	});

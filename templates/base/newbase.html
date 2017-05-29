@@ -14,75 +14,49 @@
 
 <body>
 
-<nav class="navbar" style=" position:fixed; z-index:100; background-color:#FFF; border-bottom: 1px solid black; max-height: 100%; min-height: 100px; min-width: 100%;" role="navigation" id="main-nav">
+<nav class="navbar" style=" position:fixed; z-index:100; background-color:#FFF; border-bottom: 1px solid black; min-width: 100%;" role="navigation" id="main-nav">
 	
-		<div class="navbar-header" style="background-color: #FFF; padding-right:25px; padding-left:25px;height:48px;">
-			<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:90px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > </a>
-
+		<div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
+			<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:60px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > </a>				
 		</div>
 
-		<div class= "navbar-left" style=" position:relative;bottom:0;left:10; margin-left: 110px; color:#FFF" ></div>
-		<div class= "navbar-right" style=" position:absolute;bottom:0;right:0; margin-right: 25px; color:#FFF" >
-			{% if user.is_authenticated %}
-				 <a href="{% url 'view_profile' user %}"> {{ user }} </a><a href="{% url 'logout' %}"> Logout </a>
-			{% else %}
-				<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
-			{% endif %}
+		<div class= "navbar-left topnav" style=" position:relative; bottom:200; color:#FFF" >
+					<a  class = "nav-link" href= "{% url 'home' %}" > Home </a>
+					<a  href="{% url 'gallery' %}"> Gallery </a>
+					<a  href="{% url 'index' %}"> Upload </a>
+					<a  href="{% url 'downloads' %}"> Downloads </a>
+					<a  href="/forum/"> Forum </a>
+					<a  href="{% url 'about' %}"> About </a>
+					{% if user.is_custom_admin and user.is_authenticated %}
+						<a  href="{% url 'adminPage' %}"> Admin Page </a>
+					{% endif %}
+				
+					{% if user.is_authenticated %}
+				 		<a href="{% url 'view_profile' user %}"> {{ user }} 's Profile </a>
+				 		<a href="{% url 'logout' %}"> Logout </a>
+					{% else %}
+						<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
+					{% endif %}
+			
 		</div>
-
 </nav>
 
 
-	<div class="container-fluid">
+	<div class="container-fluid" style = " display: inline"  >
 		
 		<nav class="col-md-1 nav">
-			<div class="text-right" >
-				<div id="myAffix" >
-<!-- 			<img class="img-responsive" src="{% static '/static/media/decoration/logo.png' %}"/>
-				<span class="icon-bar"></span> -->
-				<ul class="nav navbar-default navbar-fixed-side" style = " position:fixed; top:101px; z-index:11">
-					<li><a  class = "nav-link" href="{% url 'home' %}"> Home </a> </li>
-					<li><a  href="{% url 'gallery' %}"> Gallery </a></li>
-					<li><a  href="{% url 'index' %}"> Upload</a></li>
-					<li><a  href="{% url 'downloads' %}"> Downloads </a></li>
-					<li><a  href="/forum/"> Forum </a></li>
-					<li><a  href="{% url 'about' %}"> About </a></li>
-					{% if user.is_custom_admin and user.is_authenticated %}
-					<li><a  href="{% url 'adminPage' %}"> Admin Page </a></li>
-					{% endif %}
-				</ul>
-				</div>
-			</div>
 		</nav>
 
-		<div id = "body_container_main" class="col-md-20 col-lg-9 content" style="position: relative; max-width: 2000; top:101px; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
+		<div id = "body_container_main" class="col-md-20 col-lg-9 content" style="position: relative; top:80px; width: auto; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
 			{% block airpact-content %}
 			{% endblock %}
 		</div>
 
 	</div>
 
-
-
-
-
 </body>
 
 <script>
-$('#myAffix').affix({
-  offset: {
-    bottom: function () {
-      return (this.bottom = $('.footer').outerHeight(true))
-    }
-  }
-})
-
-$(function(){
-	if($(window).width() < 800) {
-		 $('#body_container_main').css({ "left": "100px"});		
-	} else { $('#body_container_main').css({ "left": "0px"}); }
-
-});
 
 </script>
 
