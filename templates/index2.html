@@ -2,10 +2,7 @@
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
 
-
-
-<div id="map" class="" style="height:500px; width: 1000px; border:solid black 1px; "> </div>
-
+<div id="map" class="" style="height:500px; width: 2000px; border:solid black 1px; "> </div>
 
  <script>
     var pictures = [];
@@ -62,17 +59,4 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCp587g3ut0dYnLfl2gfeWTc0fAxujtVcw&callback=initMap"></script>
 
-
-<!-- <script>
-	$(document).ready(function(){
-
-		$("#map").click(function(){
-			window.location.href ="{% url 'main'%}";
-		});
-		// get last 8 hours
-
-	});
-
-
-</script> -->
 {% endblock %}

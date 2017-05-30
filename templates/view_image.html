@@ -1,11 +1,7 @@
 {% extends "base/newbase.html" %}
 {% load comments %}
 {% block airpact-content %}
-
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link rel="stylesheet" href="/resources/demos/style.css">
-	
-
+	<div class ="col-md-4">
 	<table class="table table-striped">
 		<tr>
 			<td> Estimated Visual Range </td>
@@ -13,7 +9,7 @@
 		</tr>
 		<tr>
 			<td> Computed Visual Range </td>
-			<td> {{ picture.twoTargetContrastVr }}
+			<td> {{ picture.twoTargetContrastVr }} </td>
 		</tr>
 		<tr>
 			<td> User </td>
@@ -28,6 +24,7 @@
 			<td> {{ tag.text }} </td>
 		</tr>
 	</table>
+	</div>
 
 	<div id = "show_edit_options">
 		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
@@ -40,11 +37,13 @@
 		</form>
 	</div>	
 
-
-    <canvas id="canvas"></canvas>
-
-
 	<p id ="timeline"> Click Here for Timeline Slideshow </p> 
+	
+	<div class="col-md-9" style="">
+    	<canvas id="canvas">
+    	</canvas>
+	</div>
+
 
 	<div class="col-lg-12">
 		<a name="comment_start"></a>
@@ -124,10 +123,13 @@
 	<div id="slideShowRightNavArrow"> </div>
 </div>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+	
 <div id = "near_circle" class="ui-widget-content"></div>
 <div id = "far_circle" class="ui-widget-content"></div>
 
-<script type="text/javascript">
+<script>
 
 // General Global variables
 var sampleToggleState = 0;
@@ -151,14 +153,6 @@ nearX.val(0);
 nearY.val(0);
 farX.val(0);
 farY.val(0);
-
- // Create our image
- var canvas = $('#canvas')[0];
- var context = canvas.getContext('2d');
- canvas_picture.src = "{{ picture.pic.url }}";
- canvas_picture.onload = function() {
-    context.drawImage(canvas_picture, 0, 0);
- };
 
 // Make the near circle draggable and hidden
 $( "#near_circle" ).draggable({ containment: "#mainPicture" });
@@ -300,6 +294,13 @@ function toggleSampleOverlay()
 	}
 }
 
+function imgLoad()
+{
+	var canvas = $('#canvas')[0];
+	var context = canvas.getContext('2d');
+	context.drawImage(canvas_picture, 0, 0);
+}
+
 $(document).ready(function(){
     
 	findStartingIndex();
@@ -335,6 +336,15 @@ $(document).ready(function(){
 	});
 
 });
+
+ // Create our image
+ var canvas = $('#canvas')[0];
+ var context = canvas.getContext('2d');
+ canvas_picture.src = "{{ picture.pic.url }}";
+ canvas_picture.onload = function() {
+    context.drawImage(canvas_picture, 0, 0);
+ };
+
 
 </script>
 {% endblock %}
