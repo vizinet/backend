@@ -14,51 +14,67 @@
 
 <body>
 
+<nav class="navbar" style = "z-index: 100" role="navigation" id="main-nav">
 
-
-<nav class="navbar" style=" position:relative; z-index:100; background-color:#FFF; border-bottom: 1px solid black; min-width: 100%;" role="navigation" id="main-nav">
-
-<div class="container-fluid" style = " display: inline;"  >	
-		<div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
-			<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:40px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > </a>				
-		</div>
-
-		<div class= "navbar-left topnav" style=" color:#FFF" >
-					<a  class = "nav-link" href= "{% url 'home' %}" > Home </a>
-					<a  href="{% url 'gallery' %}"> Gallery </a>
-					<a  href="{% url 'index' %}"> Upload </a>
-					<a  href="{% url 'downloads' %}"> Downloads </a>
-					<a  href="/forum/"> Forum </a>
-					<a  href="{% url 'about' %}"> About </a>
-					{% if user.is_custom_admin and user.is_authenticated %}
-						<a  href="{% url 'adminPage' %}"> Admin Page </a>
-					{% endif %}
+		<div id = "main_nav_div" class= "topnav" style=" color:#FFF; position:fixed; min-width:100%" >
+			<div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
+				<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:60px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > 
+				</a>				
+			</div>
+			<a  href= "{% url 'home' %}" > Home </a>
+			<a  href="{% url 'gallery' %}"> Gallery </a>
+			<a  href="{% url 'index' %}"> Upload </a>
+			<a  href="{% url 'downloads' %}"> Downloads </a>
+			<a  href="/forum/"> Forum </a>
+			<a  href="{% url 'about' %}"> About </a>
+				{% if user.is_custom_admin and user.is_authenticated %}
+					<a  href="{% url 'adminPage' %}"> Admin Page </a>
+				{% endif %}
 				
-					{% if user.is_authenticated %}
-				 		<a href="{% url 'view_profile' user %}"> {{ user }} 's Profile </a>
-				 		<a href="{% url 'logout' %}"> Logout </a>
-					{% else %}
-						<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
-					{% endif %}
+				{% if user.is_authenticated %}
+				 	<a href="{% url 'view_profile' user %}"> {{ user }} 's Profile </a>
+				 	<a href="{% url 'logout' %}"> Logout </a>
+				{% else %}
+					<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
+				{% endif %}
 			
 		</div>
 </nav>
 
-
-		
-<div id = "body_container_main" class="content" style="position: relative; width: auto; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
-		{% block airpact-content %}
-		{% endblock %}
+<div class="container-fluid" style = " display: inline; position:relative"  >		
+	<div id = "body_container_main" class="content" style="position: relative; width: auto; top:100px; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
+			{% block airpact-content %}
+			{% endblock %}
+	</div>
 </div>
 
-<div style = "float:left">
-	<p>AirpactFire 2017 - A project under <a  href="www.lar.wsu.edu"> LAR </a> </p> 
-</div>
-		
+<div class="container-fluid" style = " display: inline; position:relative"  >
+	<div style = "float:left">
+		Project Powered by LAR
+	</div>
+</div>	
 
 </body>
 
 <script>
+
+// Make the main container and nav links have the appropriate css for the current screen 
+function resize_check(){
+	if($(window).width() > 800){
+		$("#body_container_main").css({"top" : "10px" });
+		$("#main_nav_div.topnav a").css({ "font-size": "16px", "padding":"16px 16px" });
+	}else {
+		$("#body_container_main").css({"top" : "60px" });
+		$("#main_nav_div.topnav a").css({ "font-size": "10px", "padding":"10px 8px" });
+	}	
+}
+
+resize_check();
+
+$(window).resize(function(){  
+	resize_check();
+})
+
 
 </script>
 

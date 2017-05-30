@@ -30,7 +30,7 @@
 		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
 	</div>
 
-	<div class="col-lg-12" style="padding-bottom: 5px; display:none;"> 
+	<div class="col-md-12" style="padding-bottom: 5px; display:none;"> 
 		<form class="form-inline" method="POST">
 			{% csrf_token %}
 			{{ picture_form }}
@@ -298,7 +298,7 @@ function imgLoad()
 {
 	var canvas = $('#canvas')[0];
 	var context = canvas.getContext('2d');
-	context.drawImage(canvas_picture, 0, 0);
+	context.drawImage(canvas_picture, 0, 0, 1000, 1000);
 }
 
 $(document).ready(function(){
