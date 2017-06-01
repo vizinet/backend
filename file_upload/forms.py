@@ -1,5 +1,11 @@
-from django import forms
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
 
+"""
+from django import forms
 from file_upload.models import picture
 from file_upload.models import tag
 from dal import autocomplete
@@ -36,7 +42,6 @@ class picture_upload_form(forms.Form):
 class picture_edit_form(forms.Form):
 	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
 	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
-	description = forms.CharField(label='Description', required=True)
 	
 	# Deals with circle locations
 	nearX = forms.DecimalField(widget=forms.HiddenInput())

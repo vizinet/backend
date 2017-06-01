@@ -120,6 +120,7 @@ function dragging(event) {
 }
 
 $(document).ready(function(){
+    
     $('#form').submit(function(){
         var near_cirle = $("#near_cirle")[0];
         var near_circle_rect = near_circle.getBoundingClientRect();
@@ -127,12 +128,13 @@ $(document).ready(function(){
         var far_cirle = $("#far_cirle")[0];      
         var far_circle_rect = far_circle.getBoundingClientRect();
         
-        var canvas_rect = canvas.getBoundingClientRect();
-        
-        nearY.val(near_circle_rect.top - canvas_rect.top);
-        nearX.val(near_circle_rect.left - canvas_rect.left);
-        farY.val(far_circle_rect.top - canvas_rect.top);
-        farX.val(far_circle_rect.left - canvas_rect.left);
+        nearY.val($("#near_circle").offset().top - $("#canvas").offset().top);
+        nearX.val($("#near_circle").offset().left - $("#canvas").offset().left);
+        farY.val($("#far_circle").offset().top - $("#canvas").offset().top);
+        farX.val($("#far_circle").offset().left - $("#canvas").offset().left);
+
+        alert("canvas.offset().top: "  + $("#canvas").offset().top + " near_circle_rect.top: " + near_circle_rect.top );
+        alert("canvas.offset.left: "  + $("#canvas").offset().left + " near_circle_rect.left: " + near_circle_rect.left )
         $('#submitButton').attr("disabled", "disabled");
     });
 });

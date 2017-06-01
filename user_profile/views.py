@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+
+"""
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -21,6 +28,8 @@ import json
 import random
 import string
 
+
+# View the user profile
 @login_required
 def user_profile(request):
 	if request.user.is_certified is False:
@@ -28,11 +37,13 @@ def user_profile(request):
 	if(request.method == 'POST'):
 		form = UserProfileForm(request.POST, instance=request.user.profile)
 
+# Login page
 def login(request):
 	c = {}
 	c.update(csrf(request))
 	return render_to_response('login.html', c)
 
+# Logout page
 @login_required
 def logout(request):
 	auth.logout(request)
@@ -40,20 +51,12 @@ def logout(request):
 	c.update(csrf(request))
 	return render_to_response('login.html', c)
 
+# Authenticate the user
 def auth_view(request):
 	if(request.method == 'POST'):
 		username = request.POST['username']
 		password = request.POST['password']
 		user = auth.authenticate(username=username, password=password)
-
-	# # For now, do not ask for the email
-	# #email = request.POST['email']
-
-	# print("\n ! !  This is the post information from login:")
-	# print(request.POST)
-	# print("\n ! !  This is the password:")
-	# print(password)
-
 
 		if user is not None:
 		   auth.login(request, user)
@@ -61,10 +64,12 @@ def auth_view(request):
 		else:
 			return render_to_response('login.html',  {'Errors':"Invalid username or Password"}, context_instance=RequestContext(request) )
 	return HttpResponse("DONT GO HERE")
-	
+
+# Correct login page
 def loggedin(request):
 	return render_to_response('loggedin.html')
 
+# Invalid login page
 def invalid_login(request):
 	return render_to_response('invalid.html')
 
@@ -81,10 +86,11 @@ def register_user(request):
 	form = UserCreationForm()
 	return render_to_response('register.html',  {'form':form}, context_instance=RequestContext(request) )
 
-
+# Registration successful page
 def register_success(request): 
 	return render_to_response('register_success.html', {'message': "successfull registration! "}, context_instance=RequestContext(request))
 
+# Authentication for the app
 @csrf_exempt
 def user_app_auth(request):
 	if request.method == 'POST':
@@ -108,7 +114,7 @@ def user_app_auth(request):
 	else:
 		return HttpResponse("HI")
 
-
+# View the user profile
 def view_profile(request, name, page = 1):
 	# we need to get the current user info
 	# send it to the view...so lets do that I guess

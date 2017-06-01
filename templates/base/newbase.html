@@ -15,10 +15,9 @@
 <body>
 
 <nav class="navbar" style = "z-index: 100" role="navigation" id="main-nav">
-
 		<div id = "main_nav_div" class= "topnav" style=" color:#FFF; position:fixed; min-width:100%" >
 			<div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
-				<a href="#" class="navbar-left" style="background-color: #FFF;"> <img class="img-responsive" style="height:60px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > 
+				<a href="#" class="navbar-left" style="background-color: #FFF;"> <img id = "the_logo" class="img-responsive" style="height:50px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > 
 				</a>				
 			</div>
 			<a  href= "{% url 'home' %}" > Home </a>
@@ -36,21 +35,23 @@
 				 	<a href="{% url 'logout' %}"> Logout </a>
 				{% else %}
 					<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
-				{% endif %}
-			
+				{% endif %}		
 		</div>
 </nav>
 
-<div class="container-fluid" style = " display: inline; position:relative"  >		
-	<div id = "body_container_main" class="content" style="position: relative; width: auto; top:100px; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
+<div class="container-fluid" style = " display: inline; position:relative" >		
+	<div id = "body_container_main" class="content" style="position: relative; width: auto; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
 			{% block airpact-content %}
 			{% endblock %}
 	</div>
 </div>
 
-<div class="container-fluid" style = " display: inline; position:relative"  >
+<div class="container-fluid" style = " display: inline; position:relative" >
 	<div style = "float:left">
-		Project Powered by LAR
+	Project Powered by <a href = "http://lar.wsu.edu/"> LAR </a> <br>
+	Copyright © 2017,
+	Laboratory for Atmospheric Research at Washington State University,
+	All rights reserved. <br>
 	</div>
 </div>	
 
@@ -61,11 +62,13 @@
 // Make the main container and nav links have the appropriate css for the current screen 
 function resize_check(){
 	if($(window).width() > 800){
-		$("#body_container_main").css({"top" : "10px" });
+		$("#body_container_main").css({"top" : "0px" , "left":"0" });
 		$("#main_nav_div.topnav a").css({ "font-size": "16px", "padding":"16px 16px" });
+		$("#the_logo").css({"height" : 50});
 	}else {
-		$("#body_container_main").css({"top" : "60px" });
+		$("#body_container_main").css({"top" : "50px" , "left":"0" } );
 		$("#main_nav_div.topnav a").css({ "font-size": "10px", "padding":"10px 8px" });
+		$("#the_logo").css({"height" : 30});
 	}	
 }
 

@@ -1,24 +1,30 @@
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
 
-	<P><b>{{ Errors }}<b><P>
-
-	<H2> Login </H2>
-
+<div class="col-md-10" style=" width:2000px">
+		<p>{{ Errors }} </p>
+		<H2> Login </H2>
+	<table class="table table-striped">
 	<form action = "auth" method = "post"> {% csrf_token %}
-	<p>
-		<label for = "username"> Username </label> 
-		<input type="text" name="username" value="" id="username">
-	</p>
-	<P>
-		<label for = "password"> Password </label>
-		<input type = "password" name = "password" value ="" id="password">
-	</P>
-	<input type = "submit" value="login" />
-
+		<tr>
+			<td> 
+				<label for = "username"> Username </label> 
+				<input type="text" name="username" value="" id="username">
+	    	</td>
+		</tr>
+		<tr>
+	  		<td>
+				<label for = "password"> Password </label>
+				<input type = "password" name = "password" value ="" id="password">
+	  		</td>
+		</tr>
+		<tr>
+			<td>
+				<input type = "submit" value="login">
+			</td>	
+		</tr>
 	</form>
-	<P> 	
-	</P>
-
+	</table>
+</div>
 
 {% endblock %}

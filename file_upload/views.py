@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+
+"""
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -181,7 +188,7 @@ def test(request):
 	return HttpResponse(userob.id)
 
 # View a specific picture from the gallery
-# Url: /picture/view/<pic_id>/
+# URL: /picture/view/<pic_id>/
 def view_picture(request, picId = -1):
 	pictures = None
 	if picId != -1:

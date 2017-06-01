@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+
+"""
 from __future__ import unicode_literals
 from user_profile.models import AirpactUser
 from django.db import models
@@ -9,12 +16,12 @@ from TwoTargetContrast import TwoTargetContrast
 from datetime import datetime
 import math
 import os
-# Create your models here.
 
-#TODO:
 class picture(models.Model):
 	pic = models.ImageField(upload_to = 'pictures/') # the actual picture object
 	thumbnail = models.ImageField(upload_to = 'thumbnails/', null=True, blank=True) # the small 200x200 picture object
+	
+	# Deprecated field
 	pictureWithCircles = models.ImageField(upload_to = 'circles/', null=True, blank=True) # copy of pic but with target cirlces drawn on
 	uploaded = models.DateTimeField(default = datetime.now) # time in which the picture was taken
 	description = models.TextField(default = " ", null=True) 
@@ -66,53 +73,7 @@ class picture(models.Model):
 		suf = SimpleUploadedFile(os.path.split(self.pic.name)[-1],tempHandle.read(),content_type = djangoType)
 		self.thumbnail.save('%s.%s'%(os.path.splitext(suf.name)[0],fileExtension), suf, save=False)
 
-
-	# creates a copy of the image with the circle points drawn on them 
-	def generateCircles(self):
-
-		#see what kind of file we are dealing with 
-		if self.pic.name.endswith(".jpg"):
-			pilImageType = "jpeg"
-			fileExtension = "jpg"
-			djangoType = 'image/jpeg'
-		elif self.pic.name.endswith(".png"):
-			pilImageType = "png"
-			fileExtension = "png"
-			djangoType = 'image/png'
-
-		#get the bounding boxes for each of the circles
-		highCords = [(self.highX-int(math.ceil(math.sqrt(20000))), self.highY-int(math.ceil(math.sqrt(20000)))),(self.highX+int(math.ceil(math.sqrt(20000))), self.highY+int(math.ceil(math.sqrt(20000))))]
-		lowCords = [(self.lowX-int(math.ceil(math.sqrt(20000))), self.lowY-int(math.ceil(math.sqrt(20000)))),(self.lowX+int(math.ceil(math.sqrt(20000))), self.lowY+int(math.ceil(math.sqrt(20000))))]
-
-		#open original image
-		self.pic.seek(0)
-		OriginalImage = Image.open(StringIO(self.pic.read()))
-
-		#open a new drawing object with our image
-		editor = ImageDraw.Draw(OriginalImage)
-
-		#draw the cricles
-		for i in range(0,10):
-			outline_value = (0,0,0)
-			if i > 5:
-				outline_value = (255,255,255)
-			editor.ellipse([highCords[0][0]-i,highCords[0][1]-i,highCords[1][0]+i,highCords[1][1]+i], outline=outline_value)
-			editor.ellipse([lowCords[0][0]-i,lowCords[0][1]-i,lowCords[1][0]+i,lowCords[1][1]+i], outline=outline_value)
-
-		#get rid of the drawer
-		del editor
-
-		#create a place to hold the new image for a second
-		tempHandle = StringIO()
-
-		#write the image to the handler
-		OriginalImage.save(tempHandle, pilImageType)
-		tempHandle.seek(0)
-
-		#save the image
-		suf = SimpleUploadedFile(os.path.split(self.pic.name)[-1],tempHandle.read(),content_type=djangoType)
-		self.pictureWithCircles.save('%s.%s'%(os.path.splitext(suf.name)[0],fileExtension), suf, save=False)
-	
+	# Find and assign the visual range based off the given picture object
 	def findTwoTargetContrastVr(self):
 		self.pic.seek(0)
 		#open image
@@ -131,7 +92,7 @@ class picture(models.Model):
 		lGreen = []
 		lBlue = []
 
-		# 
+		 
 		newHX = int(self.highX)
 		newHY = int(self.highY)
 		newLX = int(self.lowX)
@@ -142,6 +103,7 @@ class picture(models.Model):
 		if(int(self.radiusHigh) < radius):
 			radius = int(self.radiusHigh)
 
+		# No negative values
 		if newHX < 0:
 			newHX  = 0;
 		if newHY < 0:
@@ -194,7 +156,8 @@ class picture(models.Model):
 	def save(self):
 		self.convertToKM()
 		self.cleanDescription()
-		self.generateCircles()
+		# Deprecated
+		#self.generateCircles()
 		self.generateThumbnail()
 
 		try:

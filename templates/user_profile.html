@@ -1,6 +1,6 @@
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
-<div class="col-md-12">
+<div class="col-md-12" >
 	<div class="row">
 		<div class="col-md-4">
 			<img class="img-responsive" src="" />
@@ -14,8 +14,8 @@
 			{% if thisuser == True %}
 				<a href="/user/profile/edit/"> Edit </a>
 			{% endif %}
-
 		</div>
+		
 	<div class="row">
 			<div class ="col-md-12">
 				<h3> {{ profile_user.username }}'s Photos </h3>
@@ -23,14 +23,16 @@
 					<a href="/user/profile/manage_pictures/"> Manage Pictures </a>
 				{% endif %}
 			</div>
-			{% for pic in pictures %}
-				<div >
-				<a href="{% url 'view_picture' picId=pic.id %}"> <div class="col-md-3 thumb"> <img class="img-thumbnail" src="{{ pic.thumbnail.url }}" /> </a>
-	    		</div>
-	    		
-			{% endfor %}
-
-
+			{% for picture in pictures %}
+				<div class="col-lg-3">
+					<a href="{% url 'view_picture' picId=picture.id %}"> <img class="img-thumbnail" src="{{ picture.thumbnail.url }}" alt="{{ picture..url}}" /> </a>
+					<div>
+						<article> Date: {{ picture.uploaded }} </article>
+						<div> VR: {{picture.vr }} </div>
+						<article> uploaded by: <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </article>				
+					</div>
+				</div>
+		{% endfor %}
 	</div>
 
 	<div class="row">

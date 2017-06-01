@@ -1,103 +1,35 @@
 {% extends "base/newbase.html" %}
 {% load comments %}
 {% block airpact-content %}
-	<div class ="col-md-4">
-	<table class="table table-striped">
-		<tr>
-			<td> Estimated Visual Range </td>
-			<td> {{ picture.vr }} </td>
-		</tr>
-		<tr>
-			<td> Computed Visual Range </td>
-			<td> {{ picture.twoTargetContrastVr }} </td>
-		</tr>
-		<tr>
-			<td> User </td>
-			<td> <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
-		</tr>
-		<tr>
-			<td> Description </td>
-			<td> {{ picture.description }} </td>
-		</tr>
-		<tr>
-			<td> Location </td>
-			<td> {{ tag.text }} </td>
-		</tr>
-	</table>
-	</div>
+<!--  -->
+<div class = "col-md-10"></div>
+<div class="col-md-10" style="">
+    <canvas id="canvas"></canvas>
+</div>
 
-	<div id = "show_edit_options">
-		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
-	</div>
+<!--  -->
+<div class ="col-lg-9">
+<table class="table table-striped">
+	<tr>
+		<td> Estimated Visual Range: {{ picture.vr }} </td>
+	</tr>
+	<tr>
+		<td> Computed Visual Range: {{ picture.twoTargetContrastVr }} </td>
+	</tr>
+	<tr>
+		<td> User:  <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
+	</tr>
+	<tr>
+		<td> Description: {{ picture.description }} </td>
+	</tr>
+	<tr>
+		<td> Location: {{ tag.text }}</td>
+	</tr>
+</table>
+</div>
 
-	<div class="col-md-12" style="padding-bottom: 5px; display:none;"> 
-		<form class="form-inline" method="POST">
-			{% csrf_token %}
-			{{ picture_form }}
-		</form>
-	</div>	
-
-	<p id ="timeline"> Click Here for Timeline Slideshow </p> 
-	
-	<div class="col-md-9" style="">
-    	<canvas id="canvas">
-    	</canvas>
-	</div>
-
-
-	<div class="col-lg-12">
-		<a name="comment_start"></a>
-		<div class = "comment_form">
-
-			{% if user.is_authenticated %}
-			{% get_comment_form for convos as form %}
-			<form action = "{% comment_form_target %}" method="POST">
-			{% csrf_token %}
-
-			{{ form.comment }}
-
-			{{ form.content_type }}
-			{{ form.object_pk }}
-			{{ form.timestamp }}
-			{{ form.security_hash }}
-
-			<input type ="hidden" name="name" value = "{{ user }}">
-			<input type ="hidden" name="email" value = "nothing@gmail.com">
-			<input type ="hidden" name="url" value = "https://www.nothing.com">
-
-			<input type = "hidden" name = "next" value="/picture/view/{{ picture.id }}#comment_start">
-			<p><input type = "submit" value= "Add comment" id="id_submit" /></p>
-			</form>
-
-			{% else %}
-
-			<p> Please log in to comment </p>
-
-			{% endif %}
-		</div>
-
-		<H2 class="col-lg-12">Comments: </H2>
-
-
-		{% get_comment_list for convos as comment_list %}
-		{% for comment in comment_list reversed %}
-
-
-		{% if comment.id|divisibleby:2 %}
-		<div class = "col-lg-12 commentRow">
-			<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
-			<strong><p class="col-lg-12">{{ comment.comment }} </p></strong>
-		</div>	
-		{% else %}
-		<div class = "col-lg-12 commentRow2">
-			<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
-			<strong><p class="col-lg-12">{{ comment.comment }} </p> </strong>
-		</div>	
-		{% endif %}
-
-
-		{% endfor %}
-	</div>
+<div class = "col-lg-9">
+<button class = "btn btn-info" id ="timeline"> View Timeline </button> 
 </div>
 
 <div class="slideShowContainer" id="slideShowContainer">
@@ -123,6 +55,62 @@
 	<div id="slideShowRightNavArrow"> </div>
 </div>
 
+<div class = "col-lg-9" id = "show_edit_options">
+	<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
+</div>
+
+<div class = "col-lg-12" style="padding-bottom: 5px; display:none;"> 
+	<form class="form-inline" method="POST">
+		{% csrf_token %}
+		{{ picture_form }}
+	</form>
+</div>	
+
+
+<div class="col-lg-9">
+	<a name="comment_start"></a>
+	<div class = "comment_form">
+
+	{% if user.is_authenticated %}
+		{% get_comment_form for convos as form %}
+	<form action = "{% comment_form_target %}" method="POST">
+		{% csrf_token %}
+		{{ form.comment }}
+		{{ form.content_type }}
+		{{ form.object_pk }}
+		{{ form.timestamp }}
+		{{ form.security_hash }}
+
+		<input type ="hidden" name="name" value = "{{ user }}">
+		<input type ="hidden" name="email" value = "nothing@gmail.com">
+		<input type ="hidden" name="url" value = "https://www.nothing.com">
+
+		<input type = "hidden" name = "next" value="/picture/view/{{ picture.id }}#comment_start">
+		<p><input type = "submit" value= "Add comment" id="id_submit" /></p>
+	</form>
+
+		{% else %}
+			<p> Please log in to comment </p>
+		{% endif %}
+	</div>
+		<H2 class="col-lg-12">Comments: </H2>
+		{% get_comment_list for convos as comment_list %}
+			{% for comment in comment_list reversed %}
+				{% if comment.id|divisibleby:2 %}
+					<div class = "col-lg-12 commentRow">
+					<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
+					<strong><p class="col-lg-12">{{ comment.comment }} </p></strong>
+					</div>	
+				{% else %}
+					<div class = "col-lg-12 commentRow2">
+					<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
+					<strong><p class="col-lg-12">{{ comment.comment }} </p> </strong>
+					</div>	
+				{% endif %}
+			{% endfor %}
+	</div>
+</div>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 	
@@ -130,13 +118,15 @@
 <div id = "far_circle" class="ui-widget-content"></div>
 
 <script>
+"use strict";
+
 
 // General Global variables
 var sampleToggleState = 0;
 var pictures = [];
 var starting_index = 0;
 var currentIndex = 0;
-var canvas_picture = new Image();
+var canvas = $('#canvas')[0];
 
 // Variables obtained from the form
 var nearX = $('input[name="nearX"]');
@@ -181,15 +171,40 @@ $( "#far_circle" ).resizable({
 // Upon clicking our edit button, Change the position and radius of the circle
 // to our recorded value. And toggle the display of the form
 $('#show_edit_options').click(function(){
-	 $("#near_circle").show();
+	$("#near_circle").show();
+
+    var near_cirle = $("#near_cirle")[0];
+    var near_circle_rect = near_circle.getBoundingClientRect();
+ 
+
+    var saved_near_x = parseInt("{{ picture.lowX }}") +  $("#canvas").offset().left;  
+
+    var saved_near_y = parseInt("{{ picture.lowY }}") +  $("#canvas").offset().top; 
+    //var saved_near_y = saved_near_y * -1; 
+
+    alert("canvas offset top: " + $("#canvas").offset().top + " offset left: " + $("#canvas").offset().left + " X: {{ picture.lowX }}  Y: {{ picture.lowY }} Saved near y: " + saved_near_y);
+
 	 $("#near_circle").css({
-           "top":"{{ picture.lowY }}",
-           "left":"{{ picture.lowX }}",
-      })
+           "top": "{{ picture.lowX }}px",
+           "left": "{{ picture.lowX }}px"
+      });
 
     $(this).next().slideToggle();
     return false;
 });
+
+ // Fill the canvas with the appropriate image
+
+ var context = canvas.getContext('2d');
+ var canvas_picture = new Image();
+ canvas_picture.src = "{{ picture.pic.url }}";
+ canvas_picture.onload = function() {
+ 	canvas.width = canvas_picture.width;
+ 	canvas.height = canvas_picture.height;
+    context.drawImage(canvas_picture, 0, 0, canvas_picture.width, canvas_picture.height);
+ };	
+ 
+
 
 //
 {% for picture in pictures %}
@@ -207,7 +222,7 @@ function picture (id, date, vr, description, url){
 
 // Fade effect
 function fadeScreen(){
-	$('#overlay').slideDown( function(){ 	$("#slideShowContainer").fadeIn(); });
+	 $("#overlay").slideDown ( function(){ $("#slideShowContainer").fadeIn() });
 }
 
 // Fade back to the original page
@@ -217,14 +232,13 @@ function fadeBack(){
 		$("#overlay").slideUp(); 
 		currentIndex=starting_index;
 		$('#slideShowMainPicture').css('background-image', 'url('+String(pictures[currentIndex].url)+')');
-	});
-	
+	});	
 }
 
 // Locate starting image for timeline
 function findStartingIndex()
 {
-	var currentPicid = {{ picture.id }}
+	var currentPicid = "{{ picture.id }}";
 	for(var i = 0; i < pictures.length; i++)
 	{
 		if(currentPicid == pictures[i].id)
@@ -279,34 +293,12 @@ function updateTable()
 	$('#slideShowDesc').html(String(pictures[currentIndex].description));
 }
 
-function toggleSampleOverlay()
-{
-	if(sampleToggleState === 0)
-	{
-		$('#mainPicture').attr("src","{{ picture.pictureWithCircles.url }}");
-		sampleToggleState = 1;
-	}
-	else
-	{
-		$('#mainPicture').attr("src","{{ picture.pic.url }}");
-		sampleToggleState = 0;
-
-	}
-}
-
-function imgLoad()
-{
-	var canvas = $('#canvas')[0];
-	var context = canvas.getContext('2d');
-	context.drawImage(canvas_picture, 0, 0, 1000, 1000);
-}
-
 $(document).ready(function(){
-    
+    hidden = false;
 	findStartingIndex();
 	currentIndex=starting_index;
 	$("#slideShowMainPicture").css('background-image', "url("+String(pictures[starting_index].url)+")");
-	hidden = false;
+	
 	$('#timeline').click(function(){
 		if (hidden == false)
 		{
@@ -331,20 +323,7 @@ $(document).ready(function(){
 		moveRight();
 	});
 
-	$('#sampleToggle').click( function() {
-		toggleSampleOverlay();
-	});
-
 });
-
- // Create our image
- var canvas = $('#canvas')[0];
- var context = canvas.getContext('2d');
- canvas_picture.src = "{{ picture.pic.url }}";
- canvas_picture.onload = function() {
-    context.drawImage(canvas_picture, 0, 0);
- };
-
 
 </script>
 {% endblock %}
