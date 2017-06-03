@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- 
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+-->
 <HTML lang="en">
 
 <head>
@@ -40,7 +45,7 @@
 </nav>
 
 <div class="container-fluid" style = " display: inline; position:relative" >		
-	<div id = "body_container_main" class="content" style="position: relative; width: auto; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
+	<div id = "body_container_main" class="content" style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
 			{% block airpact-content %}
 			{% endblock %}
 	</div>
@@ -61,12 +66,14 @@
 
 // Make the main container and nav links have the appropriate css for the current screen 
 function resize_check(){
+	
+	// WARNING: The numbers here are constantly changing
 	if($(window).width() > 800){
 		$("#body_container_main").css({"top" : "0px" , "left":"0" });
 		$("#main_nav_div.topnav a").css({ "font-size": "16px", "padding":"16px 16px" });
 		$("#the_logo").css({"height" : 50});
 	}else {
-		$("#body_container_main").css({"top" : "50px" , "left":"0" } );
+		$("#body_container_main").css({"top" : "0px" , "left":"0" } );
 		$("#main_nav_div.topnav a").css({ "font-size": "10px", "padding":"10px 8px" });
 		$("#the_logo").css({"height" : 30});
 	}	

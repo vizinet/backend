@@ -133,8 +133,8 @@ $(document).ready(function(){
         farY.val($("#far_circle").offset().top - $("#canvas").offset().top);
         farX.val($("#far_circle").offset().left - $("#canvas").offset().left);
 
-        alert("canvas.offset().top: "  + $("#canvas").offset().top + " near_circle_rect.top: " + near_circle_rect.top );
-        alert("canvas.offset.left: "  + $("#canvas").offset().left + " near_circle_rect.left: " + near_circle_rect.left )
+        alert("canvas.offset().top: "  + $("#canvas").offset().top + " near_circle.offset().top: " + $("#near_circle").offset().top );
+        alert("canvas.offset.left: "  + $("#canvas").offset().left + " near_circle.offset().left: " + $("#near_circle").offset().left )
         $('#submitButton').attr("disabled", "disabled");
     });
 });
