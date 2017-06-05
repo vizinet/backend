@@ -99,10 +99,6 @@ def gallery(request, page = 1):
 	allpictures = picture.objects.all().order_by("-uploaded")
 	alltags = tag.objects.all()
 
-	print("Get request: ")
-	pprint(request.GET)
-	print("Post request: ")
-	pprint(request.POST)
 	# Gallery search form 
 	form = GallerySortForm();
 	if request.method == 'POST':
@@ -185,8 +181,6 @@ def find_pictures_tag(location, pictures, alltags):
 				foundpictures.append(picture)
 
 	return foundpictures
-
-
 
 def downloads(request):
 	return render_to_response("downloads.html", context_instance=RequestContext(request))

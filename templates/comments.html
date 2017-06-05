@@ -20,4 +20,23 @@ All rights reserved.
 			</div>	
 		{% endif %}
 	{% endfor %}
+
+<div class= "col-lg-12">
+		<ul class="pagination">
+			{% if comments.paginator.num_pages > 1 %}
+				{% for num in comments.paginator.page_range %}
+					{% if comments.number == num %}
+						<li class="active pagination_submit"> <a href="" > {{ num }} </a> </li>
+					{% else %}
+						<li> <a href = "/picture/view/{{ picture_id }}/{{ num }}/#comment_start ">{{ num }}</a> </li>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</ul>
+	</div>
+
 </body>
+
+<script type="text/javascript">
+
+</script>

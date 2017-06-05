@@ -73,7 +73,7 @@
 
 <!-- Comments -->
 <div class="col-lg-9">
-	<a name="comment_start"></a>
+
 	<div class = "comment_form">
 	{% if user.is_authenticated %}
 	<form action = "/comments/" method="POST">	
@@ -88,7 +88,7 @@
 	</div>
 
 	<div id = "comment_list"></div>
-
+	<a name="comment_start"></a>
 	</div>
 </div>
 
@@ -158,7 +158,7 @@ $( "#far_circle" ).resizable({
 // Render the list of comments via ajax
 function render_comment_list()
 {
-	$("#comment_list").load("/comments/{{ picture.id }}/1");
+	$("#comment_list").load("/comments/{{ picture.id }}/{{ comment_num }}/");
 }
 
 // Post and render the comment list upon clickin the post comment button

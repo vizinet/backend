@@ -24,9 +24,9 @@ from user_profile.models import AirpactUser
 from user_profile.views import edit_profile
 from file_upload.forms import picture_upload_form
 from file_upload.forms import picture_edit_form
-from django.contrib.auth.decorators import login_required
-from convos.models import Comment
 from convos.forms import comment_form
+from django.contrib.auth.decorators import login_required
+
 
 # index is responsible for the main upload page
 # Url: /file_upload
@@ -107,12 +107,10 @@ def upload(request):
 					_vrUnits = 'M'
 			
 			if 'time' in s:
-				print("CREATING TIME")
 				try:
 					timeTaken = datetime.strptime(s['time'],"%Y.%m.%d.%H.%M.%S")
 				except Exception as e:
 					print(e.message)
-				print("CREATED TIME")
 
 			if 'algorithmType' in s:
 				algType = s['algorithmType']
@@ -178,7 +176,7 @@ def delete_picture(request, id):
 
 # View a specific picture from the gallery
 # URL: /picture/view/<pic_id>/
-def view_picture(request, picId = -1):
+def view_picture(request, picId = -1, comment_num=1):
 	pictures = None
 	if picId != -1:
 
@@ -227,13 +225,13 @@ def view_picture(request, picId = -1):
 
 		this_comment_form = comment_form()
 
-		user = request.user
-		print("user is: ")
-		print(user);
+		print("comment_num: ")
+		print(comment_num)
 		# Setup range of image numbers for the 
 		# Picture is the main picture, pictures is the side bitches. 
 		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 
-			'tag':cur_tag[0], 'user':user, 'comment_form': this_comment_form, 'picture_form': picture_form}, context_instance=RequestContext(request))
+			'tag':cur_tag[0], "comment_num": comment_num, 'comment_form': this_comment_form, 
+			'picture_form': picture_form }, context_instance=RequestContext(request))
 
 	# If we have an invalid picture id
 	else:
