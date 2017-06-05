@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+
+"""
 """AIRPACT_Fire URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -20,6 +27,7 @@ from django.conf import settings
 from user_profile import views as user_view
 from convos import views as convos_view
 from file_upload import views as file_upload_views
+from convos import views as comment_views
 from django_comments.models import Comment
 from . import views
 from .views import LocationAutocomplete
@@ -31,17 +39,13 @@ urlpatterns = [
     url(r'^admin_page$', views.admin_page, name="adminPage"),
     url(r'^uncertified$', views.uncertified, name="uncertified"),
     url(r'^user/', include('user_profile.urls')),
-    #url(r'^user', include('user_profile.urls')),
     url(r'^gallery/$', views.gallery, name="gallery"),
     url(r'^gallery/(?P<page>\d+)/$', views.gallery, name='gallery'),
-    url(r'^test$', views.test),
 	url(r'^file_upload/', include('file_upload.urls')),
     url(r'^admin/', admin.site.urls), 
-    url(r'^picture/view/(?P<picId>\d+)/$', file_upload_views.view_picture, name="view_picture"),
-    #url(r'^convos/([0-9]+)/$', convos_view.render_convo),
-    #url(r'^comments/post/$', convos_view.comment_post),
-    #url( r'^comments/posted/$', convos_view.comment_posted),    
-    url(r'^comments/', include('django_comments.urls')),
+    url(r'^picture/view/(?P<picId>\d+)/$', file_upload_views.view_picture, name="view_picture"),   
+    url(r'^comments/(?P<picId>\d+)/', comment_views.comments, name = "comment_form_target"),
+    url(r'^comments/(?P<picId>\d+)/(?P<page>\d+)/', comment_views.comments, name = "comment_form_target"),
     url(r'^downloads/', views.downloads, name="downloads"),
     url(r'^about/',views.about,name="about"),
     url(r'^index/',views.main,name="main"),

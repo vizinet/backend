@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- 
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+-->
+<HTML lang="en">
+
+<body>
+	{% for comment in comments %}
+		{% if comment.id|divisibleby:2 %}
+			<div class = "col-lg-12 commentRow">
+			<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
+			<strong><p class="col-lg-12">{{ comment.text }} </p></strong>
+			</div>	
+		{% else %}
+			<div class = "col-lg-12 commentRow2">
+			<p class="col-lg-12 comment-header"> Posted by: {{ comment.user }} on {{ comment.submit_date }}</p>
+			<strong><p class="col-lg-12">{{ comment.text }} </p> </strong>
+			</div>	
+		{% endif %}
+	{% endfor %}
+</body>

@@ -14,8 +14,7 @@ import json
 from time import time
 from base64 import b64decode
 from django.core.files.base import ContentFile
-from datetime import datetime
-
+import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from file_upload.models import picture
@@ -23,12 +22,11 @@ from file_upload.models import tag
 from user_profile.models import AuthToken
 from user_profile.models import AirpactUser
 from user_profile.views import edit_profile
-from convos.models import convoPage
 from file_upload.forms import picture_upload_form
 from file_upload.forms import picture_edit_form
 from django.contrib.auth.decorators import login_required
-from convos.models import convoPage
-
+from convos.models import Comment
+from convos.forms import comment_form
 
 # index is responsible for the main upload page
 # Url: /file_upload
@@ -59,10 +57,6 @@ def index(request):
 				radiusLow = form.cleaned_data.get('radiusNear'));
 			newPic.save()
 			
-			#Creating some conversation stuffs
-			conversations = convoPage(picture = newPic)
-			conversations.save()
-
 			t = form.cleaned_data['location']
 
 			#20 dollars in my pocket
@@ -181,11 +175,6 @@ def delete_picture(request, id):
 		img.delete()
 	return edit_profile(request)
 
-# ? ? ?
-def test(request):
-	userob = AirpactUser.objects.get(username='JZTD')
-	print(userob.id)
-	return HttpResponse(userob.id)
 
 # View a specific picture from the gallery
 # URL: /picture/view/<pic_id>/
@@ -198,7 +187,6 @@ def view_picture(request, picId = -1):
 
 		# Tell the tag db to get alist of tags from the picture
 		cur_tag = tag.objects.filter(picture= p)
-		conversation = convoPage.objects.get(picture = p)
 
 		# If the user wants to see more images:
 		location = cur_tag[0].text
@@ -210,7 +198,7 @@ def view_picture(request, picId = -1):
 		# POST response
 		if request.method == 'POST':
 			
-			form = picture_edit_form(request.POST, request.FILES)
+			picture_form = picture_edit_form(request.POST, request.FILES)
 			if form.is_valid:
 
 				# Updated the values
@@ -223,9 +211,6 @@ def view_picture(request, picId = -1):
 				edited_picture.farTargetDistance = form.cleaned_data.get('farDistance')
 				edited_picture.save()
 				
-			# Generate the conversation 
-			conversations = convoPage(picture = newPic)
-			conversations.save()
 
 			t = form.cleaned_data['location']
 
@@ -238,12 +223,17 @@ def view_picture(request, picId = -1):
 
 		# GET Response
 		else:
-			form = picture_edit_form()
+			picture_form = picture_edit_form()
 
+		this_comment_form = comment_form()
+
+		user = request.user
+		print("user is: ")
+		print(user);
 		# Setup range of image numbers for the 
 		# Picture is the main picture, pictures is the side bitches. 
-		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 'convos':conversation, 
-			'convo_id':conversation.pk,'tag':cur_tag[0], 'picture_form': form}, context_instance=RequestContext(request))
+		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 
+			'tag':cur_tag[0], 'user':user, 'comment_form': this_comment_form, 'picture_form': picture_form}, context_instance=RequestContext(request))
 
 	# If we have an invalid picture id
 	else:

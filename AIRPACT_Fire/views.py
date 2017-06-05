@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+
+"""
 import json
 import urllib
 from datetime import datetime
@@ -10,13 +17,13 @@ from django.core.context_processors import csrf
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from file_upload.models import picture
 from file_upload.models import tag
-from convos.models import convoPage
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from user_profile.models import AirpactUser
 from file_upload.forms import GallerySortForm
 from dal import autocomplete
 from pprint import pprint
+
 
 def index(request):
 	newestPictures = picture.objects.all().order_by("-uploaded")[:20]

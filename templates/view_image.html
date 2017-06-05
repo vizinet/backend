@@ -1,7 +1,8 @@
 {% extends "base/newbase.html" %}
 {% load comments %}
 {% block airpact-content %}
-<!-- The image -->
+
+<!-- The Image -->
 <div class = "col-md-10"></div>
 
 <div class="col-md-9" style="">
@@ -58,10 +59,10 @@
 </div>
 
 {% if user.is_authenticated %}
+	<!-- Edit image -->
 	<div class = "col-lg-9" id = "show_edit_options">
 		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
 	</div>
-
 	<div id = "edit_image_form" class = "col-lg-12" style="padding-bottom: 5px; display:none;"> 
 		<form  class="form-inline" method="POST">
 			{% csrf_token %}
@@ -74,44 +75,20 @@
 <div class="col-lg-9">
 	<a name="comment_start"></a>
 	<div class = "comment_form">
-
 	{% if user.is_authenticated %}
-		{% get_comment_form for convos as form %}
-	<form action = "{% comment_form_target %}" method="POST">
+	<form action = "/comments/" method="POST">	
 		{% csrf_token %}
-		{{ form.comment }}
-		{{ form.content_type }}
-		{{ form.object_pk }}
-		{{ form.timestamp }}
-		{{ form.security_hash }}
-
-		<input type ="hidden" name="name" value = "{{ user }}">
-		<input type ="hidden" name="email" value = "nothing@gmail.com">
-		<input type ="hidden" name="url" value = "https://www.nothing.com">
-		<input type = "hidden" name = "next" value="/picture/view/{{ picture.id }}#comment_start">
-		<p><input type = "submit" value= "Add comment" id="id_submit" /></p>
+		{{ comment_form }}
+		<button id="post_comment" type="submit" class="button-submit">post</button>
 	</form>
 
-		{% else %}
-			<p> Please log in to comment </p>
-		{% endif %}
+	{% else %}
+		<p> Please log in to comment </p>
+	{% endif %}
 	</div>
 
-		<H2 class="col-lg-12">Comments: </H2>
-		{% get_comment_list for convos as comment_list %}
-			{% for comment in comment_list reversed %}
-				{% if comment.id|divisibleby:2 %}
-					<div class = "col-lg-12 commentRow">
-					<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
-					<strong><p class="col-lg-12">{{ comment.comment }} </p></strong>
-					</div>	
-				{% else %}
-					<div class = "col-lg-12 commentRow2">
-					<p class="col-lg-12 comment-header"> Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
-					<strong><p class="col-lg-12">{{ comment.comment }} </p> </strong>
-					</div>	
-				{% endif %}
-			{% endfor %}
+	<div id = "comment_list"></div>
+
 	</div>
 </div>
 
@@ -149,6 +126,7 @@ nearY.val(0);
 farX.val(0);
 farY.val(0);
 
+
 // Make the near circle draggable and hidden
 $( "#near_circle" ).draggable({
 	containment: "#canvas" 
@@ -177,16 +155,33 @@ $( "#far_circle" ).resizable({
     }   
 });
 
+// Render the list of comments via ajax
+function render_comment_list()
+{
+	$("#comment_list").load("/comments/{{ picture.id }}/1");
+}
+
+// Post and render the comment list upon clickin the post comment button
+$("#post_comment").on('click', function(e) {
+    e.preventDefault();
+    var form = $(this).closest("form");
+     $.ajax({
+            url: "/comments/{{ picture.id }}/1",
+            type: 'POST',
+            data: form.serialize()
+        }).done(function(data) {
+        	render_comment_list();
+        });
+    	return false;
+	});
+
 // Move circles with respect to their saved values
 function move_circles(){
-
 	var saved_near_x = parseInt("{{ picture.lowX }}") +  $("#canvas").offset().left;  
     var saved_near_y = parseInt("{{ picture.lowY }}") + 61;
-
     var saved_far_x = parseInt("{{ picture.highX }}") +  $("#canvas").offset().left;  
     var saved_far_y = parseInt("{{ picture.highY }}") + 61;
 	
-
 	// Edit the offset of the near circle with respect to saved values
 	$("#near_circle").offset({
            left : saved_near_x,
@@ -334,6 +329,7 @@ function updateTable()
 }
 
 $(document).ready(function(){
+	render_comment_list();
     var hidden = false;
 	findStartingIndex();
 	currentIndex=starting_index;

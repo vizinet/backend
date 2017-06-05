@@ -3,9 +3,6 @@ from django.db import models
 from django.contrib.auth.models import (
 	AbstractBaseUser, BaseUserManager)
 
-
-
-
 # Define custom User manager. 
 class AirpactUserManager(BaseUserManager):
 	

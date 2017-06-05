@@ -23,7 +23,6 @@ from forms import EditProfileForm
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import logout
-from convos.models import convoPage
 import json
 import random
 import string
