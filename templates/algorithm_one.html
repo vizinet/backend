@@ -1,6 +1,11 @@
 {% block airpact-content %}
 
 <div class="col-md-4" style="">
+    <p><h2> Instructions: </h2></p>
+    <p> Red Circle = Far target</p>
+    <p> Blue Circle = Near Target</p>
+    <p> Program will measure both circles based on the smallest radius </p>
+
     <form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
@@ -13,6 +18,7 @@
 </div>
 
 <div id = "cords"></div>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 
@@ -32,6 +38,38 @@ var farX = $('input[name="farX"]');
 var farY = $('input[name="farY"]');
 var radiusNear = $('input[name="radiusNear"]');
 var radiusFar = $('input[name="radiusFar"]');
+
+// Default values
+radiusFar.val(50);
+radiusNear.val(50);
+nearX.val(0);
+nearY.val(0);
+farX.val(0);
+farY.val(0);
+
+// Make the near circle draggable and hidden
+$( "#near_circle" ).draggable({ containment: "#canvas" });
+$( "#near_circle" ).hide();
+
+// Make the near circle resizable 
+$( "#near_circle" ).resizable({
+    aspectRatio: 1 / 1,    
+    stop: function(event, ui) { 
+        radiusNear.val(ui.size.width/2);     
+    }   
+});
+
+// Make the far circle draggable and hidden
+$( "#far_circle" ).draggable({ containment: "#canvas" });
+$( "#far_circle" ).hide();
+
+// Make the far circle resizable
+$( "#far_circle" ).resizable({
+    aspectRatio: 1 / 1,    
+    stop: function(event, ui) { 
+        radiusFar.val(ui.size.width/2);
+    }   
+});
 
 // On image load
 function imgLoad()
@@ -69,14 +107,40 @@ $('#id_pic').change(function(e){
     reader.readAsDataURL(file);
     picture.src = imgurl;
     picture.onload = imgLoad();
+    $("#near_circle").show();
+    $("#far_circle").show();
 });
+
+// The dragging event for our circles
+function dragging(event) {
+    var near_cirle = $("#near_cirle")[0];
+    var near_circle_rect = near_circle.getBoundingClientRect();
+    var canvas_rect = canvas.getBoundingClientRect();
+}
 
 $(document).ready(function(){
     
     $('#form').submit(function(){
+        var near_cirle = $("#near_cirle")[0];
+        var near_circle_rect = near_circle.getBoundingClientRect();
+        
+        var far_cirle = $("#far_cirle")[0];      
+        var far_circle_rect = far_circle.getBoundingClientRect();
+        
+        nearY.val($("#near_circle").offset().top - $("#canvas").offset().top);
+        nearX.val($("#near_circle").offset().left - $("#canvas").offset().left);
+        farY.val($("#far_circle").offset().top - $("#canvas").offset().top);
+        farX.val($("#far_circle").offset().left - $("#canvas").offset().left);
+
+        alert("canvas.offset().top: "  + $("#canvas").offset().top + " near_circle.offset().top: " + $("#near_circle").offset().top );
+        alert("canvas.offset.left: "  + $("#canvas").offset().left + " near_circle.offset().left: " + $("#near_circle").offset().left )
         $('#submitButton').attr("disabled", "disabled");
     });
 });
 
 </script>
+
+
+
+<p id="debugging"></p>
 {% endblock %}

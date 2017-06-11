@@ -5,21 +5,17 @@ Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
 
 """
-from django.shortcuts import render_to_response
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
+from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
-from user_profile.models import AirpactUser
-from user_profile.models import AuthToken
-from file_upload.models import picture
+from user_profile.models import AuthToken, AirpactUser
+from file_upload.models import Picture
 from django.template import RequestContext
-from forms import UserCreationForm
-from forms import EditProfileForm
+from forms import UserCreationForm, EditProfileForm 
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import logout
@@ -55,14 +51,17 @@ def auth_view(request):
 	if(request.method == 'POST'):
 		username = request.POST['username']
 		password = request.POST['password']
-		user = auth.authenticate(username=username, password=password)
 
+
+		user = auth.authenticate(username=username, password=password)
 		if user is not None:
 		   auth.login(request, user)
 		   return HttpResponseRedirect("/user/profile/"+ user.username + "/1")
 		else:
 			return render_to_response('login.html',  {'Errors':"Invalid username or Password"}, context_instance=RequestContext(request) )
-	return HttpResponse("DONT GO HERE")
+	c = {}
+	c.update(csrf(request))
+	return render_to_response('login.html', c)
 
 # Correct login page
 def loggedin(request):
@@ -73,7 +72,7 @@ def invalid_login(request):
 	return render_to_response('invalid.html')
 
 
-# Register/ Create a new user
+# Register / Create a new user
 def register_user(request):
 	if request.method == 'POST':
 		form = UserCreationForm(request.POST)
@@ -121,7 +120,7 @@ def view_profile(request, name, page = 1):
 	if request.user.username == name:
 		thisuser = True
 	user = AirpactUser.objects.get(username = name)
-	userpictures = picture.objects.filter(user = user)
+	userpictures = Picture.objects.filter(user = user)
 	paginator = Paginator(userpictures, 12) #show 12 per page
 	try:
 		pictures = paginator.page(page)
@@ -149,15 +148,14 @@ def edit_profile(request):
 		#reidrect back to their profile
 		return HttpResponseRedirect('/user/profile/'+request.user.username+'/')
 	form = EditProfileForm(instance=userob)
-	pictures = picture.objects.filter(user = userob)
+	pictures = Picture.objects.filter(user = userob)
 	return render_to_response('edit_profile.html', {'user': request.user, 'form':form, 'pictures': pictures}, context_instance=RequestContext(request))
 
 @login_required
 def manage_pictures(request):
 	userob = AirpactUser.objects.get(username=request.user.username)
-	pictures = picture.objects.filter(user= userob)
+	pictures = Picture.objects.filter(user= userob)
 	return render_to_response('manage_pictures.html', {'pictures': pictures}, context_instance=RequestContext(request))
-
 
 @csrf_exempt
 @login_required

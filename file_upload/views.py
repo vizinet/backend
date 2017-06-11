@@ -5,66 +5,144 @@ Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
 
 """
-from django.shortcuts import render_to_response
+# Django Libraries
+from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.views.decorators.csrf import csrf_exempt
-import json
-from time import time
-from base64 import b64decode
 from django.core.files.base import ContentFile
-import datetime
-from django.shortcuts import render
-from django.http import HttpResponse
-from file_upload.models import picture
-from file_upload.models import tag
-from user_profile.models import AuthToken
-from user_profile.models import AirpactUser
-from user_profile.views import edit_profile
-from file_upload.forms import picture_upload_form
-from file_upload.forms import picture_edit_form
-from convos.forms import comment_form
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
+# Custom Django
+from file_upload.models import Picture, Tag, AlgorithmOne
+from user_profile.models import AuthToken, AirpactUser
+from user_profile.views import edit_profile
+from file_upload.forms import picture_upload_form, algorithm_one_form
+from convos.forms import comment_form
+
+# Other
+from base64 import b64decode
+from time import time
+import datetime
+import json
+
+# Queries algorithms given a picture id, returns all appropriate algorithms
+def retreive_algorithm(Picture):
+	return {
+	"AlgorithmOne" : AlgorithmOne.objects.filter(picture = Picture),
+	"AlgorithmTwo" : None
+	}[Picture.algorithmType]
+
+# Retreives a form given a picture Django object
+def retreive_form(Picture, postData = None):
+	if postData is None:
+		return {
+		"AlgorithmOne" : algorithm_one_form(),
+		"AlgorithmTwo" : None
+		}[Picture.algorithmType]
+	else:
+		return {
+		"AlgorithmOne" : algorithm_one_form(postData),
+		"AlgorithmTwo" : None
+		}[Picture.algorithmType]
+
+# Creates an algorithm one object given a picture object and a completed
+# form. Returns True on success
+def create_algorithm_one_object(picture, form):
+	# create a new alg1 object
+	try:
+		newAlg1 = AlgorithmOne(
+			picture = newPic,
+			nearX=float(form['nearX']), 
+			nearY=float(form['nearY']),				
+			farX=float(form['farX']),
+			farY=float(form['farY']),
+			nearDistance = float(form['nearDistance']),
+			farDistance = float(form['farDistance'])
+			)
+		newAlg1.save()
+	except Exception as e:
+		print(e)
+		return False
+
+	return True
+
+# Creates an appropriate algorithm object given a picture object and its form
+def apply_form(picture, form):
+	return {
+	"AlgorithmOne" : create_algorithm_one_object(picture, form),
+	"AlgorithmTwo" : None
+	}[Picture.algorithmType]
+
+# Retreives the appropriate html page given a picture object
+def retreive_html_page(Picture):
+	return {
+	"AlgorithmOne" : 'algorithm_one.html',
+	"AlgorithmTwo" : None
+	}[Picture.algorithmType]
+
+# Edit an algorithm given a picture
+def edit_algorithm(request, picId):
+	pic = Picture.objects.get(id = picId)
+	alg = retreive_algorithm(pic)
+
+# Apply de algorithm
+def apply_algorithm(request, picId = -1):
+	pic = Picture.objects.get(id = picId)
+	
+	if picId !=-1:
+		# On POST
+		if request.method == 'POST':
+			form = retreive_form(pic, request.POST)
+			success = apply_form(form)
+			if success:
+				HttpResponseRedirect("/picture/view/" + newPic.id)
+			else: 
+				pass
+				# TODO
+
+		# On GET
+		else:
+			form = retreive_form(pic)
+			html_page = retreive_html_page(pic)
+
+		render_to_response(html_page, {'form': form} , {"picture" : pic}, context_instance=RequestContext(request))
+
+	# Invalid picture id	
+	else: 
+		HttpResponseRedirect("/gallery")
 
 # index is responsible for the main upload page
-# Url: /file_upload
+# Url: /file_upload/
 @login_required
 def index(request):
 	if request.user.is_certified is False:
 		return render_to_response('not_certified.html')
 	
-	#if there is a picture to upload
+	# If there is a picture to upload
 	if request.method == 'POST':
 
-		form = picture_upload_form(request.POST, request.FILES)
-
+		picture_form = picture_upload_form(request.POST, request.FILES)
+		
 		# Create a new picture object
 		if form.is_valid():
-			newPic = picture(
-				pic = request.FILES['pic'], 
+			newPic = Picture(
+				image = request.FILES['pic'], 
 				user=request.user, 
-				vr=form.cleaned_data.get('vr'), 
+				eVisualRange=form.cleaned_data.get('vr'), 
 				description=form.cleaned_data.get('description'),
-				highX=form.cleaned_data.get('farX'), 
-				highY=form.cleaned_data.get('farY'), 
-				lowX=form.cleaned_data.get('nearX'), 
-				lowY=form.cleaned_data.get('nearY'), 
-				nearTargetDistance = form.cleaned_data.get('nearDistance'),
-				farTargetDistance = form.cleaned_data.get('farDistance'),
-				radiusHigh = form.cleaned_data.get('radiusFar'),
-				radiusLow = form.cleaned_data.get('radiusNear'));
+				algorithmType=form.cleaned_data.get('algorithmType')
+				)
 			newPic.save()
-			
-			t = form.cleaned_data['location']
 
-			#20 dollars in my pocket
-			newTag = tag(picture = newPic, text = t.lower())
+
+			# Create new tag object
+			t = form.cleaned_data['location']
+			newTag = Tag(picture = newPic, text = t.lower())
 			newTag.save()
 			
-
-			return HttpResponseRedirect(reverse('file_upload.views.index'))
+			return HttpResponseRedirect("/picture/" + newPic.id);
 
 	# If Get Request
 	else:
@@ -120,30 +198,32 @@ def upload(request):
 					desc = s['description']
 
 			try:
-				newPic = picture(pic = ContentFile(image_data,str(str(time())+".jpg")), 
+				newPic = picture(
+								image = ContentFile(image_data,str(str(time())+".jpg")), 
 								description = desc, 
 								user=userob, 
-								vr=s['visualRangeOne'], 
-								highColor=int(s['highColor']),
+								eVisualRange=s['visualRangeOne'], 
+								geoX = float(s['geoX']),
+								geoY = float(s['geoY']),
+								uploadTime = timeTaken,
+								vrUnits = _vrUnits,
+								)
+
+				newPic.save()	
+				algorithmOne = AlgorithmOne(
+								picture = newPic,
 								highX=float(s['highX']), 
 								highY=float(s['highY']),
 								lowColor=int(s['lowColor']),
 								lowX=float(s['lowX']),
 								lowY=float(s['lowY']),
-								geoX = float(s['geoX']),
-								geoY = float(s['geoY']),
-								vrUnits = _vrUnits,
-								uploaded = timeTaken,
-								algorithmType = algType,
 								farTargetDistance = float(s['visualRangeTwo']),
 								nearTargetDistance = float(s['visualRangeOne'])
-								 );
+					)
+
 			except Exception as e:
 				print(e.message)
 
-			newPic.save()
-			conversations = convoPage(picture = newPic)
-			conversations.save()
 
 			#Creating some conversation stuffs
 			print(s['tags'])
@@ -166,10 +246,8 @@ def upload(request):
 def delete_picture(request, id):
 	if request.user.is_certified is False:
 		return render_to_response('not_certified.html')
-	img = picture.objects.get(id = id)
-	print("users id: "+str(request.user.id)+"pictureid:"+str(img.id))
+	img = Picture.objects.get(id = id)
 	if request.user.id == img.user.id:
-		print("deleteing shit")
 		img.delete()
 	return edit_profile(request)
 
@@ -181,14 +259,14 @@ def view_picture(request, picId = -1, comment_num=1):
 	if picId != -1:
 
 		# Good picture id
-		p = picture.objects.get(id = picId)
+		p = Picture.objects.get(id = picId)
 
 		# Tell the tag db to get alist of tags from the picture
-		cur_tag = tag.objects.filter(picture= p)
+		cur_tag = Tag.objects.filter(picture= p)
 
 		# If the user wants to see more images:
 		location = cur_tag[0].text
-		picture_tags = tag.objects.filter(text=location).order_by("picture__uploaded")
+		picture_tags = Tag.objects.filter(text=location).order_by("picture__uploaded")
 		pictures = []
 		for picture_tag in picture_tags:
 			pictures.append(picture_tag.picture)
@@ -196,42 +274,33 @@ def view_picture(request, picId = -1, comment_num=1):
 		# POST response
 		if request.method == 'POST':
 			
-			picture_form = picture_edit_form(request.POST, request.FILES)
+			alg1_form = algorithm_one_form(request.POST, request.FILES)
 			if form.is_valid:
 
 				# Updated the values
-				edited_picture = picture.objects.get(id = picId)
-				edited_picture.highX = form.cleaned_data.get('farX')
-				edited_picture.highY = form.cleaned_data.get('farY')
-				edited_picture.lowX =  form.cleaned_data.get('nearX')
-				edited_picture.lowY =  form.cleaned_data.get('nearY')
-				edited_picture.nearTargetDistance = form.cleaned_data.get('nearDistance')
-				edited_picture.farTargetDistance = form.cleaned_data.get('farDistance')
+				Picture.objects.get(id = picId)
+				edited_picture = AlgorithmOne.objects.filter(picture = p)
+				edited_picture.farX = alg1_form.cleaned_data.get('farX')
+				edited_picture.farY = alg1_form.cleaned_data.get('farY')
+				edited_picture.nearX =  alg1_form.cleaned_data.get('nearX')
+				edited_picture.nearY =  alg1_form.cleaned_data.get('nearY')
+				edited_picture.nearTargetDistance = alg1_form.cleaned_data.get('nearDistance')
+				edited_picture.farTargetDistance = alg1_form.cleaned_data.get('farDistance')
 				edited_picture.save()
-				
-
-			t = form.cleaned_data['location']
-
-			# Generate the tags
-			newTag = tag(picture = newPic, text = t.lower())
-			newTag.save()
-			
 
 			return HttpResponseRedirect(reverse('file_upload.views.index'))
 
 		# GET Response
 		else:
-			picture_form = picture_edit_form()
+			alg1_form = algorithm_one_form()
 
 		this_comment_form = comment_form()
 
-		print("comment_num: ")
-		print(comment_num)
 		# Setup range of image numbers for the 
 		# Picture is the main picture, pictures is the side bitches. 
 		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 
 			'tag':cur_tag[0], "comment_num": comment_num, 'comment_form': this_comment_form, 
-			'picture_form': picture_form }, context_instance=RequestContext(request))
+			'picture_form': alg1_form }, context_instance=RequestContext(request))
 
 	# If we have an invalid picture id
 	else:

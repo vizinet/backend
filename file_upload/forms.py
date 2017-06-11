@@ -6,10 +6,10 @@ All rights reserved.
 
 """
 from django import forms
-from file_upload.models import picture
-from file_upload.models import tag
+from file_upload.models import Picture, Tag
 from dal import autocomplete
 
+# All of da choices
 def getChoices():
 	T = tag.objects.values('text').distinct()
 
@@ -22,27 +22,19 @@ def getChoices():
 # The form for uploading pictures
 class picture_upload_form(forms.Form):
 	pic = forms.FileField(label="Select Picture")
-	vr = forms.DecimalField(label="Estimated Visual Range")
+	estimatedVr = forms.DecimalField(label="Estimated Visual Range")
 	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
 	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
 	location = forms.CharField(label='Location', required=True)
 	description = forms.CharField(label='Description', required=True)
+	algorithmType = forms.ChoiceField(label='Algorithm to Apply', 
+		choices= [(0,"Near-Far Contrast (one image)"), (1, "Near-Far Contrast (two images)")], required=True)
 	
-	# Deals with circle locations
-	nearX = forms.DecimalField(widget=forms.HiddenInput())
-	nearY = forms.DecimalField(widget=forms.HiddenInput())
-	farX = forms.DecimalField(widget=forms.HiddenInput())
-	farY = forms.DecimalField(widget=forms.HiddenInput())
-
-	# Radius of our circles
-	radiusFar = forms.DecimalField(widget=forms.HiddenInput())
-	radiusNear = forms.DecimalField(widget=forms.HiddenInput())
-
-# The form for editing a picture
-class picture_edit_form(forms.Form):
+# The form for editing algorithm one
+class algorithm_one_form(forms.Form):
 	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
 	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
-	
+
 	# Deals with circle locations
 	nearX = forms.DecimalField(widget=forms.HiddenInput())
 	nearY = forms.DecimalField(widget=forms.HiddenInput())
@@ -50,11 +42,11 @@ class picture_edit_form(forms.Form):
 	farY = forms.DecimalField(widget=forms.HiddenInput())
 
 	# Radius of our circles
-	radiusFar = forms.DecimalField(widget=forms.HiddenInput())
-	radiusNear = forms.DecimalField(widget=forms.HiddenInput())
+	farRadius = forms.DecimalField(widget=forms.HiddenInput())
+	nearRadius = forms.DecimalField(widget=forms.HiddenInput())
 
 def getNames():
-	qs = tag.objects.all()
+	qs = Tag.objects.all()
 	tag_names = []
 
 	for tagy in qs:

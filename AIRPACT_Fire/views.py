@@ -5,28 +5,31 @@ Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
 
 """
-import json
-import urllib
-from datetime import datetime
+# Django pre-built libraries 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from file_upload.models import picture
-from file_upload.models import tag
 from django.views.decorators.csrf import csrf_exempt
+
+# Custom Django
+from file_upload.models import Picture, Tag, AlgorithmOne
+from file_upload.forms import GallerySortForm
 from django.contrib.auth.decorators import login_required
 from user_profile.models import AirpactUser
-from file_upload.forms import GallerySortForm
+
+# Other 
+import json
+import urllib
+from datetime import datetime
 from dal import autocomplete
-from pprint import pprint
 
-
+# The Home Page
+# URL: /
 def index(request):
-	newestPictures = picture.objects.all().order_by("-uploaded")[:20]
+	newestPictures = Picture.objects.all().order_by("-uploadTime")[:20]
 	return render_to_response('index2.html',{'newestPictures' : newestPictures}, context_instance=RequestContext(request))
 	
 def main(request):
@@ -96,8 +99,8 @@ class LocationAutocomplete(autocomplete.Select2ListView):
 #This is the gallery
 # URL: /gallery/<page_num>
 def gallery(request, page = 1):
-	allpictures = picture.objects.all().order_by("-uploaded")
-	alltags = tag.objects.all()
+	allpictures = Picture.objects.all().order_by("-uploadTime")
+	alltags = Tag.objects.all()
 
 	# Gallery search form 
 	form = GallerySortForm();
@@ -120,13 +123,13 @@ def gallery(request, page = 1):
 			# Find by date (beginning)
 			if form.cleaned_data.get("date1") != "":
 				d = datetime.strptime(form.cleaned_data.get("date1"),"%m/%d/%Y")
-				allpictures = allpictures.filter(uploaded__gte=d)
+				allpictures = allpictures.filter(uploadTime__gte=d)
 				#page = 1
 
 			# Find by date (end)
 			if form.cleaned_data.get("date2") != "":
 				d = datetime.strptime(form.cleaned_data.get("date2"),"%m/%d/%Y")
-				allpictures = allpictures.filter(uploaded__lte=d)
+				allpictures = allpictures.filter(uploadTime__lte=d)
 				#page = 1
 
 			# Find by location (must be last since function returns a list)
@@ -148,8 +151,8 @@ def gallery(request, page = 1):
 # function to order the pictures based off the form value
 def order_pictures(x, pictures):
 	return {
-	'0': pictures.order_by("uploaded"),
-	'1': pictures.order_by("-uploaded"),
+	'0': pictures.order_by("uploadTime"),
+	'1': pictures.order_by("-uploadTime"),
 	'2': pictures.order_by("vr"),
 	'3': pictures.order_by("-vr"),
 	}[x]
@@ -164,7 +167,6 @@ def find_pictures_vr(x, pictures):
 		'4': pictures.filter(vr__gte=100.0, vr__lte=500.0 ),
 		'5': pictures.filter(vr__gte=500.0),
 	}[x]
-
 
 #Find pictures by tag, warning, returns a list of pictures
 #as opposed to a picture object
@@ -186,7 +188,7 @@ def downloads(request):
 	return render_to_response("downloads.html", context_instance=RequestContext(request))
 
 def about(request):
-	newestPictures = picture.objects.all().order_by("-uploaded")[:4]
+	newestPictures = picture.objects.all().order_by("-uploadTime")[:4]
 	return render_to_response("about.html", {'newestPictures' : newestPictures}, context_instance=RequestContext(request))
 	
 @csrf_exempt

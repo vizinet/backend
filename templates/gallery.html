@@ -27,8 +27,8 @@
 		<div class="col-lg-3">
 			<a href="{% url 'view_picture' picId=picture.id %}"> <img class="img-thumbnail" src="{{ picture.thumbnail.url }}" alt="{{ picture..url}}" /> </a>
 			<div>
-				<article> Date: {{ picture.uploaded }} </article>
-				<div> VR: {{picture.vr }} </div>
+				<article> Date: {{ picture.uploadTime }} </article>
+				<div> VR: {{ picture.eVisualRange }} </div>
 				<article> uploaded by: <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </article>
 				
 			</div>

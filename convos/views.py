@@ -14,7 +14,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Standard import things
 from django.shortcuts import render
 from django.http import HttpResponse
-from file_upload.models import picture
+from file_upload.models import Picture
 from user_profile.models import AirpactUser
 from convos.models import Comment
 from convos.forms import comment_form

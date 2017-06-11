@@ -24,7 +24,6 @@ class UserCreationForm(forms.ModelForm):
         fields = ('username','email')       
 
     def clean(self):
-        print(self.cleaned_data)
         if not usernameValidator(self.cleaned_data.get('username')):
             self.add_error('username', 'Username contains invalid characters. Usernames may only contain letters')
         if'password' in self.cleaned_data:
