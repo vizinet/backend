@@ -10,7 +10,6 @@ def usernameValidator(value):
     pattern = re.compile("^[a-zA-Z]*$")
     return pattern.match(value)
  
-
 # Custom user creation form for an Airpact User
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField(label='password', widget=forms.PasswordInput)

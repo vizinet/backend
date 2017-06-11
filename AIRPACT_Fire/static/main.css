@@ -44,23 +44,26 @@ body{
 #near_circle { 
 width: 100px; 
 height: 100px;
-left: 250px;
-top: 50px;
+left: 200px;
+top: 30px;
+position:absolute;
 border-radius: 100px; 
-border-color: blue;
+border-color: orange;
 background-color: transparent; 
+border-width: 10px;
 }
 
 
 #far_circle { 
 width: 100px; 
 height: 100px;
-left: 250px;
-top: 130px;
+left: 305px;
+top: 30px;
+position: absolute;
 border-radius: 100px; 
-border-color: red;
+border-color: yellow;
 background-color: transparent; 
-
+border-width: 10px;
 }
 
 .adminTable{
@@ -127,6 +130,20 @@ background-color: transparent;
     margin: 0 auto;
 }
 
+#slideShowWrapper
+{
+  position:fixed;
+  top:5%;
+  left:10%;
+  bottom:0;
+  right:0;
+  height: 85%;
+  width: 85%;
+  margin: 0;
+  padding: 0;
+  z-index: 99;
+  display: none;
+}
 
 #overlay
 {
@@ -139,11 +156,11 @@ background-color: transparent;
   width: 100%;
   margin: 0;
   padding: 0;
+  z-index: 99;
   background-color: #000;
   opacity: .8;
   filter: alpha(opacity=80);
   -moz-opacity: .8;
-   z-index: 100;
    display: none;
 
 }
@@ -158,20 +175,21 @@ background-color: transparent;
 }
 
 .slideShowContainer{
-    min-width: 80%;
-    min-height: 80%;
-    max-width: 80%;
-    max-height: 80%;
+    min-width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
     /*border: 1px solid Black;*/
     background-color: #000;
     text-align: left;
     position: absolute;
-    top: 12.5%;
-    left: 12.5%;
-    z-index:101;
-/*    background-size:contain; 
-    background-repeat:   no-repeat;
-    background-position: center center;*/
+    top: 0.0%;
+    left: 0%;
+    z-index: 101;
+  background-size:contain; 
+    background-repeat: no-repeat;
+  background-position: center center;
     display: none;
 
 }
@@ -257,8 +275,8 @@ textarea#id_comment {height:50px; }
 .nav li a{
   padding-top: 10px;
   padding-bottom: 10px;
-
 }
+
 .navbar-default{
   z-index:100;
 }

@@ -21,12 +21,20 @@ def getChoices():
 
 # The form for uploading pictures
 class picture_upload_form(forms.Form):
+
+	# The physical image 
 	pic = forms.FileField(label="Select Picture")
+
+	# User estimated Vr
 	estimatedVr = forms.DecimalField(label="Estimated Visual Range")
-	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
-	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
+
+	# Location of the image
 	location = forms.CharField(label='Location', required=True)
+	
+	# Description of the image
 	description = forms.CharField(label='Description', required=True)
+	
+	# The type of algorithm to apply
 	algorithmType = forms.ChoiceField(label='Algorithm to Apply', 
 		choices= [(0,"Near-Far Contrast (one image)"), (1, "Near-Far Contrast (two images)")], required=True)
 	
@@ -68,7 +76,7 @@ class GallerySortForm(forms.Form):
 		widget= forms.Select(attrs={'id':'vr','name':'Visual Range(in meters)','class':'form-control'}))
 
 
-   	#auto complete on location
+   	# Auto complete on location
 	location = autocomplete.Select2ListChoiceField(required = False, label = "Location:", choice_list = getNames() ,
 		widget=autocomplete.ListSelect2(url='location-autocomplete') )
 

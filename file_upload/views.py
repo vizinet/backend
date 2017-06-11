@@ -27,8 +27,12 @@ from time import time
 import datetime
 import json
 
+# Are we debuggin?
+def debugging():
+	return True
+
 # Queries algorithms given a picture id, returns all appropriate algorithms
-def retreive_algorithm(Picture):
+def retreive_algorithm_object(Picture):
 	return {
 	"AlgorithmOne" : AlgorithmOne.objects.filter(picture = Picture),
 	"AlgorithmTwo" : None
@@ -69,6 +73,7 @@ def create_algorithm_one_object(picture, form):
 	return True
 
 # Creates an appropriate algorithm object given a picture object and its form
+# Url: /picture/pic_id
 def apply_form(picture, form):
 	return {
 	"AlgorithmOne" : create_algorithm_one_object(picture, form),
@@ -83,23 +88,32 @@ def retreive_html_page(Picture):
 	}[Picture.algorithmType]
 
 # Edit an algorithm given a picture
-def edit_algorithm(request, picId):
-	pic = Picture.objects.get(id = picId)
-	alg = retreive_algorithm(pic)
+def edit_algorithm(request, algorithm_object):
+	
+	if request.method == 'POST':
+		return HttpResponse("Post request to edit algorithm")
+	else: 
+		return HttpResponse("Post request to edit algorithm")
 
 # Apply de algorithm
 def apply_algorithm(request, picId = -1):
 	pic = Picture.objects.get(id = picId)
+	alg = retreive_algorithm_object(pic)
 	
+	# If we already have a algorithm object associated with this picture,
+	# We must edit the algorithm
+	if len(alg) > 0:
+		return edit_algorithm(request, alg)
+
 	if picId !=-1:
 		# On POST
 		if request.method == 'POST':
 			form = retreive_form(pic, request.POST)
 			success = apply_form(form)
 			if success:
-				HttpResponseRedirect("/picture/view/" + newPic.id)
+				return HttpResponseRedirect("/picture/view/" + newPic.id)
 			else: 
-				pass
+				return HttpResponse("Internal Server Error on file_upload.views in apply_algorithm")
 				# TODO
 
 		# On GET
@@ -107,48 +121,60 @@ def apply_algorithm(request, picId = -1):
 			form = retreive_form(pic)
 			html_page = retreive_html_page(pic)
 
-		render_to_response(html_page, {'form': form} , {"picture" : pic}, context_instance=RequestContext(request))
+		if(debugging()):
+			print("This is the html page: " + html_page)
+			print("This is the alg type: " + pic.algorithmType)
+			print("This is the form: " )
+
+
+		return render_to_response(html_page, {'has_alg': False,'form': form, "picture" : pic }, context_instance=RequestContext(request))
 
 	# Invalid picture id	
 	else: 
-		HttpResponseRedirect("/gallery")
+		return HttpResponseRedirect("/gallery")
+
+# Convert integer to algorithm name
+def int_to_algorithm(answer):
+	return {
+	'0':"AlgorithmOne",
+	'1':"TODO"
+	}[answer]
 
 # index is responsible for the main upload page
 # Url: /file_upload/
 @login_required
 def index(request):
-	if request.user.is_certified is False:
-		return render_to_response('not_certified.html')
+	#if request.user.is_certified is False:
+		#return render_to_response('not_certified.html')
 	
 	# If there is a picture to upload
 	if request.method == 'POST':
 
-		picture_form = picture_upload_form(request.POST, request.FILES)
+		form = picture_upload_form(request.POST, request.FILES)
 		
 		# Create a new picture object
 		if form.is_valid():
 			newPic = Picture(
 				image = request.FILES['pic'], 
 				user=request.user, 
-				eVisualRange=form.cleaned_data.get('vr'), 
+				eVisualRange=form.cleaned_data.get('estimatedVr'), 
 				description=form.cleaned_data.get('description'),
-				algorithmType=form.cleaned_data.get('algorithmType')
+				algorithmType=int_to_algorithm(form.cleaned_data.get('algorithmType'))
 				)
 			newPic.save()
-
 
 			# Create new tag object
 			t = form.cleaned_data['location']
 			newTag = Tag(picture = newPic, text = t.lower())
 			newTag.save()
 			
-			return HttpResponseRedirect("/picture/" + newPic.id);
+			return HttpResponseRedirect("/picture/" + str(newPic.id));
 
 	# If Get Request
 	else:
 		form = picture_upload_form()
 	
-	return render_to_response('file_upload_page.html',{'form': form}, context_instance=RequestContext(request))
+	return render_to_response('file_upload_page.html', {'form': form}, context_instance=RequestContext(request))
 
 # The upload url for the app
 @csrf_exempt
@@ -256,7 +282,12 @@ def delete_picture(request, id):
 # URL: /picture/view/<pic_id>/
 def view_picture(request, picId = -1, comment_num=1):
 	pictures = None
+	computed_vr = 0
 	if picId != -1:
+
+		# POST response
+		if request.method == 'POST':	
+			return HttpResponseRedirect(reverse('file_upload.views.index'))
 
 		# Good picture id
 		p = Picture.objects.get(id = picId)
@@ -264,43 +295,25 @@ def view_picture(request, picId = -1, comment_num=1):
 		# Tell the tag db to get alist of tags from the picture
 		cur_tag = Tag.objects.filter(picture= p)
 
-		# If the user wants to see more images:
+		# Find all images in given location
 		location = cur_tag[0].text
-		picture_tags = Tag.objects.filter(text=location).order_by("picture__uploaded")
+		picture_tags = Tag.objects.filter(text=location).order_by("picture__uploadTime")
 		pictures = []
 		for picture_tag in picture_tags:
 			pictures.append(picture_tag.picture)
 
-		# POST response
-		if request.method == 'POST':
-			
-			alg1_form = algorithm_one_form(request.POST, request.FILES)
-			if form.is_valid:
-
-				# Updated the values
-				Picture.objects.get(id = picId)
-				edited_picture = AlgorithmOne.objects.filter(picture = p)
-				edited_picture.farX = alg1_form.cleaned_data.get('farX')
-				edited_picture.farY = alg1_form.cleaned_data.get('farY')
-				edited_picture.nearX =  alg1_form.cleaned_data.get('nearX')
-				edited_picture.nearY =  alg1_form.cleaned_data.get('nearY')
-				edited_picture.nearTargetDistance = alg1_form.cleaned_data.get('nearDistance')
-				edited_picture.farTargetDistance = alg1_form.cleaned_data.get('farDistance')
-				edited_picture.save()
-
-			return HttpResponseRedirect(reverse('file_upload.views.index'))
-
-		# GET Response
-		else:
-			alg1_form = algorithm_one_form()
+		# Is there an algorithm associated with this picture
+		alg = retreive_algorithm_object(p)
+		if len(alg) > 0:
+			computed_vr = alg[0].calculatedVisualRange
 
 		this_comment_form = comment_form()
 
 		# Setup range of image numbers for the 
 		# Picture is the main picture, pictures is the side bitches. 
-		return render_to_response( 'view_image.html', {'picture': p,'pictures':pictures, 
-			'tag':cur_tag[0], "comment_num": comment_num, 'comment_form': this_comment_form, 
-			'picture_form': alg1_form }, context_instance=RequestContext(request))
+		return render_to_response( 'view_image.html', {'picture': p, 'computed_vr': computed_vr, 'pictures':pictures, 
+			'tag':cur_tag[0], "comment_num": comment_num, 'comment_form': this_comment_form, }, 
+			context_instance=RequestContext(request))
 
 	# If we have an invalid picture id
 	else:

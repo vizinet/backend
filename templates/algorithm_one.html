@@ -1,15 +1,16 @@
+{% extends "base/newbase.html" %}
 {% block airpact-content %}
 
 <div class="col-md-4" style="">
-    <p><h2> Instructions: </h2></p>
-    <p> Red Circle = Far target</p>
-    <p> Blue Circle = Near Target</p>
+    <p><h2>Algorithm One </h2></p>
+    <p> Orange Circle = Near target</p>
+    <p> Yellow Circle = Far Target</p>
     <p> Program will measure both circles based on the smallest radius </p>
 
     <form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <p><input type="submit" id="submitButton" value="Upload" /></p>
+        <p><input type="submit" id="submitButton" value="Submit" /></p>
     </form>
 </div> 
 
@@ -24,11 +25,11 @@
 
 <div id = "near_circle" class="ui-widget-content"></div>
 <div id = "far_circle" class="ui-widget-content"></div>
+<div id = "debugging1"> Debugging1 </div>
 
 <script>
 
 // Global Variables
-var imgurl = "";
 var picture = new Image();
 
 // Vars that effect the python algorithm
@@ -47,21 +48,20 @@ nearY.val(0);
 farX.val(0);
 farY.val(0);
 
-// Make the near circle draggable and hidden
+// Make the near circle draggable 
 $( "#near_circle" ).draggable({ containment: "#canvas" });
-$( "#near_circle" ).hide();
 
 // Make the near circle resizable 
 $( "#near_circle" ).resizable({
     aspectRatio: 1 / 1,    
     stop: function(event, ui) { 
-        radiusNear.val(ui.size.width/2);     
+        radiusNear.val(ui.size.width/2);
+        $("#debugging1").text("Top offset near Circle: " + $("#near_circle").offset().top + "Top offset canvas: " +  $("#canvas").offset().top)     
     }   
 });
 
-// Make the far circle draggable and hidden
+// Make the far circle draggable 
 $( "#far_circle" ).draggable({ containment: "#canvas" });
-$( "#far_circle" ).hide();
 
 // Make the far circle resizable
 $( "#far_circle" ).resizable({
@@ -71,62 +71,71 @@ $( "#far_circle" ).resizable({
     }   
 });
 
-// On image load
-function imgLoad()
+// Move circles with respect to their saved values
+function move_circles()
 {
-    var canvas = $('#canvas')[0];
-    var context = canvas.getContext('2d');
-    context.drawImage(picture, 0,0);
-}
-
-// Load a file
-function fileOnLoad(e)
-{
-    var img = $('<img>', {src: e.target.result});
-    img.load(function(){
-        var canvas = $('#canvas')[0];
-        var context = canvas.getContext('2d');
-        canvas.width = this.naturalWidth;
-        canvas.height = this.naturalHeight;
-        context.drawImage(this,0,0);
+    var saved_near_x = parseInt("{{ picture.nearX }}") +  $("#canvas").offset().left;  
+    var saved_near_y = parseInt("{{ picture.nearY }}") + $("#canvas").offset().top;
+    var saved_far_x = parseInt("{{ picture.farX }}") +  $("#canvas").offset().left;  
+    var saved_far_y = parseInt("{{ picture.farY }}") + $("#canvas").offset().top;
+    
+    // Edit the offset of the near circle with respect to saved values
+    $("#near_circle").offset({
+           left : saved_near_x,
+           top : saved_near_y
     });
+
+    // Edit the offset of the far circle with respect to saved values
+    $("#far_circle").offset({
+           left : saved_far_x,
+           top : saved_far_y
+    });
+
+     // Edit the radius of the near circle with respect to saved values
+     $("#near_circle").css({
+        "width" : (parseInt("{{picture.radiusLow}}")*2) + "px",
+        "height" : (parseInt("{{picture.radiusLow}}")*2) + "px"
+     });
+
+     // Edit the radius of the far circle with respect to saved values
+     $("#far_circle").css({
+        "width" : (parseInt("{{picture.radiusHigh}}")*2) + "px",
+        "height" : (parseInt("{{picture.radiusHigh}}")*2) + "px"
+     }); 
 }
 
-// Whenever the image changes
-$('#id_pic').change(function(e){
-    var file = e.target.files[0], imageType=/image.*/;
-    imgurl = URL.createObjectURL(e.target.files[0]);
-    if(!file.type.match(imageType))
-    {
-        return;
-    }
-
-    // Load the picture
-    var reader = new FileReader();
-    reader.onload = fileOnLoad;
-    reader.readAsDataURL(file);
-    picture.src = imgurl;
-    picture.onload = imgLoad();
-    $("#near_circle").show();
-    $("#far_circle").show();
+// Move the circles appropriately upon window resize
+$(window).resize(function(){
+if($('#edit_image_form').is(':visible'))
+{
+    $("#near_circle").toggle();
+    $("#far_circle").toggle();  
+    move_circles();
+    $("#near_circle").toggle();
+    $("#far_circle").toggle();    
+}
 });
-
-// The dragging event for our circles
-function dragging(event) {
-    var near_cirle = $("#near_cirle")[0];
-    var near_circle_rect = near_circle.getBoundingClientRect();
-    var canvas_rect = canvas.getBoundingClientRect();
-}
 
 $(document).ready(function(){
     
+    // Fill the canvas with the appropriate image
+    var context = $("#canvas")[0].getContext('2d');
+    var canvas_picture = new Image();
+    canvas_picture.src = "{{ picture.image.url }}";
+    canvas_picture.onload = function() {
+        $("#canvas")[0].width = canvas_picture.naturalWidth;
+        $("#canvas")[0].height = canvas_picture.naturalHeight;
+    context.drawImage(canvas_picture, 0, 0);
+    }; 
+
+    // Do we have an algorithm already created? 
+    if("{{ has_alg }}" === "True")
+    {
+
+        move_circles();
+    }
+
     $('#form').submit(function(){
-        var near_cirle = $("#near_cirle")[0];
-        var near_circle_rect = near_circle.getBoundingClientRect();
-        
-        var far_cirle = $("#far_cirle")[0];      
-        var far_circle_rect = far_circle.getBoundingClientRect();
-        
         nearY.val($("#near_circle").offset().top - $("#canvas").offset().top);
         nearX.val($("#near_circle").offset().left - $("#canvas").offset().left);
         farY.val($("#far_circle").offset().top - $("#canvas").offset().top);

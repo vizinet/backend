@@ -12,7 +12,7 @@ from user_profile.models import AirpactUser
 
 # Comment Class
 class Comment(models.Model):
-	Picture = models.ForeignKey(Picture, default = -1, on_delete=models.CASCADE)
+	picture = models.ForeignKey(Picture, default = -1, on_delete=models.CASCADE)
 	user = models.ForeignKey(AirpactUser, default = -1)
 	text =  models.TextField(default = "", blank = True)
 	submit_date = models.TextField(default = "", blank = True)

@@ -2,38 +2,51 @@
 {% load comments %}
 {% block airpact-content %}
 
+<div id= "overlay"></div>
+
+<div style = "max-width:100%; max-height:100%;">
+
 <!-- The Image -->
-<div class = "col-md-10"></div>
-<div class="col-md-9" style="">
-    <canvas id="canvas"></canvas>
+<div class="col-lg-3">
+	<p><img class="img-responsive" style = "position:relative;"  src="{{ picture.image.url }}" alt="{{ picture.image.url}}" align = "middle" id ="mainPicture" /> </p>
 </div>
 
-<!-- Canvas -->
-<div class ="col-lg-9">
-<table class="table table-striped">
-	<tr>
-		<td> Estimated Visual Range: {{ picture.vr }} </td>
-	</tr>
-	<tr>
-		<td> Computed Visual Range: {{ picture.twoTargetContrastVr }} </td>
-	</tr>
-	<tr>
-		<td> User:  <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
-	</tr>
-	<tr>
-		<td> Description: {{ picture.description }} </td>
-	</tr>
-	<tr>
-		<td> Location: {{ tag.text }}</td>
-	</tr>
-</table>
+<!-- Buttons -->
+<div class = "col-lg-9" style ="position:relative">
+	<table class = "table">
+		<tr>
+			<td>
+				<button type = "submit" class = "btn btn-info" id ="timeline"> View Timeline </button>
+
+				<form action="/picture/{{ picture.id }}/" method="get">
+    				<input class = "btn btn-info" type="submit" value="Edit Image" 
+        	 		name="Edit image" id="edit_image" /></input>
+				</form>
+			</td>
+		</tr>
+	</table>	 
+	<table class="table table-striped">
+		<tr>
+			<td> Estimated Visual Range: {{ picture.eVisualRange }} </td>
+		</tr>
+		<tr>
+			<td> Computed Visual Range: {{ computed_vr }} <br > Algorithm: {{ picture.algorithmType }} </td>
+		</tr>
+		<tr>
+			<td> User:  <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
+		</tr>
+		<tr>
+			<td> Description: {{ picture.description }} </td>
+		</tr>
+		<tr>
+			<td> Location: {{ tag.text }}</td>
+		</tr>
+	</table>
 </div>
+
 
 <!-- Slideshow -->
-<div class = "col-lg-9">
-<button class = "btn btn-info" id ="timeline"> View Timeline </button> 
-</div>
-
+<div id = "slideShowWrapper">
 <div class="slideShowContainer" id="slideShowContainer">
 	<div id="slideShowMainPicture"> 
 		<div id="slideShowBottomInfoPanel"> 
@@ -47,7 +60,7 @@
 			</tr>
 				<td id="slideShowDate">{{ picture.uploaded }}</td>
 				<td id="slideShowLocation"> {{tag.text}} </td>
-				<td id="slideShowVr"> {{ picture.vr }}</td>
+				<td id="slideShowVr"> {{ picture.eVisualRange }}</td>
 				<td id="slideShowDesc"> {{ picture.description }}</td>
 			</tr>
 			</table>
@@ -56,26 +69,16 @@
 	<div id="slideShowLeftNavArrow"> </div>
 	<div id="slideShowRightNavArrow"> </div>
 </div>
+</div>
 
-{% if user.is_authenticated %}
-	<!-- Edit image -->
-	<div class = "col-lg-9" id = "show_edit_options">
-		<p> <button type="submit" class="btn btn-info" >Edit Image</button> </p>
-	</div>
-	<div id = "edit_image_form" class = "col-lg-12" style="padding-bottom: 5px; display:none;"> 
-		<form  class="form-inline" method="POST">
-			{% csrf_token %}
-			{{ picture_form }}
-		</form>
-	</div>	
-{% endif %}
+
 
 <!-- Comments -->
-<div class="col-lg-9">
+<div class="col-lg-12">
 
 	<div class = "comment_form">
 	{% if user.is_authenticated %}
-	<form action = "/comments/" method="POST">	
+	<form action = "comments/{{ picture.id }}/1" method="POST">	
 		{% csrf_token %}
 		{{ comment_form }}
 		<button id="post_comment" type="submit" class="button-submit">post</button>
@@ -90,17 +93,13 @@
 	<a name="comment_start"></a>
 	</div>
 </div>
-
-<!-- <p id = "debugger1"> The Debugger1 </p>
-<p id = "debugger2"> The Debugger2 </p> -->
+</div>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
-	
-<div id = "near_circle" class="ui-widget-content draggable"></div>
-<div id = "far_circle" class="ui-widget-content draggable"></div>
 
-<script>
+
+<script type="text/javascript">
 "use strict";
 
 // General Global variables
@@ -109,54 +108,8 @@ var pictures = [];
 var starting_index = 0;
 var currentIndex = 0;
 
-// Variables obtained from the form
-var nearX = $('input[name="nearX"]');
-var nearY = $('input[name="nearY"]');
-var farX = $('input[name="farX"]');
-var farY = $('input[name="farY"]');
-var radiusNear = $('input[name="radiusNear"]');
-var radiusFar = $('input[name="radiusFar"]');
-
-// Default values
-radiusFar.val(50);
-radiusNear.val(50);
-nearX.val(0);
-nearY.val(0);
-farX.val(0);
-farY.val(0);
-
-
-// Make the near circle draggable and hidden
-$( "#near_circle" ).draggable({
-	containment: "#canvas" 
-});
-$( "#near_circle" ).hide();
-
-// Make the near circle resizable 
-$( "#near_circle" ).resizable({
-    aspectRatio: 1 / 1,    
-    stop: function(event, ui) { 
-        radiusNear.val(ui.size.width/2);
-    }   
-});
-
-// Make the far circle draggable and hidden
-$( "#far_circle" ).draggable({ 
-	containment: "#canvas" 
-});
-$( "#far_circle" ).hide();
-
-// Make the far circle resizable
-$( "#far_circle" ).resizable({
-    aspectRatio: 1 / 1,    
-    stop: function(event, ui) { 
-        radiusFar.val(ui.size.width/2);
-    }   
-});
-
 // Render the list of comments via ajax
-function render_comment_list()
-{
+function render_comment_list(){
 	$("#comment_list").load("/comments/{{ picture.id }}/{{ comment_num }}/");
 }
 
@@ -165,7 +118,7 @@ $("#post_comment").on('click', function(e) {
     e.preventDefault();
     var form = $(this).closest("form");
      $.ajax({
-            url: "/comments/{{ picture.id }}/1",
+            url: "/comments/{{ picture.id }}/1/",
             type: 'POST',
             data: form.serialize()
         }).done(function(data) {
@@ -173,76 +126,10 @@ $("#post_comment").on('click', function(e) {
         });
     	return false;
 	});
-
-// Move circles with respect to their saved values
-function move_circles(){
-	var saved_near_x = parseInt("{{ picture.lowX }}") +  $("#canvas").offset().left;  
-    var saved_near_y = parseInt("{{ picture.lowY }}") + 61;
-    var saved_far_x = parseInt("{{ picture.highX }}") +  $("#canvas").offset().left;  
-    var saved_far_y = parseInt("{{ picture.highY }}") + 61;
-	
-	// Edit the offset of the near circle with respect to saved values
-	$("#near_circle").offset({
-           left : saved_near_x,
-           top : saved_near_y
-    });
-
-	// Edit the offset of the far circle with respect to saved values
-	$("#far_circle").offset({
-           left : saved_far_x,
-           top : saved_far_y
-    });
-
-	 // Edit the radius of the near circle with respect to saved values
-	 $("#near_circle").css({
-	 	"width" : (parseInt("{{picture.radiusLow}}")*2) + "px",
-	 	"height" : (parseInt("{{picture.radiusLow}}")*2) + "px"
-	 });
-
-	 // Edit the radius of the far circle with respect to saved values
-	 $("#far_circle").css({
-	 	"width" : (parseInt("{{picture.radiusHigh}}")*2) + "px",
-	 	"height" : (parseInt("{{picture.radiusHigh}}")*2) + "px"
-	 }); 
-
-	 //$("#debugger1").text("Canvas top: " + $("#canvas").offset().top );
-}
-
-
-// Upon clicking our edit button, Change the position and radius of the circle
-// to our recorded value. And toggle the display of the form
-$('#show_edit_options').click(function(){
-	$("#near_circle").toggle();
-	$("#far_circle").toggle();
-	move_circles();
-
-    $("#edit_image_form").toggle();
-});
-
-// Move the circles appropriately upon window resize
-$(window).resize(function(){
-if($('#edit_image_form').is(':visible'))
-{
-	$("#near_circle").toggle();
-	$("#far_circle").toggle();	
-	move_circles();
-	$("#edit_image_form").toggle();
-}
-});
-
- // Fill the canvas with the appropriate image
- var context = $("#canvas")[0].getContext('2d');
- var canvas_picture = new Image();
- canvas_picture.src = "{{ picture.pic.url }}";
- canvas_picture.onload = function() {
- 	$("#canvas")[0].width = canvas_picture.naturalWidth;
- 	$("#canvas")[0].height = canvas_picture.naturalHeight;
-    context.drawImage(canvas_picture, 0, 0);
- };	
  
 //
 {% for picture in pictures %}
-	pictures.push(new picture ({{picture.id}}, "{{picture.uploaded}}",{{picture.vr}}, "{{picture.description}}", "{{picture.pic.url}}"));
+	pictures.push(new picture ({{ picture.id }}, "{{ picture.uploadTime }}", {{ picture.eVisualRange }}, "{{picture.description}}", "{{ picture.image.url }}"));
 {% endfor %}
 
 
@@ -329,23 +216,28 @@ function updateTable()
 
 $(document).ready(function(){
 	render_comment_list();
-    var hidden = false;
+    
 	findStartingIndex();
 	currentIndex=starting_index;
 	$("#slideShowMainPicture").css('background-image', "url("+String(pictures[starting_index].url)+")");
-	
-	$('#timeline').click(function(){
+
+	var hidden = false;
+
+	$("#timeline").on('click', function(e) {
 		if (hidden == false)
 		{
+			$("#slideShowWrapper").toggle();
 			fadeScreen();
 			hidden=true;
 		}
+
 	});
 
 	$('#overlay').click(function(){
 		if(hidden == true)
 		{
 			fadeBack();
+			$("#slideShowWrapper").toggle();
 			hidden=false;
 		}
 	});

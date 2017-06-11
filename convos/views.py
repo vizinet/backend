@@ -23,22 +23,21 @@ import datetime
 # Function to View all the comments and post a comment
 # URL /comments/<pic_id>/<page_num>
 def comments(request, picId = -1, page = 99):
-	print("comments page number: ")
-	print(page)
+	comments_paginated = []
 	if picId !=-1:
-		p = picture.objects.get(id = picId)
+		p = Picture.objects.get(id = picId)
 		if request.method == 'POST':	
 			this_comment_form = comment_form(request.POST)
-			#print(form)
 			try:
 				if(this_comment_form.is_valid()):
 					this_comment = Comment(
 						picture = p,
 						user = request.user,
 						text = this_comment_form.cleaned_data.get('text'),
-						submit_date = datetime.datetime.now().replace(microsecond=0)
+						submit_date = datetime.datetime.now()
 					);
 					this_comment.save();
+
 				else:
 					print("Comment form is not valid")
 			except Exception as e:
@@ -46,7 +45,8 @@ def comments(request, picId = -1, page = 99):
 
 		comments = Comment.objects.filter(picture = p).order_by("-submit_date")
 
-		paginator = Paginator(comments, 5) #Show 5 per page
+		#Show 5 per page
+		paginator = Paginator(comments, 5) 
 
 		try:
 			comments_paginated = paginator.page(page)
@@ -57,12 +57,10 @@ def comments(request, picId = -1, page = 99):
 		except Exception as e:
 			print(e)
 
-		#comments_paginated = reversed(comments_paginated)
-
-		return render_to_response("comments.html", 
+		return render_to_response("comments.html",	
 			{'comments': comments_paginated, "picture_id" : picId}, context_instance=RequestContext(request));
 
 	# No picture present
 	else:
-		pass
+		return HttpResponse("Sever Error occured")
 	
