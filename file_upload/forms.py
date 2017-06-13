@@ -9,7 +9,7 @@ from django import forms
 from file_upload.models import Picture, Tag
 from dal import autocomplete
 
-# All of da choices
+# Choices for the tag object
 def getChoices():
 	T = tag.objects.values('text').distinct()
 
@@ -21,27 +21,39 @@ def getChoices():
 
 # The form for uploading pictures
 class picture_upload_form(forms.Form):
-
-	# The physical image 
 	pic = forms.FileField(label="Select Picture")
-
-	# User estimated Vr
 	estimatedVr = forms.DecimalField(label="Estimated Visual Range")
-
-	# Location of the image
 	location = forms.CharField(label='Location', required=True)
-	
-	# Description of the image
 	description = forms.CharField(label='Description', required=True)
-	
-	# The type of algorithm to apply
 	algorithmType = forms.ChoiceField(label='Algorithm to Apply', 
-		choices= [(0,"Near-Far Contrast (one image)"), (1, "Near-Far Contrast (two images)")], required=True)
+		choices= [(1,"Near-Far Contrast (one image)"), (2, "Near-Far Contrast (two images)")], required=True)
 	
 # The form for editing algorithm one
 class algorithm_one_form(forms.Form):
-	nearDistance = forms.DecimalField(label="Estimated distance to near Target (in KM)")
-	farDistance = forms.DecimalField(label = "Estimated distance to far Target (in KM)")
+	
+	# Distances to the near and far targets
+	nearDistance = forms.DecimalField(label="Estimated distance to near target (in KM)")
+	farDistance = forms.DecimalField(label = "Estimated distance to far target (in KM)")
+
+	# X and Y coordinates for the two circles
+	nearX = forms.DecimalField(widget=forms.HiddenInput())
+	nearY = forms.DecimalField(widget=forms.HiddenInput())
+	farX = forms.DecimalField(widget=forms.HiddenInput())
+	farY = forms.DecimalField(widget=forms.HiddenInput())
+
+	# Radius for the circles
+	farRadius = forms.DecimalField(widget=forms.HiddenInput())
+	nearRadius = forms.DecimalField(widget=forms.HiddenInput())
+
+# The form for editing algorithm two 
+class algorithm_two_form(forms.Form):
+	
+	# The image for the far target
+	pic2 = forms.FileField(label="Select Picture for the far target", required = False)
+	
+	# Distances to the near and far targets
+	nearDistance = forms.DecimalField(label="Estimated distance to near target (in KM)")
+	farDistance = forms.DecimalField(label = "Estimated distance to far target (in KM)")
 
 	# Deals with circle locations
 	nearX = forms.DecimalField(widget=forms.HiddenInput())

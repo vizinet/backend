@@ -15,10 +15,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 # Custom Django
-from file_upload.models import Picture, Tag, AlgorithmOne
+from file_upload.models import Picture, Tag, AlgorithmOne, AlgorithmTwo
 from user_profile.models import AuthToken, AirpactUser
 from user_profile.views import edit_profile
-from file_upload.forms import picture_upload_form, algorithm_one_form
+from file_upload.forms import picture_upload_form, algorithm_one_form, algorithm_two_form
 from convos.forms import comment_form
 
 # Other
@@ -34,22 +34,23 @@ def debugging():
 # Returns list of algorithm objects given its picture *Note the list should contain 
 # Only one value
 def retreive_algorithm_object(Picture):
+	
 	return {
 	"AlgorithmOne" : AlgorithmOne.objects.filter(picture = Picture),
-	"AlgorithmTwo" : None
+	"AlgorithmTwo" : AlgorithmTwo.objects.filter(picture = Picture)
 	}[Picture.algorithmType]
 
 # Retreives am algorithm form given a picture
-def retreive_algorithm_form(Picture, postData = None):
+def retreive_algorithm_form(Picture, postData = None, fileData = None):
 	if postData is None:
 		return {
 		"AlgorithmOne" : algorithm_one_form(),
-		"AlgorithmTwo" : None
+		"AlgorithmTwo" : algorithm_two_form()
 		}[Picture.algorithmType]
 	else:
 		return {
 		"AlgorithmOne" : algorithm_one_form(postData),
-		"AlgorithmTwo" : None
+		"AlgorithmTwo" : algorithm_two_form(postData, fileData)
 		}[Picture.algorithmType]
 
 # Creates an algorithm one object 
@@ -59,26 +60,42 @@ def create_algorithm_one_object(Picture, form):
 	if form.is_valid():
 		newAlg1 = AlgorithmOne(
 			picture = Picture,
-			nearX=form.cleaned_data.get('nearX'), 
-			nearY=form.cleaned_data.get('nearY'),				
-			farX=form.cleaned_data.get('farX'),
-			farY=form.cleaned_data.get('farY'),
+			nearX = form.cleaned_data.get('nearX'), 
+			nearY = form.cleaned_data.get('nearY'),				
+			farX = form.cleaned_data.get('farX'),
+			farY = form.cleaned_data.get('farY'),
 			nearDistance = form.cleaned_data.get('nearDistance'),
 			farDistance = form.cleaned_data.get('farDistance'),
 			nearRadius = form.cleaned_data.get('nearRadius'),
-			farRadius = form.cleaned_data.get('farRadius')
+			farRadius = form.cleaned_data.get('farRadius'),
 			)
-
-		if(debugging()):
-			print ("Form info: ")
-			print (form.cleaned_data.get('nearX'))
-			print (form.cleaned_data.get('nearY'))
-			print (form.cleaned_data.get('farX'))
-			print (form.cleaned_data.get('farY'))
-			print (form.cleaned_data.get('nearDistance'))
-			print (form.cleaned_data.get('farDistance'))
-
 		newAlg1.save()
+		return True
+	return False 
+
+# Creates an algorithm one object. File Data comes in the form 
+# request.FILES
+def create_algorithm_two_object(Picture, form, fileData):
+	
+	# Create a new alg1 object
+	if form.is_valid():
+		try:
+			newAlg2 = AlgorithmTwo(
+				picture = Picture,
+				image2 = fileData['pic2'],
+				nearX = form.cleaned_data.get('nearX'), 
+				nearY = form.cleaned_data.get('nearY'),				
+				farX = form.cleaned_data.get('farX'),
+				farY = form.cleaned_data.get('farY'),
+				nearDistance = form.cleaned_data.get('nearDistance'),
+				farDistance = form.cleaned_data.get('farDistance'),
+				nearRadius = form.cleaned_data.get('nearRadius'),
+				farRadius = form.cleaned_data.get('farRadius'))
+			newAlg2.save()
+		except Exception as e:
+			print(e)
+			return False 
+
 		return True
 	return False 
 
@@ -99,38 +116,64 @@ def edit_algorithm_one_object(form, algorithmOneObject):
 
 	return False
 
+# Edits an algorithm obe object based off given form data
+def edit_algorithm_two_object(form, algorithmTwoObject, FileData):
+	
+	if form.is_valid():
+		algorithmTwoObject.nearX = form.cleaned_data.get('nearX');
+		algorithmTwoObject.nearY = form.cleaned_data.get('nearY');
+		algorithmTwoObject.farX = form.cleaned_data.get('farX');
+		algorithmTwoObject.farY = form.cleaned_data.get('farY');
+		algorithmTwoObject.nearDistance = form.cleaned_data.get('nearDistance');
+		algorithmTwoObject.farDistance = form.cleaned_data.get('farDistance');
+		algorithmTwoObject.nearRadius = form.cleaned_data.get('nearRadius');
+		algorithmTwoObject.farRadius = form.cleaned_data.get('farRadius');
+		algorithmTwoObject.save();
+		return True
+
+	return False
+
 # Creates an appropriate algorithm form object given a picture object and its form
-def apply_create_form(Picture, form):
-	return {
-	"AlgorithmOne" : create_algorithm_one_object(Picture, form),
-	"AlgorithmTwo" : None
+def apply_create_form(Picture, form, Data = None):
+	return { 
+	'AlgorithmOne': create_algorithm_one_object(Picture, form), 
+	'AlgorithmTwo': create_algorithm_two_object(Picture, form, Data)
 	}[Picture.algorithmType]
 
 # Edits an appropriate algorithm object based off given form
-def apply_edit_form(form, algorithmObject):
+def apply_edit_form(form, algorithmObject, Data = None):
 	return {
 	"AlgorithmOne" : edit_algorithm_one_object(form, algorithmObject),
-	"AlgorithmTwo" : None
+	"AlgorithmTwo" : edit_algorithm_two_object(form, algorithmObject, Data)
 	}[algorithmObject.picture.algorithmType]
 
 # Retreives the appropriate html page given a picture object
 def retreive_html_page(Picture):
 	return {
 	"AlgorithmOne" : 'algorithm_one.html',
-	"AlgorithmTwo" : None
+	"AlgorithmTwo" : 'algorithm_two.html'
 	}[Picture.algorithmType]
 
 # Edit an algorithm given a picture
 def edit_algorithm(request, Picture, algorithmObject, html_page):
-	
+	file_data = None
+
 	# POST Request
 	if request.method == 'POST':
-		form = retreive_algorithm_form(Picture, request.POST)
-		success = apply_edit_form(form, algorithmObject)
+
+		# Is there file information in the request?
+		if hasattr(request, 'FILES'):
+			form = retreive_algorithm_form(Picture, request.POST, request.FILES)
+			file_data = request.FILES
+		else:
+			form = retreive_algorithm_form(Picture, request.POST)
+
+		success = apply_edit_form(form, algorithmObject, request.FILES)
+
 		if success:
 			return HttpResponseRedirect("/picture/view/" + str(Picture.id))
 		else:
-			return HttpResponse("Internal Server Error info: file_upload Line 132. Please contact administrator")
+			return HttpResponse("Internal Server Error info: file_upload Line 182. Please contact administrator")
 		return HttpResponse("Post request to edit algorithm")
 
 	# GET Request
@@ -145,6 +188,7 @@ def apply_algorithm(request, picId = -1):
 	pic = Picture.objects.get(id = picId)
 	alg = retreive_algorithm_object(pic)
 	html_page = retreive_html_page(pic)
+	file_data = None
 	
 	# If we already have a algorithm object associated with this picture,
 	# We must edit the algorithm
@@ -154,11 +198,21 @@ def apply_algorithm(request, picId = -1):
 	if picId !=-1:
 		# On POST
 		if request.method == 'POST':
-			form = retreive_algorithm_form(pic, request.POST)
-			if(debugging):
-				print("This is the form: ")
-				print(form)
-			success = apply_create_form(pic, form)
+
+			# Is there file information in the request?
+			if hasattr(request, 'FILES'):
+				form = retreive_algorithm_form(pic, request.POST, request.FILES)
+				file_data = request.FILES
+			else: 
+				form = retreive_algorithm_form(pic, request.POST)
+
+			# Apply the creation form with the following variables
+			if(debugging()):
+				print("Our algorithm type at line 207 = ")
+				print(pic.algorithmType)
+
+			success = apply_create_form(pic, form, file_data)
+
 			if success:
 				return HttpResponseRedirect("/picture/view/" + picId)
 			else: 
@@ -183,16 +237,16 @@ def apply_algorithm(request, picId = -1):
 # Convert integer to algorithm name
 def int_to_algorithm(answer):
 	return {
-	'0':"AlgorithmOne",
-	'1':"TODO"
+	'1':"AlgorithmOne",
+	'2':"AlgorithmTwo"
 	}[answer]
 
 # index is responsible for the main upload page
 # Url: /file_upload/
 @login_required
 def index(request):
-	#if request.user.is_certified is False:
-		#return render_to_response('not_certified.html')
+	if request.user.is_certified is False:
+		return render_to_response('not_certified.html')
 	
 	# If there is a picture to upload
 	if request.method == 'POST':

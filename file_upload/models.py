@@ -210,3 +210,111 @@ class AlgorithmOne(models.Model):
 			print("ERROR CALCULATING VR: " + e.message)
 
 		super(AlgorithmOne, self).save()
+
+
+# This algorithm computes the visual range for two images, one target each
+class AlgorithmTwo(models.Model):
+
+	# Foreign key reference to picture
+	picture = models.ForeignKey(Picture, unique = True, on_delete=models.CASCADE)
+	
+	# The image for the far target
+	image2 = models.ImageField(upload_to = 'pictures/')
+
+	# Our calculated visual range
+	calculatedVisualRange = models.FloatField(null=True, default=0)
+
+	# X value for the far target
+	farX = models.FloatField(null=False, default=0) 
+
+	# Y value for the far target
+	farY= models.FloatField(null=False, default=0)
+
+	# X value for the near target
+	nearX = models.FloatField(null=False, default=0 )
+
+	# Y Value for the near target
+	nearY = models.FloatField(null=False, default=0)
+
+	farRadius = models.FloatField(null=True)
+	
+	nearRadius = models.FloatField(null = True)
+
+	# Distance to far target
+	farDistance = models.FloatField(null = True, default = 0)
+
+	# Distance to near target
+	nearDistance = models.FloatField(null = True, default = 0)
+
+	# Must define
+	def __str__(self):
+		return "AlgorithmTwo"
+	
+	# Find and assign the visual range based off the given picture object
+	def findTwoTargetContrastVr(self):
+		self.picture.image.seek(0)
+		self.image2.seek(0)
+
+		# Open images
+		image1 = Image.open(StringIO(self.picture.image.read()))
+		image2 = Image.open(StringIO(self.image2.read()))
+
+		# Convert to RGB values for each pixel in the images
+		nearPixelData = image1.convert('RGB')
+		farPixelData = image2.convert('RGB')
+
+		# Set up containers for red green and blue for each target
+		farRed = []
+		farGreen = []
+		farBlue = []
+		nearRed = []
+		nearGreen = []
+		nearBlue = []
+
+		newFarX = int(self.farX)
+		newFarY = int(self.farY)
+		newNearX = int(self.nearX)
+		newNearY = int(self.nearY)
+		radius = int(self.nearRadius)
+
+		# The radius must be the smaller of the two radiuss
+		if(int(self.farRadius) < radius):
+			radius = int(self.farRadius)
+
+		# Process far target first
+		for x in range(newFarX, newFarX + radius*2):
+			for y in range(newFarY, newFarY + radius*2):
+				try:
+					R,G,B = farPixelData.getpixel((x,y))
+					farRed.append(R)
+					farGreen.append(G)
+					farBlue.append(B)
+				except Exception:
+					print("Out of bounds when getting pixel data")
+
+		# Do the same for near target
+		for x in range(newNearX, newNearX+radius*2):
+			for y in range(newNearY, newNearY+radius*2):
+				try:
+					R,G,B = nearPixelData.getpixel((x,y))
+					nearRed.append(R)
+					nearGreen.append(G)
+					nearBlue.append(B)
+				except Exception:
+					print("Out of bounds at x:" + str(x) + "y:"+str(y))
+
+		# Now we need to run the function 3 times one for each color band then average them together
+		vrR = TwoTargetContrast(farRed, nearRed, self.farDistance, self.nearDistance)
+		vrG = TwoTargetContrast(farGreen,nearGreen, self.farDistance, self.nearDistance)
+		vrB = TwoTargetContrast(farBlue, nearBlue, self.farDistance, self.nearDistance)
+
+		self.calculatedVisualRange = (abs((vrR[0] + vrG[0] + vrB[0]) / 3))
+
+	# Override the save function for AlgorithmOne
+	def save(self):
+		try:
+			self.findTwoTargetContrastVr()
+		except Exception as e:
+			print("ERROR CALCULATING VR: " + e.message)
+
+		super(AlgorithmTwo, self).save()
