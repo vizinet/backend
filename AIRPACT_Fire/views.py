@@ -188,7 +188,7 @@ def downloads(request):
 	return render_to_response("downloads.html", context_instance=RequestContext(request))
 
 def about(request):
-	newestPictures = picture.objects.all().order_by("-uploadTime")[:4]
+	newestPictures = Picture.objects.all().order_by("-uploadTime")[:4]
 	return render_to_response("about.html", {'newestPictures' : newestPictures}, context_instance=RequestContext(request))
 	
 @csrf_exempt
