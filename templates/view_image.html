@@ -55,13 +55,16 @@
 				<th> Date </th>
 				<th> Location </th>
 				<th> Visual Range </th>
+				<th> Algorithm Type:
 				<th> Description </th>
 			</thead>
 			</tr>
 				<td id="slideShowDate">{{ picture.uploaded }}</td>
 				<td id="slideShowLocation"> {{tag.text}} </td>
-				<td id="slideShowVr"> {{ picture.eVisualRange }}</td>
+				<td id="slideShowVr"> {{ picture.eVisualRange }} </td>
+				<td> Algorithm: {{ picture.algorithmType }}</td>
 				<td id="slideShowDesc"> {{ picture.description }}</td>
+
 			</tr>
 			</table>
 		</div>

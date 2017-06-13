@@ -31,15 +31,16 @@ import json
 def debugging():
 	return True
 
-# Queries algorithms given a picture id, returns all appropriate algorithms
+# Returns list of algorithm objects given its picture *Note the list should contain 
+# Only one value
 def retreive_algorithm_object(Picture):
 	return {
 	"AlgorithmOne" : AlgorithmOne.objects.filter(picture = Picture),
 	"AlgorithmTwo" : None
 	}[Picture.algorithmType]
 
-# Retreives a form given a picture Django object
-def retreive_form(Picture, postData = None):
+# Retreives am algorithm form given a picture
+def retreive_algorithm_form(Picture, postData = None):
 	if postData is None:
 		return {
 		"AlgorithmOne" : algorithm_one_form(),
@@ -51,34 +52,66 @@ def retreive_form(Picture, postData = None):
 		"AlgorithmTwo" : None
 		}[Picture.algorithmType]
 
-# Creates an algorithm one object given a picture object and a completed
-# form. Returns True on success
-def create_algorithm_one_object(picture, form):
+# Creates an algorithm one object 
+def create_algorithm_one_object(Picture, form):
+	
 	# create a new alg1 object
-	try:
+	if form.is_valid():
 		newAlg1 = AlgorithmOne(
-			picture = newPic,
-			nearX=float(form['nearX']), 
-			nearY=float(form['nearY']),				
-			farX=float(form['farX']),
-			farY=float(form['farY']),
-			nearDistance = float(form['nearDistance']),
-			farDistance = float(form['farDistance'])
+			picture = Picture,
+			nearX=form.cleaned_data.get('nearX'), 
+			nearY=form.cleaned_data.get('nearY'),				
+			farX=form.cleaned_data.get('farX'),
+			farY=form.cleaned_data.get('farY'),
+			nearDistance = form.cleaned_data.get('nearDistance'),
+			farDistance = form.cleaned_data.get('farDistance'),
+			nearRadius = form.cleaned_data.get('nearRadius'),
+			farRadius = form.cleaned_data.get('farRadius')
 			)
+
+		if(debugging()):
+			print ("Form info: ")
+			print (form.cleaned_data.get('nearX'))
+			print (form.cleaned_data.get('nearY'))
+			print (form.cleaned_data.get('farX'))
+			print (form.cleaned_data.get('farY'))
+			print (form.cleaned_data.get('nearDistance'))
+			print (form.cleaned_data.get('farDistance'))
+
 		newAlg1.save()
-	except Exception as e:
-		print(e)
-		return False
+		return True
+	return False 
 
-	return True
+# Edits an algorithm obe object based off given form data
+def edit_algorithm_one_object(form, algorithmOneObject):
+	
+	if form.is_valid():
+		algorithmOneObject.nearX = form.cleaned_data.get('nearX');
+		algorithmOneObject.nearY = form.cleaned_data.get('nearY');
+		algorithmOneObject.farX = form.cleaned_data.get('farX');
+		algorithmOneObject.farY = form.cleaned_data.get('farY');
+		algorithmOneObject.nearDistance = form.cleaned_data.get('nearDistance');
+		algorithmOneObject.farDistance = form.cleaned_data.get('farDistance');
+		algorithmOneObject.nearRadius = form.cleaned_data.get('nearRadius');
+		algorithmOneObject.farRadius = form.cleaned_data.get('farRadius');
+		algorithmOneObject.save();
+		return True
 
-# Creates an appropriate algorithm object given a picture object and its form
-# Url: /picture/pic_id
-def apply_form(picture, form):
+	return False
+
+# Creates an appropriate algorithm form object given a picture object and its form
+def apply_create_form(Picture, form):
 	return {
-	"AlgorithmOne" : create_algorithm_one_object(picture, form),
+	"AlgorithmOne" : create_algorithm_one_object(Picture, form),
 	"AlgorithmTwo" : None
 	}[Picture.algorithmType]
+
+# Edits an appropriate algorithm object based off given form
+def apply_edit_form(form, algorithmObject):
+	return {
+	"AlgorithmOne" : edit_algorithm_one_object(form, algorithmObject),
+	"AlgorithmTwo" : None
+	}[algorithmObject.picture.algorithmType]
 
 # Retreives the appropriate html page given a picture object
 def retreive_html_page(Picture):
@@ -88,46 +121,60 @@ def retreive_html_page(Picture):
 	}[Picture.algorithmType]
 
 # Edit an algorithm given a picture
-def edit_algorithm(request, algorithm_object):
+def edit_algorithm(request, Picture, algorithmObject, html_page):
 	
+	# POST Request
 	if request.method == 'POST':
-		return HttpResponse("Post request to edit algorithm")
-	else: 
+		form = retreive_algorithm_form(Picture, request.POST)
+		success = apply_edit_form(form, algorithmObject)
+		if success:
+			return HttpResponseRedirect("/picture/view/" + str(Picture.id))
+		else:
+			return HttpResponse("Internal Server Error info: file_upload Line 132. Please contact administrator")
 		return HttpResponse("Post request to edit algorithm")
 
+	# GET Request
+	else:
+		form = retreive_algorithm_form(Picture) 
+		return render_to_response(html_page, {'has_alg': True,'form': form, "picture" : Picture,  "algorithm": algorithmObject}, 
+			context_instance=RequestContext(request))
+
 # Apply de algorithm
+# URL /picture/<picId>/
 def apply_algorithm(request, picId = -1):
 	pic = Picture.objects.get(id = picId)
 	alg = retreive_algorithm_object(pic)
+	html_page = retreive_html_page(pic)
 	
 	# If we already have a algorithm object associated with this picture,
 	# We must edit the algorithm
 	if len(alg) > 0:
-		return edit_algorithm(request, alg)
+		return edit_algorithm(request, pic, alg[0], html_page)
 
 	if picId !=-1:
 		# On POST
 		if request.method == 'POST':
-			form = retreive_form(pic, request.POST)
-			success = apply_form(form)
+			form = retreive_algorithm_form(pic, request.POST)
+			if(debugging):
+				print("This is the form: ")
+				print(form)
+			success = apply_create_form(pic, form)
 			if success:
-				return HttpResponseRedirect("/picture/view/" + newPic.id)
+				return HttpResponseRedirect("/picture/view/" + picId)
 			else: 
 				return HttpResponse("Internal Server Error on file_upload.views in apply_algorithm")
 				# TODO
 
 		# On GET
 		else:
-			form = retreive_form(pic)
-			html_page = retreive_html_page(pic)
-
+			form = retreive_algorithm_form(pic)
+			
 		if(debugging()):
 			print("This is the html page: " + html_page)
 			print("This is the alg type: " + pic.algorithmType)
-			print("This is the form: " )
 
-
-		return render_to_response(html_page, {'has_alg': False,'form': form, "picture" : pic }, context_instance=RequestContext(request))
+		return render_to_response(html_page, {'has_alg': False,'form': form, "picture" : pic }, 
+			context_instance=RequestContext(request))
 
 	# Invalid picture id	
 	else: 
@@ -317,6 +364,6 @@ def view_picture(request, picId = -1, comment_num=1):
 
 	# If we have an invalid picture id
 	else:
-		return HttpResponseRedirect("/gallery")
+		return HttpResponseRedirect("/gallery/")
 		#redirect back to gallery
 

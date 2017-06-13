@@ -141,6 +141,9 @@ class AlgorithmOne(models.Model):
 	# Distance to near target
 	nearDistance = models.FloatField(null = True, default = 0)
 
+	# Must define
+	def __str__(self):
+		return "AlgorithmOne"
 	
 	# Find and assign the visual range based off the given picture object
 	def findTwoTargetContrastVr(self):
@@ -153,61 +156,51 @@ class AlgorithmOne(models.Model):
 		pixelData = image.convert('RGB')
 
 		# Set up containers for red green and blue for each target
-		hRed = []
-		hGreen = []
-		hBlue = []
-		lRed = []
-		lGreen = []
-		lBlue = []
+		farRed = []
+		farGreen = []
+		farBlue = []
+		nearRed = []
+		nearGreen = []
+		nearBlue = []
 
-		newHX = int(self.farX)
-		newHY = int(self.farY)
-		newLX = int(self.nearX)
-		newLY = int(self.nearY)
+		newFarX = int(self.farX)
+		newFarY = int(self.farY)
+		newNearX = int(self.nearX)
+		newNearY = int(self.nearY)
 		radius = int(self.nearRadius)
 
 		# The radius must be the smaller of the two radiuss
 		if(int(self.farRadius) < radius):
 			radius = int(self.farRadius)
 
-		# No negative values
-		if newHX < 0:
-			newHX  = 0;
-		if newHY < 0:
-			newHY = 0;
-		if newLX < 0:
-			newLX = 0;
-		if newLY < 0:
-			newLY = 0;
-
-		# Process high or "Far" target first
-		for x in range(newHX, newHX + radius*2):
-			for y in range(newHY,newHY+radius*2):
+		# Process far target first
+		for x in range(newFarX, newFarX + radius*2):
+			for y in range(newFarY, newFarY + radius*2):
 				try:
 					R,G,B = pixelData.getpixel((x,y))
-					hRed.append(R)
-					hGreen.append(G)
-					hBlue.append(B)
+					farRed.append(R)
+					farGreen.append(G)
+					farBlue.append(B)
 				except Exception:
 					print("Out of bounds when getting pixel data")
 
-		# do the same for the low or "close" target
-		for x in range(newLX, newLX+radius*2):
-			for y in range(newLY, newLY+radius*2):
+		# Do the same for near target
+		for x in range(newNearX, newNearX+radius*2):
+			for y in range(newNearY, newNearY+radius*2):
 				try:
 					R,G,B = pixelData.getpixel((x,y))
-					lRed.append(R)
-					lGreen.append(G)
-					lBlue.append(B)
+					nearRed.append(R)
+					nearGreen.append(G)
+					nearBlue.append(B)
 				except Exception:
 					print("Out of bounds at x:" + str(x) + "y:"+str(y))
 
 		# Now we need to run the function 3 times one for each color band then average them together
-		vrR = TwoTargetContrast(hRed,lRed,self.farTargetDistance,self.nearTargetDistance)
-		vrG = TwoTargetContrast(hGreen,lGreen,self.farTargetDistance,self.nearTargetDistance)
-		vrB = TwoTargetContrast(hBlue,lBlue,self.farTargetDistance,self.nearTargetDistance)
+		vrR = TwoTargetContrast(farRed, nearRed, self.farDistance, self.nearDistance)
+		vrG = TwoTargetContrast(farGreen,nearGreen, self.farDistance, self.nearDistance)
+		vrB = TwoTargetContrast(farBlue, nearBlue, self.farDistance, self.nearDistance)
 
-		self.twoTargetContrastVr = (abs((vrR[0] + vrG[0] + vrB[0]) / 3))
+		self.calculatedVisualRange = (abs((vrR[0] + vrG[0] + vrB[0]) / 3))
 
 	# Override the save function for AlgorithmOne
 	def save(self):
@@ -216,4 +209,4 @@ class AlgorithmOne(models.Model):
 		except Exception as e:
 			print("ERROR CALCULATING VR: " + e.message)
 
-		super(Picture, self).save()
+		super(AlgorithmOne, self).save()

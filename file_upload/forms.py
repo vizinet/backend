@@ -40,8 +40,8 @@ class picture_upload_form(forms.Form):
 	
 # The form for editing algorithm one
 class algorithm_one_form(forms.Form):
-	nearDistance = forms.DecimalField(label="Estimated distance to near Target")
-	farDistance = forms.DecimalField(label = "Estimated distance to far Target")
+	nearDistance = forms.DecimalField(label="Estimated distance to near Target (in KM)")
+	farDistance = forms.DecimalField(label = "Estimated distance to far Target (in KM)")
 
 	# Deals with circle locations
 	nearX = forms.DecimalField(widget=forms.HiddenInput())

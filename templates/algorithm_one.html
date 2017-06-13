@@ -7,11 +7,18 @@
     <p> Yellow Circle = Far Target</p>
     <p> Program will measure both circles based on the smallest radius </p>
 
-    <form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
+    <form action="{% url 'apply_algorithm' picId=picture.id %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        {% if has_alg %}
+            <p> <b> previous Near Distance: {{ algorithm.nearDistance }} </b> <br> </p>
+            <p> <b> previous Far Distance: {{ algorithm.farDistance }} </b> </p>
+        {% else %}
+        {% endif%}
         <p><input type="submit" id="submitButton" value="Submit" /></p>
     </form>
+
+
 </div> 
 
 <div class="col-md-9" style="">
@@ -25,8 +32,6 @@
 
 <div id = "near_circle" class="ui-widget-content"></div>
 <div id = "far_circle" class="ui-widget-content"></div>
-<div id = "debugging1"> Debugging1 </div>
-
 <script>
 
 // Global Variables
@@ -37,8 +42,8 @@ var nearX = $('input[name="nearX"]');
 var nearY = $('input[name="nearY"]');
 var farX = $('input[name="farX"]');
 var farY = $('input[name="farY"]');
-var radiusNear = $('input[name="radiusNear"]');
-var radiusFar = $('input[name="radiusFar"]');
+var radiusNear = $('input[name="nearRadius"]');
+var radiusFar = $('input[name="farRadius"]');
 
 // Default values
 radiusFar.val(50);
@@ -55,8 +60,7 @@ $( "#near_circle" ).draggable({ containment: "#canvas" });
 $( "#near_circle" ).resizable({
     aspectRatio: 1 / 1,    
     stop: function(event, ui) { 
-        radiusNear.val(ui.size.width/2);
-        $("#debugging1").text("Top offset near Circle: " + $("#near_circle").offset().top + "Top offset canvas: " +  $("#canvas").offset().top)     
+        radiusNear.val(ui.size.width/2);    
     }   
 });
 
@@ -74,16 +78,18 @@ $( "#far_circle" ).resizable({
 // Move circles with respect to their saved values
 function move_circles()
 {
-    var saved_near_x = parseInt("{{ picture.nearX }}") +  $("#canvas").offset().left;  
-    var saved_near_y = parseInt("{{ picture.nearY }}") + $("#canvas").offset().top;
-    var saved_far_x = parseInt("{{ picture.farX }}") +  $("#canvas").offset().left;  
-    var saved_far_y = parseInt("{{ picture.farY }}") + $("#canvas").offset().top;
+    var saved_near_x = parseInt("{{ algorithm.nearX }}") +  $("#canvas").offset().left;  
+    var saved_near_y = parseInt("{{ algorithm.nearY }}") + $("#canvas").offset().top;
+    var saved_far_x = parseInt("{{ algorithm.farX }}") +  $("#canvas").offset().left;  
+    var saved_far_y = parseInt("{{ algorithm.farY }}") + $("#canvas").offset().top;
     
     // Edit the offset of the near circle with respect to saved values
     $("#near_circle").offset({
            left : saved_near_x,
            top : saved_near_y
     });
+
+ //    $("#debugging").text("canvas top offset: " + $("#canvas").offset().top + "algorithm nearY: {{ algorithm.nearY }}" + "near circle top offset: " + $("#near_circle").offset().top)
 
     // Edit the offset of the far circle with respect to saved values
     $("#far_circle").offset({
@@ -93,14 +99,14 @@ function move_circles()
 
      // Edit the radius of the near circle with respect to saved values
      $("#near_circle").css({
-        "width" : (parseInt("{{picture.radiusLow}}")*2) + "px",
-        "height" : (parseInt("{{picture.radiusLow}}")*2) + "px"
+        "width" : (parseInt("{{ algorithm.nearRadius }}")*2) + "px",
+        "height" : (parseInt("{{ algorithm.nearRadius }}")*2) + "px"
      });
 
      // Edit the radius of the far circle with respect to saved values
      $("#far_circle").css({
-        "width" : (parseInt("{{picture.radiusHigh}}")*2) + "px",
-        "height" : (parseInt("{{picture.radiusHigh}}")*2) + "px"
+        "width" : (parseInt("{{ algorithm.farRadius }}")*2) + "px",
+        "height" : (parseInt("{{ algorithm.farRadius }}")*2) + "px"
      }); 
 }
 
@@ -118,6 +124,8 @@ if($('#edit_image_form').is(':visible'))
 
 $(document).ready(function(){
     
+ //    $("#debugging").text("canvas top offset: " + $("#canvas").offset().top + "algorithm nearY: {{ algorithm.nearY }}" + "near circle top offset: " + $("#near_circle").offset().top)
+
     // Fill the canvas with the appropriate image
     var context = $("#canvas")[0].getContext('2d');
     var canvas_picture = new Image();
@@ -126,23 +134,18 @@ $(document).ready(function(){
         $("#canvas")[0].width = canvas_picture.naturalWidth;
         $("#canvas")[0].height = canvas_picture.naturalHeight;
     context.drawImage(canvas_picture, 0, 0);
-    }; 
-
     // Do we have an algorithm already created? 
-    if("{{ has_alg }}" === "True")
-    {
-
-        move_circles();
-    }
+        if("{{ has_alg }}" == 'True')
+        {
+            move_circles();
+        }
+    }; 
 
     $('#form').submit(function(){
         nearY.val($("#near_circle").offset().top - $("#canvas").offset().top);
         nearX.val($("#near_circle").offset().left - $("#canvas").offset().left);
         farY.val($("#far_circle").offset().top - $("#canvas").offset().top);
         farX.val($("#far_circle").offset().left - $("#canvas").offset().left);
-
-        alert("canvas.offset().top: "  + $("#canvas").offset().top + " near_circle.offset().top: " + $("#near_circle").offset().top );
-        alert("canvas.offset.left: "  + $("#canvas").offset().left + " near_circle.offset().left: " + $("#near_circle").offset().left )
         $('#submitButton').attr("disabled", "disabled");
     });
 });
@@ -150,6 +153,4 @@ $(document).ready(function(){
 </script>
 
 
-
-<p id="debugging"></p>
 {% endblock %}
