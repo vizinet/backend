@@ -1,0 +1,73 @@
+{% extends "base/newbase.html" %}
+{% block airpact-content %}
+
+<H1> Step 1: Upload image </H1>
+<div class="col-md-4" style="">
+    <form action="{% url "index" %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" id="submitButton" value="Next Step" /></p>
+    </form> 
+</div> 
+
+<div class="col-md-9" style="">
+    <canvas style="max-width: 100%;" id="canvas"></canvas>
+</div>
+
+<div id = "cords"></div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+<script>
+
+// Global Variables
+var imgurl = "";
+var picture = new Image();
+
+// On image load
+function imgLoad()
+{
+    var canvas = $('#canvas')[0];
+    var context = canvas.getContext('2d');
+    context.drawImage(picture, 0,0);
+}
+
+// Load a file
+function fileOnLoad(e)
+{
+    var img = $('<img>', {src: e.target.result});
+    img.load(function(){
+        var canvas = $('#canvas')[0];
+        var context = canvas.getContext('2d');
+        canvas.width = this.naturalWidth;
+        canvas.height = this.naturalHeight;
+        context.drawImage(this,0,0);
+    });
+}
+
+// Whenever the image changes
+$('#id_pic').change(function(e){
+    var file = e.target.files[0], imageType=/image.*/;
+    imgurl = URL.createObjectURL(e.target.files[0]);
+    if(!file.type.match(imageType))
+    {
+        return;
+    }
+
+    // Load the picture
+    var reader = new FileReader();
+    reader.onload = fileOnLoad;
+    reader.readAsDataURL(file);
+    picture.src = imgurl;
+    picture.onload = imgLoad();
+});
+
+$(document).ready(function(){
+    
+    $('#form').submit(function(){
+        $('#submitButton').attr("disabled", "disabled");
+    });
+});
+
+</script>
+{% endblock %}
