@@ -187,9 +187,12 @@ def find_pictures_tag(location, pictures, alltags):
 def downloads(request):
 	return render_to_response("downloads.html", context_instance=RequestContext(request))
 
+# URL /about/
 def about(request):
 	newestPictures = Picture.objects.all().order_by("-uploadTime")[:4]
-	return render_to_response("about.html", {'newestPictures' : newestPictures}, context_instance=RequestContext(request))
+	print("Newest pictures: ")
+	print(newestPictures)
+	return render_to_response("about.html", {'newestPictures' : newestPictures }, context_instance=RequestContext(request))
 	
 @csrf_exempt
 def getPythonScripts(request):
