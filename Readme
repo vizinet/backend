@@ -36,7 +36,8 @@ Example:
 sudo nohup ./log_script master_log https://hooks.slack.com/services/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 &
 
 ------------------------------Git---------------------------------------------
-git clone https://github.com/Iamsoto/AIRPACT-Fire-Website.git
+git clone https://github.com/AIRPACT-Fire/Website.git
+
 
 
 
