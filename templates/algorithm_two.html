@@ -1,0 +1,221 @@
+{% extends "base/newbase.html" %}
+{% block airpact-content %}
+
+<div class="col-md-4" style="">
+    <p><h2>Algorithm Two </h2></p>
+    <p> Orange Circle = First Image / Near Target</p>
+    <p> Yellow Circle = Second Image / Far Target</p>
+    <p> Tap Circles to lock onto their image </p>
+
+    <form action="{% url 'apply_algorithm' picId=picture.id %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.errors }}
+        {{ form.non_field_errors }}
+        {{ form.as_p }}
+        {% if has_alg %}
+            <p> <b> previous Near Distance: {{ algorithm.nearDistance }} </b> <br> </p>
+            <p> <b> previous Far Distance: {{ algorithm.farDistance }} </b> </p>
+        {% else %}
+        {% endif%}
+        <p><input type="submit" id="submitButton" value="Submit" /></p>
+    </form>
+
+
+</div> 
+
+
+<!-- Image 1 -->
+<div class="col-md-9" style="">
+    <canvas id= "canvas1" style = "border-style: solid; border-color: orange"></canvas>
+</div>
+
+<!-- Image 2 -->
+<div class="col-md-9" style = "border-style: solid; border-color: yellow">
+    <canvas id="canvas2"></canvas>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+<div id = "near_circle" class="ui-widget-content"></div>
+<div id = "far_circle" class="ui-widget-content"></div>
+<script>
+"use strict";
+
+// Some global variables
+var imgurl = "";
+var picture = new Image();
+
+// Vars that effect the python algorithm
+var nearX = $('input[name="nearX"]');
+var nearY = $('input[name="nearY"]');
+var farX = $('input[name="farX"]');
+var farY = $('input[name="farY"]');
+var radiusNear = $('input[name="nearRadius"]');
+var radiusFar = $('input[name="farRadius"]');
+
+// Default values
+radiusFar.val(50);
+radiusNear.val(50);
+nearX.val(0);
+nearY.val(0);
+farX.val(0);
+farY.val(0);
+
+// Make the near circle draggable 
+$( "#near_circle" ).draggable({ containment: "#canvas1" });
+
+// Make the near circle resizable 
+$( "#near_circle" ).resizable({
+    aspectRatio: 1 / 1,
+    stop: function(event, ui) { 
+        radiusNear.val(ui.size.width/2);    
+    }   
+});
+
+// Make the far circle draggable 
+$( "#far_circle" ).draggable({ containment: "#canvas2" });
+
+// Make the far circle resizable
+$( "#far_circle" ).resizable({
+    aspectRatio: 1 / 1,    
+    stop: function(event, ui) { 
+        radiusFar.val(ui.size.width/2);
+    }   
+});
+
+// Move the near circle to a pre-saved value
+function move_near_circle() {
+    var saved_near_x = parseInt("{{ algorithm.nearX }}") +  $("#canvas1").offset().left;  
+    var saved_near_y = parseInt("{{ algorithm.nearY }}") + $("#canvas1").offset().top;
+    
+    // Edit the offset of the near circle with respect to saved values
+    $("#near_circle").offset({
+           left : saved_near_x,
+           top : saved_near_y
+    });
+
+    // Edit the radius of the near circle with respect to saved values
+    $("#near_circle").css({
+        "width" : (parseInt("{{ algorithm.nearRadius }}")*2) + "px",
+        "height" : (parseInt("{{ algorithm.nearRadius }}")*2) + "px"
+    });
+}
+
+// Moves the far circle to a pre-saved value
+function move_far_circle() {
+    var saved_far_x = parseInt("{{ algorithm.farX }}") +  $("#canvas2").offset().left;  
+    var saved_far_y = parseInt("{{ algorithm.farY }}") + $("#canvas2").offset().top; 
+
+    // Edit the offset of the far circle with respect to saved values
+    $("#far_circle").offset({
+           left : saved_far_x,
+           top : saved_far_y
+    });
+
+    // Edit the radius of the far circle with respect to saved values
+    $("#far_circle").css({
+        "width" : (parseInt("{{ algorithm.farRadius }}")*2) + "px",
+        "height" : (parseInt("{{ algorithm.farRadius }}")*2) + "px"
+     }); 
+}
+
+// Move the circles appropriately upon window resize
+$(window).resize(function(){
+if($('#edit_image_form').is(':visible'))
+{
+    $("#near_circle").toggle();
+    $("#far_circle").toggle();  
+    move_far_circle();
+    move_near_circle();
+    $("#near_circle").toggle();
+    $("#far_circle").toggle();    
+}
+});
+
+// On image load
+function imgLoad()
+{
+    var canvas = $('#canvas2')[0];
+    var context = canvas.getContext('2d');
+    context.drawImage(picture, 0,0);
+}
+
+// Load a file (specific to the second image)
+function fileOnLoad(e) {
+    var img = $('<img>', {src: e.target.result});
+    img.load(function(){
+        var canvas = $('#canvas2')[0];
+        var context = canvas.getContext('2d');
+        canvas.width = this.naturalWidth;
+        canvas.height = this.naturalHeight;
+        context.drawImage(this,0,0);
+    });
+}
+
+// Whenever the image2 changes
+// Note, this doesn't apply when we are editing
+$('#id_pic2').change(function(e) {
+    if( "{{ has_alg }}" == 'False')
+    {
+        var file = e.target.files[0], imageType=/image.*/;
+        imgurl = URL.createObjectURL(e.target.files[0]);
+        if(!file.type.match(imageType)) {
+            return;
+        }
+
+        // Load the picture
+        var reader = new FileReader();
+        reader.onload = fileOnLoad;
+        reader.readAsDataURL(file);
+        picture.src = imgurl;
+        picture.onload = imgLoad();        
+    }
+});
+
+// On document ready...
+$(document).ready(function(){
+    
+    // Fill the canvas1 with the appropriate image
+    var context1 = $("#canvas1")[0].getContext('2d');
+    var canvas_picture1 = new Image();
+    canvas_picture1.src = "{{ picture.image.url }}";
+    canvas_picture1.onload = function() {
+        $("#canvas1")[0].width = canvas_picture1.naturalWidth;
+        $("#canvas1")[0].height = canvas_picture1.naturalHeight;
+         context1.drawImage(canvas_picture1, 0, 0);
+        // Do we have an algorithm already created? 
+        if("{{ has_alg }}" == 'True') {
+            move_near_circle();
+        }
+    }; 
+
+    // If we are ediing, the second image should already 
+    // be present
+    if( "{{ has_alg }}" == 'True') {
+        // Fill the canvas2 with the appropriate image
+        var context2 = $("#canvas2")[0].getContext('2d');
+        var canvas_picture2 = new Image();
+        canvas_picture2.src = "{{ algorithm.image2.url }}";
+        canvas_picture2.onload = function(){
+            $("#canvas2")[0].width = canvas_picture2.naturalWidth;
+            $("#canvas2")[0].height = canvas_picture2.naturalHeight;
+            context2.drawImage(canvas_picture2, 0, 0);  
+            move_far_circle();
+        }
+    }
+
+    // Submit the locations of the circles
+    $('#form').submit(function(){
+        nearY.val($("#near_circle").offset().top - $("#canvas1").offset().top);
+        nearX.val($("#near_circle").offset().left - $("#canvas1").offset().left);
+        farY.val($("#far_circle").offset().top - $("#canvas2").offset().top);
+        farX.val($("#far_circle").offset().left - $("#canvas2").offset().left);
+        $('#submitButton').attr("disabled", "disabled");
+    });
+});
+
+</script>
+
+
+{% endblock %}
