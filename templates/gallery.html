@@ -25,7 +25,7 @@
 </div>
 	{% for picture in pictures %}
 		<div class="col-lg-3">
-			<a href="{% url 'view_picture' picId=picture.id %}"> <img class="img-thumbnail" src="{{ picture.thumbnail.url }}" alt="{{ picture..url}}" /> </a>
+			<a href="{% url 'view_picture' picId=picture.id %}"> <img class="img-thumbnail" src="{{ picture.thumbnail.url }}" alt="{{ picture.url}}" /> </a>
 			<div>
 				<article> Date: {{ picture.uploadTime }} </article>
 				<div> VR: {{ picture.eVisualRange }} </div>
@@ -51,7 +51,7 @@
 <script>
 // When num link is clicked, re-fire form submit
 $(".pagination_submit").click(function() {
-	page_num = $(this).text();
+	page_num = $.trim($(this).text());
 	
 	$("#search_submit").on("click", function(e){
     	e.preventDefault();

@@ -153,19 +153,19 @@ def order_pictures(x, pictures):
 	return {
 	'0': pictures.order_by("uploadTime"),
 	'1': pictures.order_by("-uploadTime"),
-	'2': pictures.order_by("vr"),
-	'3': pictures.order_by("-vr"),
+	'2': pictures.order_by("eVisualRange"),
+	'3': pictures.order_by("-eVisualRange"),
 	}[x]
 
 # A switch statement for finding the pictures based on visual range
 def find_pictures_vr(x, pictures):
 	return {
 		'0': pictures,
-		'1': pictures.filter(vr__lte=10.0),
-		'2': pictures.filter(vr__gte=10.0, vr__lte=30.0 ),
-		'3': pictures.filter(vr__gte=30.0, vr__lte=100.0 ),
-		'4': pictures.filter(vr__gte=100.0, vr__lte=500.0 ),
-		'5': pictures.filter(vr__gte=500.0),
+		'1': pictures.filter(eVisualRange__lte=10.0),
+		'2': pictures.filter(eVisualRange__gte=10.0, eVisualRange__lte=30.0 ),
+		'3': pictures.filter(eVisualRange__gte=30.0, eVisualRange__lte=100.0 ),
+		'4': pictures.filter(eVisualRange__gte=100.0, eVisualRange__lte=500.0 ),
+		'5': pictures.filter(eVisualRange__gte=500.0),
 	}[x]
 
 #Find pictures by tag, warning, returns a list of pictures
