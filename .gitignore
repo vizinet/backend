@@ -34,7 +34,8 @@ htmlcov/
 nosetests.xml
 coverage.xml
 
-
+# Database file
+db.sqlite3
 
 # Translations
 *.mo

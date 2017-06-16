@@ -84,7 +84,7 @@ def test(request):
 class LocationAutocomplete(autocomplete.Select2ListView):
     
     def get_list(self):
-        qs = tag.objects.all()
+        qs = Tag.objects.all()
         tag_names = []
         if self.q:
             qs = qs.filter(text__istartswith=self.q)
