@@ -351,7 +351,7 @@ def upload(request):
 				newPic = picture(
 								image = ContentFile(image_data,str(str(time())+".jpg")), 
 								description = desc, 
-								algorithmType = int_to_algorithm(s['algorithmType'])
+								algorithmType = int_to_algorithm(s['algorithmType']),
 								user=userob, 
 								eVisualRange=s['estimatedVisualRange'], 
 								geoX = float(s['gpsLatitude']),
@@ -370,7 +370,7 @@ def upload(request):
 				algorithmList = {"AlgorithmOne" : create_algorithm_one_object_json(s), 
 								"AlgorithmTwo" : create_algorithm_two_object_json(s) }
 				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]		
-			Exception as e:
+			except Exception as e:
 				print(e.message)
 
 			# Tags should be one location
