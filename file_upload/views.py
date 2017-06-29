@@ -27,6 +27,10 @@ from time import time
 import datetime
 import json
 
+# TODO: 
+# Create time taken field in picture table
+
+
 # Are we debuggin?
 def debugging():
 	return True
@@ -34,7 +38,6 @@ def debugging():
 # Returns list of algorithm objects given its picture *Note the list should contain 
 # Only one value
 def retreive_algorithm_object(Picture):
-	
 	return {
 	"AlgorithmOne" : AlgorithmOne.objects.filter(picture = Picture),
 	"AlgorithmTwo" : AlgorithmTwo.objects.filter(picture = Picture)
@@ -54,6 +57,26 @@ def retreive_algorithm_form(Picture, postData = None, fileData = None):
 		}[Picture.algorithmType]
 
 # Creates an algorithm one object 
+def create_algorithm_one_object_json(Picture, json):
+	
+	# create a new alg1 object, Default 50 radius circles
+	if form.is_valid():
+		newAlg1 = AlgorithmOne(
+			picture = Picture,
+			nearX = json['nearTargetX'], 
+			nearY = json['nearTargetY'],				
+			farX = json['farTargetX'],
+			farY = json['farTargetY'],
+			nearDistance = json['nearTargetEstimatedDistance'],
+			farDistance = json['farTargetEstimatedDistance'],
+			nearRadius =  50,
+			farRadius = 50,
+			)
+		newAlg1.save()
+		return True
+	return False 
+
+# Creates an algorithm one object 
 def create_algorithm_one_object(Picture, form):
 	
 	# create a new alg1 object
@@ -71,6 +94,10 @@ def create_algorithm_one_object(Picture, form):
 			)
 		newAlg1.save()
 		return True
+	return False 
+
+# Creates an algorithm Two object. 
+def create_algorithm_two_object_json(Picture, form, fileData):
 	return False 
 
 # Creates an algorithm one object. File Data comes in the form 
@@ -98,6 +125,7 @@ def create_algorithm_two_object(Picture, form, fileData):
 
 		return True
 	return False 
+
 
 # Edits an algorithm obe object based off given form data
 def edit_algorithm_one_object(form, algorithmOneObject):
@@ -277,6 +305,8 @@ def index(request):
 	
 	return render_to_response('file_upload_page.html', {'form': form}, context_instance=RequestContext(request))
 
+
+
 # The upload url for the app
 @csrf_exempt
 def upload(request):
@@ -286,87 +316,91 @@ def upload(request):
 		# S is our JSON object
 		s = json.loads(request.body);
 
+		# Verify user
 		toke = AuthToken.objects.filter(token=s['secretKey'])
 		if toke.count() > 0:
 			AuthToken.objects.get(token=s['secretKey']).delete()
 			image_data = b64decode(s['image'])
 			userob = AirpactUser.objects.get(username=s['user'])
 			
+			# Default values
 			_vrUnits = 'K'
 			timeTaken = datetime.now()
 			algType = ""
-			desc = " "
+			desc = ""
 			
-			try:
-				for key, value in s.iteritems():
-					if key != 'image' or key == 'description' and s['descrption'] is not None:
-						print(key +":" + str(value))
-
-			except Exception as e:
-				print("ERROR ITERATING KESY: "+e.message +"NOT FOUND")
-			if "highColor" in s:
-				print("FOUND HIGH COLOR it's:" + s["highColor"])
-
-			if 'distanceUnits' in s:
-				if s['distanceUnits'] == 'miles':
+			# Grab distance
+			if 'distanceMetric' in s:
+				if s['distanceMetric'] == 'miles':
 					_vrUnits = 'M'
 			
+			# Grab time
 			if 'time' in s:
 				try:
 					timeTaken = datetime.strptime(s['time'],"%Y.%m.%d.%H.%M.%S")
 				except Exception as e:
 					print(e.message)
-
-			if 'algorithmType' in s:
-				algType = s['algorithmType']
 			
+			# Grab descripting
 			if 'description' in s:
 				if s['description'] is not None:
 					desc = s['description']
 
+			# Create a picture object
 			try:
 				newPic = picture(
 								image = ContentFile(image_data,str(str(time())+".jpg")), 
 								description = desc, 
+								algorithmType = int_to_algorithm(s['algorithmType'])
 								user=userob, 
-								eVisualRange=s['visualRangeOne'], 
-								geoX = float(s['geoX']),
-								geoY = float(s['geoY']),
+								eVisualRange=s['estimatedVisualRange'], 
+								geoX = float(s['gpsLatitude']),
+								geoY = float(s['gpsLongitude']),
 								uploadTime = timeTaken,
 								vrUnits = _vrUnits,
 								)
 
-				newPic.save()	
-				algorithmOne = AlgorithmOne(
-								picture = newPic,
-								highX=float(s['highX']), 
-								highY=float(s['highY']),
-								lowColor=int(s['lowColor']),
-								lowX=float(s['lowX']),
-								lowY=float(s['lowY']),
-								farTargetDistance = float(s['visualRangeTwo']),
-								nearTargetDistance = float(s['visualRangeOne'])
-					)
-
+				newPic.save()
 			except Exception as e:
 				print(e.message)
+				newPic = None
 
+			# Create the appropriate algorithm object
+			try:
+				algorithmList = {"AlgorithmOne" : create_algorithm_one_object_json(s), 
+								"AlgorithmTwo" : create_algorithm_two_object_json(s) }
+				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]		
+			Exception as e:
+				print(e.message)
 
-			#Creating some conversation stuffs
-			print(s['tags'])
-			tags = s['tags'].split(",")
-			for t in tags:
-				newTag = tag(picture = newPic, text = t.lower())
-				newTag.save()
+			# Tags should be one location
+			location = s['location']
+			newTag = Tag(picture = newPic, text = location.lower())
+			newTag.save()
 
 			response_data['status'] = 'success'
-			response_data['TwoTargetContrastOutput'] = newPic.twoTargetContrastVr
-			response_data['imageID'] = newPic.id
+			
+			# Return the appropriate output information
+			if algorithmOne is not None:
+				response_data['output'] = retreive_algorithm_object(newPic).calculatedVisualRange
+			else: 
+				response_data['output'] = 0
+
+			# Return the id of the new image, if possible
+			if newPic is not None:
+				response_data['imageID'] = newPic.id
+			else: 
+				response_data['imageID'] = -1
+
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
 		else:
+
+			# The auth key failed
 			response_data['status'] = 'keyFailed'
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
 	else:
+
+		# A horrid Get request was made
 		return HttpResponse("For app uploads only")
 
 @login_required

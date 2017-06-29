@@ -6,14 +6,21 @@ from user_profile.models import AirpactUser
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
+def debuggin():
+    return True
+
 def usernameValidator(value):
-    pattern = re.compile("^[a-zA-Z]*$")
+    if value is None:
+        return False 
+    pattern = re.compile("^[0-9a-zA-Z]*$")
     return pattern.match(value)
  
 # Custom user creation form for an Airpact User
 class UserCreationForm(forms.ModelForm):
-    password = forms.CharField(label='password', widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='confirm password', widget=forms.PasswordInput)
+    confirm_email = forms.EmailField(label='Confirm Email', required = True, widget=forms.EmailInput)
+    password = forms.CharField(label='Password', required = True, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='Confirm Password', required = True, widget=forms.PasswordInput)
+    
     class Meta:
         model = AirpactUser
 
@@ -21,13 +28,23 @@ class UserCreationForm(forms.ModelForm):
         # but don't need to include password and confirm_password as they are
         # already included since they are defined above.
         fields = ('username','email')       
+    
 
     def clean(self):
+        
         if not usernameValidator(self.cleaned_data.get('username')):
-            self.add_error('username', 'Username contains invalid characters. Usernames may only contain letters')
-        if'password' in self.cleaned_data:
-            if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
-                self.add_error('confirm_password', 'Password & Confirm Password must match.')
+            self.add_error('username', 'Username contains invalid characters')
+        
+
+        if 'confirm_email' in self.cleaned_data and self.cleaned_data['email'] != self.cleaned_data['confirm_email']:
+            self.add_error('confirm_email', 'Email and Confirm Email fields must match')
+
+        if 'confirm_email' in self.cleaned_data:
+            if AirpactUser.objects.filter(email= self.cleaned_data['email']):
+                self.add_error('email', "This email already used")
+
+        if 'password' in self.cleaned_data and 'confirm_password' in self.cleaned_data and self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
+            self.add_error('confirm_password', 'Password & Confirm Password fields must match.')
 
         return super(UserCreationForm, self).clean()
 

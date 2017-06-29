@@ -6,7 +6,7 @@ from django.contrib.auth.models import (
 # Define custom User manager. 
 class AirpactUserManager(BaseUserManager):
 	
-	# define custom create user 
+	# Define custom create user 
 	def create_user(self, email, username, password = None):
 		if not email:
 			raise ValueError('Users must have valid email')
@@ -23,13 +23,12 @@ class AirpactUserManager(BaseUserManager):
 
 		return user
 
-	# I believe a super user is a user with admin priviledges
+	# 
 	def create_superuser(self,username, email, password):
 		user = self.create_user(email=email, username = username, password = password)
 		user.is_admin = True;
 		user.is_superuser = True;
 		user.save(using=self._db)
-
 		return user
 
 
@@ -39,7 +38,7 @@ class AirpactUser(AbstractBaseUser):
 	bio = models.TextField(max_length=1000, null=True, blank=True)
 	first_name = models.CharField(max_length=30,null=False, blank=True)
 	last_name = models.CharField(max_length=30, null=False, blank=True)
-	email = models.EmailField(blank=True)
+	email = models.EmailField(blank=False)
 	is_custom_admin = models.BooleanField(default = False)
 	is_certified = models.BooleanField(default = False)
 	is_superuser = models.BooleanField(default = False)	

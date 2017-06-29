@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import dj_database_url
 from spirit.settings import *
+
 # IF YOU WANT TO RUN THIS LOCALLY YOU MUST SET PRODUCTION TO 0
 PRODUCTION = 0
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -27,7 +28,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'et20@fybnrzon4b77v5yg*&19ozx*)#gpjhkly*u6u*52!x*1o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -35,7 +36,7 @@ DEBUG = False
 INSTALLED_APPS.extend([
     'dal',
     'dal_select2',
-
+    'spirit',
 
     # custom apps
     'file_upload',
@@ -173,3 +174,6 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ os.path.join(PROJECT_ROOT, 'static'), ]
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

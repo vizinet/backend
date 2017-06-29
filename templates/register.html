@@ -1,19 +1,19 @@
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
 
-<div class="col-md-10" style=" width:2000px">
+<div class="col-lg-3" style=" width:2000px; position:relative" >
 	{% if form.errors %}
- 		<h3>   Error Registering </h3>
+ 		<h3 style = "color:Red;">   Error Registering </h3>
 	{% endif %}
 
 	<h2> Register </h2>
-	
-	<table class="table table-striped">
-	<form action ="register" method = "post"> {% csrf_token %}
-		{{form.as_table}}
-		<input type = "submit", value="register">
+	<form class = "" saction ="register" method = "post"> 
+		{% csrf_token %}
+		{{ form.as_p }}	
+		<button type="submit" class="btn btn-default"> Submit </button>		
 	</form>
-	</table>
 	
 </div>
+
+
 {% endblock %}

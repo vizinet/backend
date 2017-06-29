@@ -5,6 +5,7 @@ Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
 
 """
+# Django Libraries
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
@@ -12,17 +13,30 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
-from user_profile.models import AuthToken, AirpactUser
-from file_upload.models import Picture
 from django.template import RequestContext
-from forms import UserCreationForm, EditProfileForm 
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import logout
+
+# Custom Django
+from forms import UserCreationForm, EditProfileForm 
+from file_upload.models import Picture
+from user_profile.models import AuthToken, AirpactUser
+from spirit.user.models import UserProfile as spirit_user
+
+# Other
 import json
 import random
 import string
 
+
+# TODO:
+# Log in with either username or email
+# 
+
+# Are we debugging? 
+def debugging():
+	return True
 
 # View the user profile
 @login_required
@@ -52,7 +66,6 @@ def auth_view(request):
 		username = request.POST['username']
 		password = request.POST['password']
 
-
 		user = auth.authenticate(username=username, password=password)
 		if user is not None:
 		   auth.login(request, user)
@@ -70,7 +83,6 @@ def loggedin(request):
 # Invalid login page
 def invalid_login(request):
 	return render_to_response('invalid.html')
-
 
 # Register / Create a new user
 def register_user(request):
@@ -93,8 +105,6 @@ def register_success(request):
 def user_app_auth(request):
 	if request.method == 'POST':
 		userdata = json.loads(request.body)
-		print(userdata['username'])
-		print(userdata['password'])
 		user = auth.authenticate(username=userdata['username'], password=userdata['password'] )
 		response_data = {}
 		if user is not None and user.is_certified:
@@ -157,6 +167,7 @@ def manage_pictures(request):
 	pictures = Picture.objects.filter(user= userob)
 	return render_to_response('manage_pictures.html', {'pictures': pictures}, context_instance=RequestContext(request))
 
+# The custom admin page
 @csrf_exempt
 @login_required
 def admin_page(request):
@@ -167,25 +178,44 @@ def admin_page(request):
 
 	nusers = AirpactUser.objects.all()
 	if(request.method == 'POST'):
-		print(request.POST)
+
 		username = request.POST.get("ourUser",False)
 		nuser = AirpactUser.objects.get(username=username)
+		suser = spirit_user.objects.get(user = nuser)
+
+		if debugging():
+			print("Spirit user: ")
+			print(suser)
+			print("are we verified?")
+			print(suser.is_verified)
+
 		the_type = request.POST['the_type']
 		
 		if(the_type == "certify"):
-			nuser.is_certified = True 
+			nuser.is_certified = True
+			suser.is_verified = True
 			nuser.save()
+			suser.save()
 
 		if(the_type == "uncertify"):
 			nuser.is_certified = False 
+			suser.is_verified = False
 			nuser.save()
+			suser.save()
 
 		if(the_type == "make_admin"):
 			nuser.is_custom_admin = True
-			nuser.save() 
+			suser.is_administrator = True
+			suser.is_moderator = True
+			suser.is_verified = True
+			nuser.save()
+			suser.save() 
 
 		if(the_type == "unmake_admin"):
 			nuser.is_custom_admin = False
+			suser.is_administrator = False
+			suser.is_moderator = False
+			suser.is_verified = False
 			nuser.save() 
 
 		if(the_type == "delete"):
