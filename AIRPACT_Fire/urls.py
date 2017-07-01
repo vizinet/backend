@@ -53,6 +53,7 @@ urlpatterns = [
     url(r'^about/',views.about,name="about"),
     url(r'^index/',views.main,name="main"),
     url(r'^forum/',include('spirit.urls'), name="forum"),
+    url(r'^forum_notifications/', views.forum_notifications, name="forum_notifications"),
     url(r'^getPythonScripts/', views.getPythonScripts, name="getPythonScripts"),
 ]
 urlpatterns+=staticfiles_urlpatterns()

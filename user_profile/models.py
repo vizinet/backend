@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright © 2017,
+Laboratory for Atmospheric Research at Washington State University,
+All rights reserved.
+
+"""
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import (
@@ -30,7 +37,6 @@ class AirpactUserManager(BaseUserManager):
 		user.is_superuser = True;
 		user.save(using=self._db)
 		return user
-
 
 # This is a custom user/userprofile class
 class AirpactUser(AbstractBaseUser):

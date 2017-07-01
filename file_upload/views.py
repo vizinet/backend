@@ -29,7 +29,7 @@ import json
 
 # TODO: 
 # Create time taken field in picture table
-
+#
 
 # Are we debuggin?
 def debugging():
@@ -212,7 +212,10 @@ def edit_algorithm(request, Picture, algorithmObject, html_page):
 
 # Apply de algorithm
 # URL /picture/<picId>/
+@login_required
 def apply_algorithm(request, picId = -1):
+	if request.user.is_certified is False:
+		return render_to_response('not_certified.html')
 	pic = Picture.objects.get(id = picId)
 	alg = retreive_algorithm_object(pic)
 	html_page = retreive_html_page(pic)

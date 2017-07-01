@@ -29,7 +29,7 @@ All rights reserved.
 			<a  href="{% url 'gallery' %}"> Gallery </a>
 			<a  href="{% url 'index' %}"> Upload </a>
 			<a  href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire"> Download </a>
-			<a  href="/forum/"> Forum </a>
+			<a  href="/forum/"> Forum <div id ="forum_notification"> </div></a>
 			<a  href="{% url 'about' %}"> About </a>
 				{% if user.is_custom_admin and user.is_authenticated %}
 					<a  href="{% url 'adminPage' %}"> Admin Page </a>
@@ -63,6 +63,10 @@ All rights reserved.
 </body>
 
 <script>
+
+
+$("#forum_notification").load("/forum_notifications/");
+
 
 // Make the main container and nav links have the appropriate css for the current screen 
 function resize_check(){

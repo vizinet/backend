@@ -17,6 +17,7 @@ from django.template import RequestContext
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import logout
+from django.core.mail import send_mail
 
 # Custom Django
 from forms import UserCreationForm, EditProfileForm 
@@ -196,6 +197,16 @@ def admin_page(request):
 			suser.is_verified = True
 			nuser.save()
 			suser.save()
+			
+			# Send duh email to duh person
+			send_mail(
+    			'You are now airpact certified!',
+    			'Congradulations! You are now a certified user of airpacfire@eecs.wsu.edu!',
+    			'airpactfire@gmail.com',
+    			["" + nuser.email],
+    			fail_silently=False,
+				)
+
 
 		if(the_type == "uncertify"):
 			nuser.is_certified = False 

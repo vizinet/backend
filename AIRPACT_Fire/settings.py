@@ -9,13 +9,13 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-
 import os
 import dj_database_url
 from spirit.settings import *
 
 # IF YOU WANT TO RUN THIS LOCALLY YOU MUST SET PRODUCTION TO 0
 PRODUCTION = 0
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +31,6 @@ SECRET_KEY = 'et20@fybnrzon4b77v5yg*&19ozx*)#gpjhkly*u6u*52!x*1o'
 DEBUG = True
 
 # Application definition
-
 
 INSTALLED_APPS.extend([
     'dal',
@@ -69,7 +68,6 @@ MIDDLEWARE_CLASSES.extend( [
 
 ROOT_URLCONF = 'AIRPACT_Fire.urls'
 
-
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 TEMPLATES = [
     {
@@ -102,6 +100,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'OPTIONS': {
+        },
     }
 }
 

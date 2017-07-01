@@ -19,12 +19,15 @@ from file_upload.models import Picture, Tag, AlgorithmOne
 from file_upload.forms import GallerySortForm
 from django.contrib.auth.decorators import login_required
 from user_profile.models import AirpactUser
+from spirit.topic.notification.models import TopicNotification
 
 # Other 
 import json
 import urllib
 from datetime import datetime
 from dal import autocomplete
+
+
 
 # The Home Page
 # URL: /
@@ -37,6 +40,18 @@ def main(request):
 
 def forum(request):
 	return render_to_response('forum.html', context_instance=RequestContext(request))
+
+# URL /forum_notifications
+def forum_notifications(request):
+	unread_messages = False
+	number = 0
+	notifications = TopicNotification.objects.filter(user = request.user)
+	if notifications is not None:
+		for notification in notifications:
+			if not notification.is_read:
+				unread_messages = True
+				number = number + 1
+	return render_to_response('forum_notifications.html', { 'unread_messages': unread_messages, 'number': number },context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
