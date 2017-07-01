@@ -1,19 +1,11 @@
 {% load spirit_tags i18n %}
 {% load static from staticfiles %}
 
-<!-- Place/replace in Directory /usr/local/lib/python2.7/dist-packages/spirit/core/templates/spirit -->
-	<div id = "main_nav_div" class= "topnav" style=" color:#FFF; position:fixed; min-width:100%" >
-	  <div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
+ <header class="header js-tabs-container">
 	    <a href="/" class="navbar-left" style="background-color: #FFF;"> 
 	      <img id = "the_logo" class="img-responsive" style="height:50px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > 
 	    Return to main site 
-	   </a>				
-	  </div>		
-	</div>
-
-    <header class="header js-tabs-container">
-		<a class="header-logo" href="{% url "spirit:index" %}">{{ config.site_name }}</a>
-
+	   </a>	
         {% if user.is_authenticated %}
             {% has_topic_notifications user as has_notifications %}
 
@@ -29,10 +21,10 @@
                     <nav class="header-nav">
                         <ul class="menu">
                             <li><a class="menu-link" href="{% url "spirit:user:detail" pk=user.pk slug=user.st.slug %}">{% trans "Profile" %}</a></li>
-                            <li><a class="menu-link" href="{% url "spirit:topic:index-active" %}"> {% trans "Topics" %} </a></li>
-                            <li><a class="menu-link" href="{% url "spirit:topic:unread:index" %}"> {% trans "Unread topics" %} </a></li>
-                            <li><a class="menu-link" href="{% url "spirit:topic:private:index" %}"> {% trans "Private topics" %} </a></li>
-			 
+                            <li><a class="menu-link" href="{% url "spirit:topic:index-active" %}">{% trans "Topics" %}</a></li>
+                            <li><a class="menu-link" href="{% url "spirit:topic:unread:index" %}">{% trans "Unread topics" %}</a></li>
+                            <li><a class="menu-link" href="{% url "spirit:topic:private:index" %}">{% trans "Private topics" %}</a></li>
+
                             {% if user.st.is_administrator %}
                                 <li><a class="menu-link" href="{% url "spirit:admin:index" %}">{% trans "Admin" %}</a></li>
                             {% endif %}
