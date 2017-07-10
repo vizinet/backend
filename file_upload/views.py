@@ -60,7 +60,7 @@ def retreive_algorithm_form(Picture, postData = None, fileData = None):
 def create_algorithm_one_object_json(Picture, json):
 	
 	# create a new alg1 object, Default 50 radius circles
-	if form.is_valid():
+	try:
 		newAlg1 = AlgorithmOne(
 			picture = Picture,
 			nearX = json['nearTargetX'], 
@@ -73,8 +73,10 @@ def create_algorithm_one_object_json(Picture, json):
 			farRadius = 50,
 			)
 		newAlg1.save()
-		return True
-	return False 
+	except Exception as e:
+		print (e)
+		return False
+	return True 
 
 # Creates an algorithm one object 
 def create_algorithm_one_object(Picture, form):
