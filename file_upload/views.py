@@ -360,7 +360,7 @@ def upload(request):
 			if debugging():
 				print("About to create a picture object")
 				print("Here is the JSON")
-				
+
 			# Create a picture object
 			try:
 				newPic = Picture(
@@ -381,7 +381,7 @@ def upload(request):
 					print(newPic)
 
 			except Exception as e:
-				print(e.message)
+				print(e)
 				newPic = None
 
 			# Create the appropriate algorithm object
