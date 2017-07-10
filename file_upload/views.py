@@ -401,10 +401,14 @@ def upload(request):
 			except Exception as e:
 				print(e.message)
 
-			# Tags should be one location
-			location = s['location']
-			newTag = Tag(picture = newPic, text = location.lower())
-			newTag.save()
+			try:
+				# Tags should be one location
+				location = s['location']
+				newTag = Tag(picture = newPic, text = location.lower())
+				newTag.save()
+			except Exception as e:
+				print("Issue creating a location tag")
+				print(e)
 
 			response_data['status'] = 'success'
 			
