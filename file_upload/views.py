@@ -390,7 +390,8 @@ def upload(request):
 								"AlgorithmTwo" : create_algorithm_two_object_json(s) }
 				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]	
 
-				if debugging("Created algorithm object: ")
+				if debugging():
+					print("Created algorithm object: ")
 					print(created_algorithm_object)
 
 			except Exception as e:
