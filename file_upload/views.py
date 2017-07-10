@@ -364,7 +364,7 @@ def upload(request):
 			# Create a picture object
 			try:
 				newPic = Picture(
-								image = ContentFile(image_data, str(datetime.datetime.now()) + ".jpg" ), 
+								image = ContentFile(image_data), 
 								description = desc, 
 								algorithmType = int_to_algorithm(s['algorithmType']),
 								user=userob, 
