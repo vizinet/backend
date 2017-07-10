@@ -74,7 +74,8 @@ def create_algorithm_one_object_json(Picture, json):
 			)
 		newAlg1.save()
 	except Exception as e:
-		print ("Failed to create algorithm object " + e)
+		print("Issue creating algorithm object")
+		print (e)
 		return False
 	return True 
 
@@ -325,7 +326,6 @@ def upload(request):
 
 		# S is our JSON object
 		s = json.loads(request.body);
-
 
 		# Verify user
 		toke = AuthToken.objects.filter(token=s['secretKey'])
