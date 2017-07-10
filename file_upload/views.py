@@ -313,6 +313,9 @@ def index(request):
 # The upload url for the app
 @csrf_exempt
 def upload(request):
+	if debugging():
+		print("I am uploading!")
+		
 	if request.method == 'POST':
 		response_data = {}
 		created_algorithm_object = None
@@ -331,7 +334,7 @@ def upload(request):
 			
 			# Default values
 			_vrUnits = 'K'
-			timeTaken = datetime.now()
+			timeTaken = datetime.datetime.now()
 			algType = ""
 			desc = ""
 			
@@ -360,7 +363,7 @@ def upload(request):
 			# Create a picture object
 			try:
 				newPic = Picture(
-								image = ContentFile(image_data,str(str(time())+".jpg")), 
+								image = ContentFile(image_data, str(str(time())+".jpg")), 
 								description = desc, 
 								algorithmType = int_to_algorithm(s['algorithmType']),
 								user=userob, 
@@ -370,7 +373,6 @@ def upload(request):
 								uploadTime = timeTaken,
 								vrUnits = _vrUnits,
 								)
-
 				newPic.save()
 
 				if debugging():
