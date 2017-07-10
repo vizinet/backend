@@ -319,6 +319,11 @@ def upload(request):
 		# S is our JSON object
 		s = json.loads(request.body);
 
+		# Let's print some json
+		if debugging():
+			print("Here is the JSON")
+			print(s)
+
 		# Verify user
 		toke = AuthToken.objects.filter(token=s['secretKey'])
 		if toke.count() > 0:
