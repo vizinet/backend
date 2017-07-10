@@ -360,8 +360,7 @@ def upload(request):
 			if debugging():
 				print("About to create a picture object")
 				print("Here is the JSON")
-				print(s)
-
+				
 			# Create a picture object
 			try:
 				newPic = Picture(
