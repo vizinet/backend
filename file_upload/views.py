@@ -369,8 +369,8 @@ def upload(request):
 								algorithmType = int_to_algorithm(s['algorithmType']),
 								user=userob, 
 								eVisualRange=s['estimatedVisualRange'], 
-								geoX = float(s['gpsLatitude']),
-								geoY = float(s['gpsLongitude']),
+								#geoX = float(s['gpsLatitude']),
+								#geoY = float(s['gpsLongitude']),
 								uploadTime = timeTaken,
 								vrUnits = _vrUnits,
 								)
@@ -381,6 +381,7 @@ def upload(request):
 					print(newPic)
 
 			except Exception as e:
+				print("Issue creating image: ")
 				print(e)
 				newPic = None
 
