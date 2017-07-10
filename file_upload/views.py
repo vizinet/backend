@@ -373,10 +373,9 @@ def upload(request):
 
 				newPic.save()
 
-
-			if debugging():
-				print("Here is the newpic: ")
-				print(newPic)
+				if debugging():
+					print("Here is the newpic: ")
+					print(newPic)
 
 			except Exception as e:
 				print(e.message)
