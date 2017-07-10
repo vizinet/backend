@@ -315,14 +315,12 @@ def index(request):
 def upload(request):
 	if request.method == 'POST':
 		response_data = {}
+		created_algorithm_object = None
+		newPic = None
 
 		# S is our JSON object
 		s = json.loads(request.body);
 
-		# Let's print some json
-		if debugging():
-			print("Here is the JSON")
-			print(s)
 
 		# Verify user
 		toke = AuthToken.objects.filter(token=s['secretKey'])
@@ -354,6 +352,11 @@ def upload(request):
 				if s['description'] is not None:
 					desc = s['description']
 
+			if debugging():
+				print("About to create a picture object")
+				print("Here is the JSON")
+				print(s)
+
 			# Create a picture object
 			try:
 				newPic = Picture(
@@ -369,15 +372,28 @@ def upload(request):
 								)
 
 				newPic.save()
+
+
+			if debugging():
+				print("Here is the newpic: ")
+				print(newPic)
+
 			except Exception as e:
 				print(e.message)
 				newPic = None
 
 			# Create the appropriate algorithm object
 			try:
+				if debugging():
+					print("About to create an algorithm object")
+
 				algorithmList = {"AlgorithmOne" : create_algorithm_one_object_json(s), 
 								"AlgorithmTwo" : create_algorithm_two_object_json(s) }
-				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]		
+				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]	
+
+				if debugging("Created algorithm object: ")
+					print(created_algorithm_object)
+
 			except Exception as e:
 				print(e.message)
 
@@ -388,8 +404,11 @@ def upload(request):
 
 			response_data['status'] = 'success'
 			
+			if debugging():
+				print("About to send response data")
+
 			# Return the appropriate output information
-			if algorithmOne is not None:
+			if created_algorithm_object is not None:
 				response_data['output'] = retreive_algorithm_object(newPic).calculatedVisualRange
 			else: 
 				response_data['output'] = 0
@@ -399,6 +418,9 @@ def upload(request):
 				response_data['imageID'] = newPic.id
 			else: 
 				response_data['imageID'] = -1
+
+			if debugging():
+				print("Sent response Data!")
 
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
 		else:
