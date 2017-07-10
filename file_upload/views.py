@@ -315,7 +315,7 @@ def index(request):
 def upload(request):
 	if debugging():
 		print("I am uploading!")
-		
+
 	if request.method == 'POST':
 		response_data = {}
 		created_algorithm_object = None
@@ -388,7 +388,7 @@ def upload(request):
 				if debugging():
 					print("About to create an algorithm object")
 
-				algorithmList = {"AlgorithmOne" : create_algorithm_one_object_json(s), 
+				algorithmList = {"AlgorithmOne" : create_algorithm_one_object_json(newPic, s), 
 								"AlgorithmTwo" : create_algorithm_two_object_json(s) }
 				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]	
 
