@@ -413,7 +413,11 @@ def upload(request):
 
 			# Return the appropriate output information
 			if created_algorithm_object is not None:
-				response_data['output'] = retreive_algorithm_object(newPic).calculatedVisualRange
+				try:
+					response_data['output'] = retreive_algorithm_object(newPic).calculatedVisualRange
+				except Exception as e:
+					print("Error retreiving calculated visual range")
+					print(e)
 			else: 
 				response_data['output'] = 0
 
