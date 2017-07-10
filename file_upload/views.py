@@ -74,7 +74,7 @@ def create_algorithm_one_object_json(Picture, json):
 			)
 		newAlg1.save()
 	except Exception as e:
-		print (e)
+		print ("Failed to create algorithm object " + e)
 		return False
 	return True 
 
@@ -99,7 +99,7 @@ def create_algorithm_one_object(Picture, form):
 	return False 
 
 # Creates an algorithm Two object. 
-def create_algorithm_two_object_json(Picture, form, fileData):
+def create_algorithm_two_object_json(json):
 	return False 
 
 # Creates an algorithm one object. File Data comes in the form 
