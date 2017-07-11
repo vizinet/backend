@@ -270,6 +270,7 @@ def apply_algorithm(request, picId = -1):
 
 # Convert integer to algorithm name
 def int_to_algorithm(answer):
+	answer = str(answer)
 	return {
 	'1':"AlgorithmOne",
 	'2':"AlgorithmTwo"
