@@ -79,8 +79,7 @@ def getNames():
 class GallerySortForm(forms.Form):
 
 	vr_choices=[(0, "None"), (1,'0-10'),(2,'10-30'), (3,'30-100'), (4,'100-500'), (5,'500+')]
-	ascending_choices = [(0,"Descending time", (1,"Ascending time")), 
-	(2,"Ascending visual Range"),(3,"Descending visual Range")]
+	ascending_choices = [(0,"Descending time", (1,"Ascending time"), (2,"Ascending visual Range"), (3,"Descending visual Range")]
 
 	ascending = forms.ChoiceField(ascending_choices, label = "Order by:", widget = forms.Select())
    
