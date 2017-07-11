@@ -126,7 +126,7 @@ def gallery(request, page = 1):
 		if form.is_valid():
 			
 			# Order by
-			if form.cleaned_data.get("ascending") != "" and form.cleaned_data.get("ascending") != 0:
+			if form.cleaned_data.get("ascending") != "":
 				allpictures = order_pictures(form.cleaned_data.get("ascending"), allpictures)
 
 			# Find by vr
@@ -166,8 +166,8 @@ def gallery(request, page = 1):
 # function to order the pictures based off the form value
 def order_pictures(x, pictures):
 	return {
-	'0': pictures.order_by("uploadTime"),
-	'1': pictures.order_by("-uploadTime"),
+	'0': pictures.order_by("-uploadTime"),
+	'1': pictures.order_by("uploadTime"),
 	'2': pictures.order_by("eVisualRange"),
 	'3': pictures.order_by("-eVisualRange"),
 	}[x]
