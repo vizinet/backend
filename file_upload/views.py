@@ -101,7 +101,7 @@ def create_algorithm_one_object(Picture, form):
 
 # Creates an algorithm Two object. 
 def create_algorithm_two_object_json(json):
-	return False 
+	return False
 
 # Creates an algorithm one object. File Data comes in the form 
 # request.FILES
@@ -419,7 +419,7 @@ def upload(request):
 			# Return the appropriate output information
 			if created_algorithm_object is not None:
 				try:
-					response_data['output'] = retreive_algorithm_object(newPic).calculatedVisualRange
+					response_data['output'] = retreive_algorithm_object(newPic)[0].calculatedVisualRange
 				except Exception as e:
 					print("Error retreiving calculated visual range")
 					print(e)
