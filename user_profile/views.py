@@ -10,6 +10,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
@@ -39,6 +40,69 @@ import string
 def debugging():
 	return True
 
+# Generate a random string with characters and intigers to act as a new password
+def random_password(size=6, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+	return ''.join(random.choice(chars) for _ in range(size))
+
+# Has the user forgotten the password
+def forgot_password(request):
+	Errors = ""
+	Messages = ""	
+
+	# Show the user the Form on a get request
+	if request.method == 'GET':
+		Messages = "Reset Password Here:"
+
+	# Parse the form on a post request
+	elif request.method == 'POST': 
+
+		entered_username = request.POST['username']
+
+		# Did the user enter an email?
+		if '@' in entered_username: 
+			this_email = entered_username
+			user = AirpactUser.objects.filter(email = this_email)
+			if len(user) > 0:
+				# Grab the first user who matches this email (There should only be one)
+				user = user[0]
+			else: 
+				Errors = "That email Does not exist"
+				user = None
+
+		# Did the user enter a username? 
+		else: 
+			user = AirpactUser.objects.filter(username = entered_username)
+			if len(user) < 1:
+				Errors = "That username does not exist"
+				user = None
+			else:
+				user = user[0]
+
+		# Do we have a valid user 
+		if user is not None:
+			new_password = random_password(random.randint(6, 12))
+			user.set_password(new_password)
+			try:
+				user.save()
+			except Exception as e:
+				Errors = "There was an error resetting your password, please try again. "
+				print (e)
+				return render_to_response('forgot_password.html',{'Errors': Errors, 'Messages': Messages },
+					context_instance=RequestContext(request))
+
+			# Send duh email to duh person
+			send_mail(
+    			'Your new Password to airpactfire',
+    			'This is your new password to airpacfire@eecs.wsu.edu!, please take care of it: ' + new_password,
+    			'airpactfire@gmail.com',
+    			["" + user.email],
+    			fail_silently=False,
+				)
+			Messages = "Your password has been successfully reset! Your new password will be sent to your email account.";
+
+	return render_to_response('forgot_password.html',{'Errors': Errors, 'Messages': Messages },
+		context_instance=RequestContext(request))
+
 # View the user profile
 @login_required
 def user_profile(request):
@@ -64,10 +128,26 @@ def logout(request):
 # Authenticate the user
 def auth_view(request):
 	if(request.method == 'POST'):
-		username = request.POST['username']
+		entered_username = request.POST['username']
 		password = request.POST['password']
 
-		user = auth.authenticate(username=username, password=password)
+		# Is the user logging in with an email? 
+		if '@' in entered_username:
+			this_email = entered_username
+			user = AirpactUser.objects.filter(email = this_email)
+			if len(user) > 0:
+				user = user[0]
+				if(debugging()):
+					print ("Password for user: " + user.password + " Our password: " + password)
+				user = auth.authenticate(username = user.username, password = password)
+
+			else:
+				user = None 
+
+		# If we are authenticating with a regular username
+		else:	
+			user = auth.authenticate(username=username, password=password)
+		
 		if user is not None:
 		   auth.login(request, user)
 		   return HttpResponseRedirect("/user/profile/"+ user.username + "/1")
@@ -91,6 +171,17 @@ def register_user(request):
 		form = UserCreationForm(request.POST)
 		if form.is_valid():
 			form.save()
+
+			# Send email to all of the admins
+			for admin_user in AirpactUser.objects.filter(is_custom_admin = True):
+				send_mail(
+    				'A New user has registered on airpacfire.eecs.wsu.edu',
+    				'User ' + form.cleaned_data['username'] + ' has registered on the site',
+    				'airpactfire@gmail.com',
+    				["" + admin_user.email],
+    				fail_silently=False,
+					)	
+
 			return HttpResponseRedirect('/user/')
 		else:
 			return render_to_response('register.html',  {'form':form}, context_instance=RequestContext(request) )
@@ -118,7 +209,7 @@ def user_app_auth(request):
 		else:
 			response_data['isUser'] = 'false'
 			response_data['secretKey'] = ''
-		print(json.dumps(response_data))
+		#print(json.dumps(response_data))
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
 	else:
 		return HttpResponse("HI")
@@ -141,6 +232,7 @@ def view_profile(request, name, page = 1):
 		pictures = paginator.page(paginator.num_pages)
 	return render_to_response('user_profile.html', {'pictures' : pictures, 'profile_user':user, 'thisuser':thisuser}, context_instance=RequestContext(request))
 
+# What is used to edit the user's profile
 @login_required
 def edit_profile(request):
 	if request.user.is_certified is False:
@@ -153,8 +245,15 @@ def edit_profile(request):
 		if form.is_valid():
 			userob.first_name = form.cleaned_data.get('first_name')
 			userob.last_name = form.cleaned_data.get('last_name')
-			userob.email = form.cleaned_data.get('email')
 			userob.bio = form.cleaned_data.get('bio')
+
+			# Make sure the email is unique
+			this_email = form.cleaned_data.get('email')
+			other_user = AirpactUser.objects.filter(email = this_email)
+			if other_user is not none:
+				userob.email = form.cleaned_data.get('email')
+
+			
 			userob.save()
 		#reidrect back to their profile
 		return HttpResponseRedirect('/user/profile/'+request.user.username+'/')
@@ -180,8 +279,12 @@ def admin_page(request):
 	nusers = AirpactUser.objects.all()
 	if(request.method == 'POST'):
 
-		username = request.POST.get("ourUser",False)
+		username = request.POST.get("ourUser", False)
+
+		# Nuser is the user for the airpacfire site
 		nuser = AirpactUser.objects.get(username=username)
+
+		# Suser is the user for the spirit forums
 		suser = spirit_user.objects.get(user = nuser)
 
 		if debugging():
@@ -207,29 +310,53 @@ def admin_page(request):
     			fail_silently=False,
 				)
 
-
+		# Uncertify the user
 		if(the_type == "uncertify"):
 			nuser.is_certified = False 
 			suser.is_verified = False
 			nuser.save()
 			suser.save()
 
+		# Certify the user
 		if(the_type == "make_admin"):
 			nuser.is_custom_admin = True
 			suser.is_administrator = True
 			suser.is_moderator = True
 			suser.is_verified = True
 			nuser.save()
-			suser.save() 
+			suser.save()
 
+			# Send duh email to duh person
+			send_mail(
+    			'You are now an administrator to airpacfire.eecs.wsu.edu',
+    			'Congradulations! You are now an administrator to airpacfire@eecs.wsu.edu!',
+    			'airpactfire@gmail.com',
+    			["" + nuser.email],
+    			fail_silently=False,
+				) 
+
+		# Make the user not an admin
 		if(the_type == "unmake_admin"):
 			nuser.is_custom_admin = False
+			nuser.is_superuser = False
 			suser.is_administrator = False
 			suser.is_moderator = False
-			suser.is_verified = False
+			suser.i_verified = False
 			nuser.save() 
 
+		# Delete the user
 		if(the_type == "delete"):
 			nuser.delete()
+
+			# Send duh email to duh person
+			send_mail(
+    			'Your account has been removed from airpacfire.eecs.wsu.edu',
+    			'Due to unfortunate circumstances, your account is now removed from airpactfire. ' + 
+    			'Please contact your administrator for questions',
+    			'airpactfire@gmail.com',
+    			["" + nuser.email],
+    			fail_silently=False,
+				) 
+
 
 	return render_to_response('custom_admin_page.html', {'nusers': nusers}, context_instance=RequestContext(request));

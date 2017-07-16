@@ -7,7 +7,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 def debuggin():
-    return True
+    return False
+
+class ForgotPasswordForm(forms.Form):
+    pass
 
 def usernameValidator(value):
     if value is None:

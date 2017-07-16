@@ -11,6 +11,7 @@ from . import views
 # Url patterns for users and user actions
 urlpatterns = [
     url(r'^admin_page$', views.admin_page, name="adminPage"),
+    url(r'^forgot_password$', views.forgot_password, name="forgot_password"),
     url(r'^$', views.login, name="login"),
     url(r'^logout$', views.logout, name="logout"),
     url(r'^auth$', views.auth_view),

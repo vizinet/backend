@@ -27,6 +27,7 @@ from django.conf import settings
 from user_profile import views as user_view
 from convos import views as convos_view
 from file_upload import views as file_upload_views
+from user_profile import views as user_profile_views
 from convos import views as comment_views
 from django_comments.models import Comment
 from . import views
@@ -52,6 +53,8 @@ urlpatterns = [
     url(r'^downloads/', views.downloads, name="downloads"),
     url(r'^about/',views.about,name="about"),
     url(r'^index/',views.main,name="main"),
+    url(r'^forum/user/register/', user_profile_views.register_user, name="forum_register"),
+    url(r'^forum/user/resend-activation/', user_profile_views.register_user, name = "forum_resend"),
     url(r'^forum/',include('spirit.urls'), name="forum"),
     url(r'^forum_notifications/', views.forum_notifications, name="forum_notifications"),
     url(r'^getPythonScripts/', views.getPythonScripts, name="getPythonScripts"),

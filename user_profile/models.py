@@ -40,14 +40,25 @@ class AirpactUserManager(BaseUserManager):
 
 # This is a custom user/userprofile class
 class AirpactUser(AbstractBaseUser):
+
+	# The username
 	username = models.CharField(max_length=254, unique=True)
+
+	# The bio of the user
 	bio = models.TextField(max_length=1000, null=True, blank=True)
+
 	first_name = models.CharField(max_length=30,null=False, blank=True)
+
 	last_name = models.CharField(max_length=30, null=False, blank=True)
+
 	email = models.EmailField(blank=False)
+
 	is_custom_admin = models.BooleanField(default = False)
+
 	is_certified = models.BooleanField(default = False)
-	is_superuser = models.BooleanField(default = False)	
+
+	is_superuser = models.BooleanField(default = False)
+		
 	objects = AirpactUserManager()
 
 	#required to implement
