@@ -182,4 +182,4 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'airpactfire@gmail.com'
 EMAIL_HOST_PASSWORD = 'airpact@fire#16'
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = True
+#EMAIL_USE_SSL = True
