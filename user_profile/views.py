@@ -127,7 +127,10 @@ def logout(request):
 
 # Authenticate the user
 def auth_view(request):
-	if(request.method == 'POST'):
+
+	if request.method == 'POST':
+		request.POST._mutable = True
+		
 		entered_username = request.POST['username']
 		password = request.POST['password']
 
@@ -135,27 +138,53 @@ def auth_view(request):
 		if '@' in entered_username:
 			this_email = entered_username
 			user = AirpactUser.objects.filter(email = this_email)
+
 			if len(user) > 0:
 				user = user[0]
-				if(debugging()):
-					print ("Password for user: " + user.password + " Our password: " + password)
+				
+				request.POST['username'] = user.username
 				user = auth.authenticate(username = user.username, password = password)
 
+			# There is no user with this email
 			else:
+				if(debugging()):
+					print("Failed to authenticate!")
 				user = None 
 
 		# If we are authenticating with a regular username
 		else:	
 			user = auth.authenticate(username=entered_username, password=password)
 		
+
+		if debugging():
+			print(user)
+
 		if user is not None:
-		   auth.login(request, user)
-		   return HttpResponseRedirect("/user/profile/"+ user.username + "/1")
+			try: 
+				request.POST._mutable = False
+
+				if (debugging()):
+					print("Logging in! ")
+
+				test_var = auth.login(request, user)
+
+				if(debugging()):
+					print(test_var)
+
+			except Exception as e:
+				print("Failed to log in!")
+				return render_to_response('login.html',  {'Errors':e.message}, context_instance=RequestContext(request) )
+
+			return HttpResponseRedirect("/user/profile/"+ user.username + "/1")
+		
+		# User is NOTHING
 		else:
 			return render_to_response('login.html',  {'Errors':"Invalid username or Password"}, context_instance=RequestContext(request) )
-	c = {}
-	c.update(csrf(request))
-	return render_to_response('login.html', c)
+	
+	elif request.method == 'GET':
+		c = {}
+		c.update(csrf(request))
+		return render_to_response('login.html', c)
 
 # Correct login page
 def loggedin(request):
@@ -250,9 +279,12 @@ def edit_profile(request):
 			# Make sure the email is unique
 			this_email = form.cleaned_data.get('email')
 			other_user = AirpactUser.objects.filter(email = this_email)
-			if other_user is not none:
+			if other_user is not None:
 				userob.email = form.cleaned_data.get('email')
 
+			# Set the password
+			if form.cleaned_data.get('password') is not None:
+				userob.set_password(form.cleaned_data.get('password'))
 			
 			userob.save()
 		#reidrect back to their profile

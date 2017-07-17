@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^index/',views.main,name="main"),
     url(r'^forum/user/register/', user_profile_views.register_user, name="forum_register"),
     url(r'^forum/user/resend-activation/', user_profile_views.register_user, name = "forum_resend"),
+    url(r'^forum/user/password-reset/', user_profile_views.forgot_password, name = "forum_resend"),
     url(r'^forum/',include('spirit.urls'), name="forum"),
     url(r'^forum_notifications/', views.forum_notifications, name="forum_notifications"),
     url(r'^getPythonScripts/', views.getPythonScripts, name="getPythonScripts"),

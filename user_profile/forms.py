@@ -71,10 +71,11 @@ class UserCreationForm(forms.ModelForm):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = AirpactUser
-        fields = ['first_name', 'last_name', 'email','bio']
+        fields = ['first_name', 'last_name','email','bio']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control'})
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
         }
+    #password = forms.CharField(label='Password', widget=forms.PasswordInput)
