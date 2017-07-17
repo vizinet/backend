@@ -176,4 +176,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [ os.path.join(PROJECT_ROOT, 'static'), ]
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Host for sending e-mail.
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'airpactfire@gmail.com'
+EMAIL_HOST_PASSWORD = 'airpact@fire#16'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
