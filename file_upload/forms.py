@@ -19,6 +19,12 @@ def getChoices():
 			x.append((k,k))
 	return x
 
+# Theformto edit a location
+class edit_location_form(forms.Form):
+	geoX = forms.DecimalField(widget=forms.HiddenInput())
+	geoY = forms.DecimalField(widget=forms.HiddenInput())
+
+
 # The form for uploading pictures
 class picture_upload_form(forms.Form):
 	pic = forms.FileField(label="Select Picture")

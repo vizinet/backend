@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from file_upload.models import Picture, Tag, AlgorithmOne, AlgorithmTwo
 from user_profile.models import AuthToken, AirpactUser
 from user_profile.views import edit_profile
-from file_upload.forms import picture_upload_form, algorithm_one_form, algorithm_two_form
+from file_upload.forms import picture_upload_form, edit_location_form, algorithm_one_form, algorithm_two_form
 from convos.forms import comment_form
 
 # Other
@@ -275,6 +275,41 @@ def int_to_algorithm(answer):
 	'1':"AlgorithmOne",
 	'2':"AlgorithmTwo"
 	}[answer]
+
+# Apply location for a picture
+# URL /picture/location/<picId>/ 
+@login_required
+def apply_location(request, picId = -1):
+	if request.user.is_certified is False:
+		return render_to_response('not_certified.html')	
+	
+	pic = Picture.objects.get(id = picId)
+	Errors = ""
+
+	# On a POST request
+	if request.method== 'POST':
+		form = edit_location_form(request.POST, request.FILES)
+		
+		if form.is_valid():
+			# Update the geo positions accordingly
+			pic.geoX = form.cleaned_data['geoX']
+			pic.geoY = form.cleaned_data['geoY']
+		
+			try:
+				pic.save()
+				# go back to viewing the image
+				return HttpResponseRedirect("/picture/view/" + str(picId))
+			except Exception as e:
+				Errors = e.message
+			else:
+				Errors = "Errors in submitting this location"
+
+	# On a GET request
+	elif request.method == 'GET':
+		form = edit_location_form()
+
+	return render_to_response('edit_location.html', {'picture': pic,'form': form,'Errors':Errors}, 
+		context_instance=RequestContext(request))
 
 # index is responsible for the main upload page
 # Url: /file_upload/

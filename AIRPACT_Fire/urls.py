@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^gallery/(?P<page>\d+)/$', views.gallery, name='gallery'),
     url(r'^picture/view/(?P<picId>\d+)/$', file_upload_views.view_picture, name="view_picture"), 
     url(r'^picture/(?P<picId>\d+)/$', file_upload_views.apply_algorithm, name="apply_algorithm"),
+    url(r'^picture/location/(?P<picId>\d+)/$', file_upload_views.apply_location, name="apply_location"),
     url(r'^picture/edit/(?P<picId>\d+)/$', file_upload_views.edit_algorithm, name="edit_algorithm"),       
     url(r'^picture/view/(?P<picId>\d+)/(?P<comment_num>\d+)/$', file_upload_views.view_picture, name="view_picture"),  
 	url(r'^file_upload/', include('file_upload.urls')),

@@ -1,0 +1,53 @@
+{% extends "base/newbase.html" %}
+{% block airpact-content %}
+
+<!-- The Google map-->
+<p> {{ Errors }}</p>
+<p> <h3> Where was this picture Taken? </h3> </p>
+<div id="map" class="" style="height:500px; width: 1000px; border:solid black 1px; "> </div>
+
+<form action="{% url 'apply_location' picId=picture.id %}" method="post" style="min-width: 100%;" id="form" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" id="submitButton" value="Submit" />
+</form>
+<script>
+
+// Variables from our form
+var geoX = $('input[name="geoX"]');
+var geoY = $('input[name="geoY"]');
+
+// Initialize the map
+function initMap() {
+        // Create a map object and specify the DOM element for display.
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 42.0902, lng: -80.7129 },
+          scrollwheel: false,
+          zoom: 4
+        });
+
+        // Create a new marker object
+        var marker = new google.maps.Marker(
+        {
+          map:map,
+          draggable:true,
+          animation: google.maps.Animation.DROP,
+          position: {lat: {{ picture.geoX }}, lng: {{ picture.geoY}} }
+        });
+        
+        // Add a drag listener event
+        google.maps.event.addListener(marker, 'dragend', function(){ 
+          geoX.val(marker.getPosition().lat());
+          geoY.val(marker.getPosition().lng());            
+        });
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCp587g3ut0dYnLfl2gfeWTc0fAxujtVcw&callback=initMap"></script>
+
+{% endblock %}
+
+
+
+
+

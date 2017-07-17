@@ -146,7 +146,7 @@ def auth_view(request):
 
 		# If we are authenticating with a regular username
 		else:	
-			user = auth.authenticate(username=username, password=password)
+			user = auth.authenticate(username=entered_username, password=password)
 		
 		if user is not None:
 		   auth.login(request, user)

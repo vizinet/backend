@@ -19,9 +19,15 @@
 				<button type = "submit" class = "btn btn-info" id ="timeline"> View Timeline </button>
 
 				<form action="/picture/{{ picture.id }}/" method="get">
-    				<input class = "btn btn-info" type="submit" value="Edit Image" 
+    				<input class = "btn btn-info" type="submit" value="Edit Image Algorithm" 
         	 		name="Edit image" id="edit_image" /></input>
 				</form>
+
+				<form action="/picture/location/{{ picture.id }}/" method="get">
+    				<input class = "btn btn-info" type="submit" value="Edit Image Location" 
+        	 		name="Edit image location" id="edit_image" /></input>
+				</form>
+
 			</td>
 		</tr>
 	</table>	 
