@@ -105,7 +105,7 @@ def create_algorithm_two_object_json(Picture, json):
 	try:
 		newAlg1 = AlgorithmTwo(
 			picture = Picture,
-			image2 = json['imageTwo'],
+			image2 = ContentFile(json['imageTwo'], str(datetime.datetime.now()) + ".jpg"),
 			nearX = json['nearTargetX'], 
 			nearY = json['nearTargetY'],				
 			farX = json['farTargetX'],
@@ -433,7 +433,7 @@ def upload(request):
 
 				if debugging():
 					print("Here is the newpic: ")
-					print(newPic)
+					#print(newPic)
 
 			except Exception as e:
 				print("Issue creating image: ")
