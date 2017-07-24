@@ -58,11 +58,11 @@
           var br = "<br />";
           var anchor1 = '<a href="'+pictures[i].link+'">';
           var content = anchor1 +' <img  class="img-responsive" src="' + pictures[i].thumbnailUrl + '" alt="{{ picture.pic.url}}" align = "middle" id ="mainPicture" /> </a>'+
-          'User: <a href="user/profile/'+pictures[i].user+'/">'+pictures[i].user;
+          'User: <a href="user/profile/'+pictures[i].user+'/">'+pictures[i].user +"</a><br> Description: " + pictures[i].description;
           google.maps.event.addListener(markerList[i], 'click', (function(content){
             return function(){
            infoWindow.setPosition(this.getPosition());
-           infoWindow.setContent("<p> Location: "+this.getPosition()+content );
+           infoWindow.setContent( content );
            infoWindow.open(map);
          };
 

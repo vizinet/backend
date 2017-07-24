@@ -100,8 +100,27 @@ def create_algorithm_one_object(Picture, form):
 	return False 
 
 # Creates an algorithm Two object. 
-def create_algorithm_two_object_json(json):
-	return False
+def create_algorithm_two_object_json(Picture, json):
+	# create a new alg1 object, Default 50 radius circles
+	try:
+		newAlg1 = AlgorithmTwo(
+			picture = Picture,
+			image2 = json['imageTwo']
+			nearX = json['nearTargetX'], 
+			nearY = json['nearTargetY'],				
+			farX = json['farTargetX'],
+			farY = json['farTargetY'],
+			nearDistance = json['nearTargetEstimatedDistance'],
+			farDistance = json['farTargetEstimatedDistance'],
+			nearRadius =  50,
+			farRadius = 50,
+			)
+		newAlg1.save()
+	except Exception as e:
+		print("Issue creating algorithm object")
+		print (e)
+		return False
+	return True 
 
 # Creates an algorithm one object. File Data comes in the form 
 # request.FILES
@@ -427,7 +446,7 @@ def upload(request):
 					print("About to create an algorithm object")
 
 				algorithmList = {"AlgorithmOne" : create_algorithm_one_object_json(newPic, s), 
-								"AlgorithmTwo" : create_algorithm_two_object_json(s) }
+								"AlgorithmTwo" : create_algorithm_two_object_json(newPic, s) }
 				created_algorithm_object = algorithmList[int_to_algorithm(s['algorithmType'])]	
 
 				if debugging():
