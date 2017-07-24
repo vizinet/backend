@@ -105,7 +105,7 @@ def create_algorithm_two_object_json(Picture, json):
 	try:
 		newAlg1 = AlgorithmTwo(
 			picture = Picture,
-			image2 = ContentFile(json['imageTwo'], str(datetime.datetime.now()) + ".jpg"),
+			image2 = ContentFile(b64decode(json['imageTwo']), str(datetime.datetime.now()) + ".jpg"),
 			nearX = json['nearTargetX'], 
 			nearY = json['nearTargetY'],				
 			farX = json['farTargetX'],
@@ -118,7 +118,7 @@ def create_algorithm_two_object_json(Picture, json):
 		newAlg1.save()
 	except Exception as e:
 		print("Issue creating algorithm object")
-		print (e)
+		print(e)
 		return False
 	return True 
 
