@@ -105,7 +105,7 @@ def create_algorithm_two_object_json(Picture, json):
 	try:
 		newAlg1 = AlgorithmTwo(
 			picture = Picture,
-			image2 = json['imageTwo']
+			image2 = json['imageTwo'],
 			nearX = json['nearTargetX'], 
 			nearY = json['nearTargetY'],				
 			farX = json['farTargetX'],
