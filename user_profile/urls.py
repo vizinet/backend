@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^register$', views.register_user, name='register'),
     url(r'^loggedin$', views.loggedin),
     url(r'^invalid$', views.invalid_login),
-    url(r'^appauth$',views.user_app_auth),
+    url(r'^appauth$', views.user_app_auth),
     url(r'^register_success$', views.register_success),
     url(r'^profile/edit/$', views.edit_profile, name="edit_profile"),
     url(r'^profile/manage_pictures/$', views.manage_pictures, name="manage_pictures"),

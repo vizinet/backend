@@ -11,11 +11,13 @@ from file_upload.models import Picture
 from user_profile.models import AirpactUser
 
 # Comment Class
-class Comment(models.Model):
-	picture = models.ForeignKey(Picture, default = -1, on_delete=models.CASCADE)
-	user = models.ForeignKey(AirpactUser, default = -1)
-	text =  models.TextField(default = "", blank = True)
-	submit_date = models.TextField(default = "", blank = True)
 
-	def __str__(self):
-		return self.text
+
+class Comment(models.Model):
+    picture = models.ForeignKey(Picture, default=-1, on_delete=models.CASCADE)
+    user = models.ForeignKey(AirpactUser, default=-1)
+    text = models.TextField(default="", blank=True)
+    submit_date = models.TextField(default="", blank=True)
+
+    def __str__(self):
+        return self.text

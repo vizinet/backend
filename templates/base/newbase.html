@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 
+<!--
 Copyright © 2017,
 Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
@@ -7,11 +7,17 @@ All rights reserved.
 <HTML lang="en">
 
 <head>
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<title>AIRPACT-Fire | Research Platform</title>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="/static/media/decoration/logo_small.png" />
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
 	{% load static from staticfiles %}
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap-theme.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static '/static/main.css' %}">
@@ -19,11 +25,26 @@ All rights reserved.
 
 <body>
 
+	<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+			<a href="#" class="navbar-left"><img id = "the_logo" class="img-responsive" style="height:50px; padding-top:0px; text-align: middle" src="{% static '/static/media/decoration/banner_large.png' %}" ></a>
+    </div>
+    <ul class="nav navbar-nav" style="padding-left: 1em;">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">Upload</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- TODO: Restore this navbar style soon
 <nav class="navbar" style = "z-index: 100" role="navigation" id="main-nav">
 		<div id = "main_nav_div" class= "topnav" style=" color:#FFF; position:fixed; min-width:100%" >
 			<div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
-				<a href="#" class="navbar-left" style="background-color: #FFF;"> <img id = "the_logo" class="img-responsive" style="height:50px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > 
-				</a>				
+				<a href="#" class="navbar-left" style="background-color: #FFF;"> <img id = "the_logo" class="img-responsive" style="height:50px; padding-top:0px; text-align: middle" src="{% static '/static/media/decoration/banner_large.png' %}" >
+				</a>
 			</div>
 			<a  href= "{% url 'home' %}" > Home </a>
 			<a  href="{% url 'gallery' %}"> Gallery </a>
@@ -34,31 +55,31 @@ All rights reserved.
 				{% if user.is_custom_admin and user.is_authenticated %}
 					<a  href="{% url 'adminPage' %}"> Admin Page </a>
 				{% endif %}
-				
+
 				{% if user.is_authenticated %}
 				 	<a href="{% url 'view_profile' user %}"> {{ user }} 's Profile </a>
 				 	<a href="{% url 'logout' %}"> Logout </a>
 				{% else %}
 					<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
-				{% endif %}		
+				{% endif %}
 		</div>
 </nav>
+-->
 
-<div class="container-fluid" style = " display: inline; position:relative" >		
-	<div id = "body_container_main" class="content" style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0.8); padding-top:5px; padding-bottom:5px; display: inline-block;">
+<div class="container-fluid" style = " display: inline; position:relative" >
+	<div id = "body_container_main" class="content" style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0); padding-top:0px; padding-bottom:0px; display: inline-block;">
 			{% block airpact-content %}
 			{% endblock %}
 	</div>
 </div>
 
 <div class="container-fluid" style = " display: inline; position:relative" >
-	<div style = "float:left">
-	Project Powered by <a href = "http://lar.wsu.edu/"> LAR </a> <br>
+	<div style = "text-align: center;">
 	Copyright © 2017,
 	Laboratory for Atmospheric Research at Washington State University,
 	All rights reserved. <br>
 	</div>
-</div>	
+</div>
 
 </body>
 
@@ -68,9 +89,9 @@ All rights reserved.
 $("#forum_notification").load("/forum_notifications/");
 
 
-// Make the main container and nav links have the appropriate css for the current screen 
+// Make the main container and nav links have the appropriate css for the current screen
 function resize_check(){
-	
+
 	// WARNING: The numbers here are constantly changing
 	if($(window).width() > 800){
 		$("#body_container_main").css({"top" : "0px" , "left":"0" });
@@ -80,12 +101,12 @@ function resize_check(){
 		$("#body_container_main").css({"top" : "0px" , "left":"0" } );
 		$("#main_nav_div.topnav a").css({ "font-size": "10px", "padding":"10px 8px" });
 		$("#the_logo").css({"height" : 30});
-	}	
+	}
 }
 
 resize_check();
 
-$(window).resize(function(){  
+$(window).resize(function(){
 	resize_check();
 })
 
@@ -93,5 +114,3 @@ $(window).resize(function(){
 </script>
 
 </HTML>
-
-

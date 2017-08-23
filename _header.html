@@ -1,10 +1,10 @@
-{% load spirit_tags i18n %}
-{% load static from staticfiles %}
+{ % load spirit_tags i18n % }
+{ % load static from staticfiles % }
 
- <header class="header js-tabs-container">
-	    <a href="/" class="navbar-left" style="background-color: #FFF;"> 
-	      <img id = "the_logo" class="img-responsive" style="height:50px; padding-top:5px;" src="{% static '/static/media/decoration/banner_large.png' %}" > 
-	    Return to main site 
+ <header class = "header js-tabs-container" >
+	    <a href = "/" class = "navbar-left" style = "background-color: #FFF;" >
+	      <img id = "the_logo" class = "img-responsive" style = "height:50px; padding-top:5px;" src = "{% static '/static/media/decoration/banner_large.png' %}" >
+	    Return to main site
 	   </a>	
         {% if user.is_authenticated %}
             {% has_topic_notifications user as has_notifications %}

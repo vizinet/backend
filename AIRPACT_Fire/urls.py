@@ -35,31 +35,31 @@ from .views import LocationAutocomplete
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-	url(r'^$', views.index, name="home"),
+    url(r'^$', views.index, name="home"),
     url(r'^tag-autocomplete/$', LocationAutocomplete.as_view(), name='location-autocomplete'),
     url(r'^admin_page$', views.admin_page, name="adminPage"),
     url(r'^uncertified$', views.uncertified, name="uncertified"),
     url(r'^user/', include('user_profile.urls')),
     url(r'^gallery/$', views.gallery, name="gallery"),
     url(r'^gallery/(?P<page>\d+)/$', views.gallery, name='gallery'),
-    url(r'^picture/view/(?P<picId>\d+)/$', file_upload_views.view_picture, name="view_picture"), 
+    url(r'^picture/view/(?P<picId>\d+)/$', file_upload_views.view_picture, name="view_picture"),
     url(r'^picture/(?P<picId>\d+)/$', file_upload_views.apply_algorithm, name="apply_algorithm"),
     url(r'^picture/location/(?P<picId>\d+)/$', file_upload_views.apply_location, name="apply_location"),
-    url(r'^picture/edit/(?P<picId>\d+)/$', file_upload_views.edit_algorithm, name="edit_algorithm"),       
-    url(r'^picture/view/(?P<picId>\d+)/(?P<comment_num>\d+)/$', file_upload_views.view_picture, name="view_picture"),  
-	url(r'^file_upload/', include('file_upload.urls')),
-    url(r'^admin/', admin.site.urls),  
-    url(r'^comments/(?P<picId>\d+)/$', comment_views.comments, name = "comment_form_target"),
-    url(r'^comments/(?P<picId>\d+)/(?P<page>\d+)/$', comment_views.comments, name = "comment_form_target"),
+    url(r'^picture/edit/(?P<picId>\d+)/$', file_upload_views.edit_algorithm, name="edit_algorithm"),
+    url(r'^picture/view/(?P<picId>\d+)/(?P<comment_num>\d+)/$', file_upload_views.view_picture, name="view_picture"),
+    url(r'^file_upload/', include('file_upload.urls')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^comments/(?P<picId>\d+)/$', comment_views.comments, name="comment_form_target"),
+    url(r'^comments/(?P<picId>\d+)/(?P<page>\d+)/$', comment_views.comments, name="comment_form_target"),
     url(r'^downloads/', views.downloads, name="downloads"),
-    url(r'^about/',views.about,name="about"),
-    url(r'^index/',views.main,name="main"),
+    url(r'^about/', views.about, name="about"),
+    url(r'^index/', views.main, name="main"),
     url(r'^forum/user/register/', user_profile_views.register_user, name="forum_register"),
-    url(r'^forum/user/resend-activation/', user_profile_views.register_user, name = "forum_resend"),
-    url(r'^forum/user/password-reset/', user_profile_views.forgot_password, name = "forum_resend"),
-    url(r'^forum/',include('spirit.urls'), name="forum"),
+    url(r'^forum/user/resend-activation/', user_profile_views.register_user, name="forum_resend"),
+    url(r'^forum/user/password-reset/', user_profile_views.forgot_password, name="forum_resend"),
+    url(r'^forum/', include('spirit.urls'), name="forum"),
     url(r'^forum_notifications/', views.forum_notifications, name="forum_notifications"),
     url(r'^getPythonScripts/', views.getPythonScripts, name="getPythonScripts"),
 ]
-urlpatterns+=staticfiles_urlpatterns()
-urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

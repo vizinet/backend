@@ -8,5 +8,6 @@ All rights reserved.
 from django import forms
 from convos.models import Comment
 
+
 class comment_form(forms.Form):
-	text = forms.CharField(label = "Add comment")
+    text = forms.CharField(label="Add comment")

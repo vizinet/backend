@@ -1,1 +1,1 @@
-web: gunicorn AIRPACT_Fire.wsgi --timeout 60
+web: gunicorn AIRPACT_Fire.wsgi - -timeout 60

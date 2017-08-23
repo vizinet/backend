@@ -1,6 +1,6 @@
-body{
-  background: url("http://www.google.com") no-repeat scroll 0px 100% / cover transparent;
-  background-size: cover;
+/*
+body {
+  background-color: #fff;
 }
 
 #myAffix{
@@ -12,11 +12,11 @@ body{
     background-image: url('/static/media/decoration/banner_large.png');
 }
 
-.cover{
+.cover {
     color: rgb(255, 255, 255);
     position: relative;
     min-height: 350px;
-    background: url("http://www.gannett-cdn.com/-mm-/b0984d609b612d560a39f146747966a1b1800369/c=1-0-639-480&r=x393&c=520x390/local/-/media/2016/04/15/USATODAY/USATODAY/635963141877760191-Mount-Rainier-Reflections-Mount-Rainier-reflects-in-a-small-pond-at-the-top-of-the-Tatoosh-Range-credit-NPS-Photo.jpg") no-repeat scroll 0px 100% / cover transparent;
+	background-color: #FFF;
 }
 
 .thumb{
@@ -59,6 +59,7 @@ body{
    outline:none;
 }
 
+
 #rcorners1 {
     border-radius: 25px;
     background: #00CD21;
@@ -71,16 +72,12 @@ body{
 }
 .commentRow {
     line-height:12pt;
-   /* border: solid 1px black;*/
-   /* border-radius: 25px;*/
     background: #faf8f3;
     padding: 10px;
 }
 
 .commentRow2 {
     line-height:12pt;
-  /*  border: solid 1px black;*/
-   /* border-radius: 25px;*/
     background: #e7e9ea;
     padding: 10px;
 }
@@ -88,6 +85,7 @@ body{
 .carousel-inner > .item > img {
     margin: 0 auto;
 }
+
 
 
 #overlay
@@ -101,7 +99,7 @@ body{
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color: #000;
+  background-color: #FFF;
   opacity: .8;
   filter: alpha(opacity=80);
   -moz-opacity: .8;
@@ -115,16 +113,12 @@ body{
     min-height: 80%;
     max-width: 80%;
     max-height: 80%;
-    /*border: 1px solid Black;*/
-    background-color: #000;
+    background-color: #FFF;
     text-align: left;
     position: absolute;
     top: 12.5%;
     left: 12.5%;
     z-index:101;
-/*    background-size:contain; 
-    background-repeat:   no-repeat;
-    background-position: center center;*/
     display: none;
 
 }
@@ -144,9 +138,6 @@ body{
   height: 12%;
   width: 100%;
   color:#FFF;
-  background: rgb(0,0,0);
-  background: rgba(0,0,0,.7);
-  -moz-opacity: .5;
 }
 
 #slideShowBottomInforPanel{
@@ -181,8 +172,7 @@ body{
 }
 
 #timelineContainer{
-/*  height: 50px;
-  min-height: 50px;*/
+
 }
 
 #timelineLeftArrow
@@ -214,7 +204,7 @@ body{
 }
 
 .navbar-fixed-left .navbar-nav > li {
-  float: none;  /* Cancel default li float: left */
+  float: none;  /* Cancel default li float: left *
   width: 139px;
 }
 
@@ -222,15 +212,12 @@ body{
   padding-left: 160px;
 }
 
-/* On using dropdown menu (To right shift popuped) */
+/* On using dropdown menu (To right shift popuped) *
 .navbar-fixed-left .navbar-nav > li > .dropdown-menu {
   margin-top: -50px;
   margin-left: 140px;
 }
 
-
-
-
-
 textarea#id_comment {height:50px; }
+*/
 

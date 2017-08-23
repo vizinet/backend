@@ -16,5 +16,4 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AIRPACT_Fire.settings")
 from whitenoise.django import DjangoWhiteNoise
 
 
-
 application = DjangoWhiteNoise(get_wsgi_application())

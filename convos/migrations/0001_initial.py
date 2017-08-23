@@ -16,11 +16,28 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('text', models.TextField(default='', blank=True)),
-                ('submit_date', models.TextField(default='', blank=True)),
-                ('picture', models.ForeignKey(default=-1, to='file_upload.Picture')),
-                ('user', models.ForeignKey(default=-1, to=settings.AUTH_USER_MODEL)),
+                ('id',
+                 models.AutoField(
+                     verbose_name='ID',
+                     serialize=False,
+                     auto_created=True,
+                     primary_key=True)),
+                ('text',
+                 models.TextField(
+                     default='',
+                     blank=True)),
+                ('submit_date',
+                 models.TextField(
+                     default='',
+                     blank=True)),
+                ('picture',
+                 models.ForeignKey(
+                     default=-1,
+                     to='file_upload.Picture')),
+                ('user',
+                 models.ForeignKey(
+                     default=-1,
+                     to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

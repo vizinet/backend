@@ -55,7 +55,7 @@ INSTALLED_APPS.extend([
 AUTH_USER_MODEL = 'user_profile.AirpactUser'
 SITE_ID = 1
 
-MIDDLEWARE_CLASSES.extend( [
+MIDDLEWARE_CLASSES.extend([
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,7 +145,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 
-
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 MEDIA_URL = '/media/'
@@ -157,9 +156,8 @@ STATIC_URL = '/static/'
 AUTH_PROFILE_MODULE = 'user_profile.UserProfile'
 
 
-
-LOGIN_REDIRECT_URL='/user/'
-LOGIN_URL='/user/'
+LOGIN_REDIRECT_URL = '/user/'
+LOGIN_URL = '/user/'
 TIME_ZONE = "America/Los_Angeles"
 USE_TZ = True
 
@@ -175,7 +173,7 @@ ALLOWED_HOSTS = ['*']
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [ os.path.join(PROJECT_ROOT, 'static'), ]
+STATICFILES_DIRS = [os.path.join(PROJECT_ROOT, 'static'), ]
 
 
 # Host for sending e-mail.

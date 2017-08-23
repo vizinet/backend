@@ -1,34 +1,51 @@
 /* AIRPCTFIRE/STATIC*/
-body{
+body {
   color:#000;
-    background-color: #3a3a32 ;
+    background-color: #FFF ;
   width:100%;
   height: 100%;
 }
 
-.thumb{
+.navbar {
+  margin-bottom: 0em;
+}
+
+.navbar-default  {
+  z-index: 100;
+  background-color: #FFF;
+  border-color: #FFF;
+  padding: 1em;
+}
+
+.navbar-default {
+  font-size: 2em;
+}
+
+.thumb {
 	height: 300px;
 	min-height: 300px;
 	max-height: 300px;
 }
 
 .topnav {
-    background-color: #ffffff;
+    background-color: #FFF;
     overflow: hidden;
 }
 
 .topnav a {
+
     float: left;
-    display: block;
-    color:  #000;
+    display: table-cell;
     text-align: center;
-    padding: 16px 16px;
+
+    vertical-align: middle;
+
     text-decoration: none;
     font-size: 16px;
 }
 
 .topnav a:hover {
-    background-color:  #c6c6c6;
+    background-color: #c6c6c6;
     color: black;
 }
 
@@ -38,31 +55,31 @@ body{
 }
 
 .specialnav{
-    color:  #1783dc; 
+    color:  #1783dc;
 }
 
-#near_circle { 
-width: 100px; 
+#near_circle {
+width: 100px;
 height: 100px;
 left: 200px;
 top: 30px;
 position:absolute;
-border-radius: 100px; 
+border-radius: 100px;
 border-color: orange;
-background-color: transparent; 
+background-color: transparent;
 border-width: 10px;
 }
 
 
-#far_circle { 
-width: 100px; 
+#far_circle {
+width: 100px;
 height: 100px;
 left: 305px;
 top: 30px;
 position: absolute;
-border-radius: 100px; 
+border-radius: 100px;
 border-color: yellow;
-background-color: transparent; 
+background-color: transparent;
 border-width: 10px;
 }
 
@@ -108,7 +125,7 @@ border-width: 10px;
 }
 .comment-header{
   font-size: 8pt;
-  
+
 }
 .commentRow {
     line-height:12pt;
@@ -166,7 +183,7 @@ border-width: 10px;
 }
 
 .pagination_submit{
-  
+
 }
 
 .stickytop {
@@ -187,7 +204,7 @@ border-width: 10px;
     top: 0.0%;
     left: 0%;
     z-index: 101;
-  background-size:contain; 
+  background-size:contain;
     background-repeat: no-repeat;
   background-position: center center;
     display: none;
@@ -197,7 +214,7 @@ border-width: 10px;
   position: absolute;
   width: 100%;
   height: 100%;
-  background-size:contain; 
+  background-size:contain;
   background-repeat:   no-repeat;
   background-position: center center;
 
@@ -271,15 +288,6 @@ border-width: 10px;
   background-position: center center;
 }
 textarea#id_comment {height:50px; }
-
-.nav li a{
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.navbar-default{
-  z-index:100;
-}
 
 .heading
 {
