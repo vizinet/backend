@@ -26,18 +26,30 @@ All rights reserved.
 <body>
 
 	<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-			<a href="#" class="navbar-left"><img id = "the_logo" class="img-responsive" style="height:50px; padding-top:0px; text-align: middle" src="{% static '/static/media/decoration/banner_large.png' %}" ></a>
-    </div>
-    <ul class="nav navbar-nav" style="padding-left: 1em;">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Gallery</a></li>
-      <li><a href="#">Upload</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </div>
-</nav>
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+				<a href="#" class="navbar-left"><img id = "the_logo" class="img-responsive" style="height:50px; padding-top:0px; text-align: middle" src="{% static '/static/media/decoration/banner_large.png' %}" ></a>
+	    </div>
+	    <ul class="nav navbar-nav" style="padding-left: 1em;">
+	      <li class="active"><a href="{% url 'home' %}">Home</a></li>
+	      <li><a href="{% url 'gallery' %}">Gallery</a></li>
+	      <li><a href="{% url 'index' %}">Upload</a></li>
+	      <li><a href="{% url 'about' %}">About</a></li>
+				<li><a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire">Download</a></li>
+				<li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
+				{% if user.is_custom_admin and user.is_authenticated %}
+					<li><a  href="{% url 'adminPage' %}"> Admin Control </a></li>
+				{% endif %}
+				{% if user.is_authenticated %}
+				 	<li><a href="{% url 'view_profile' user %}"> {{ user }} 's Profile </a></li>
+				 	<li><a href="{% url 'logout' %}">Logout</a></li>
+				{% else %}
+					<li><a href="{% url 'login' %}">Login</a></li>
+					<li><a href="{% url 'register' %}">Register</a></li>
+				{% endif %}
+	    </ul>
+	  </div>
+	</nav>
 
 <!-- TODO: Restore this navbar style soon
 <nav class="navbar" style = "z-index: 100" role="navigation" id="main-nav">
