@@ -19,12 +19,12 @@ sudo ssh admin@airpacfire.eecs.wsu.edu # Password: airpact@fire#16
 ## Step 2: Run server
 
 ```bash
-cd /home/justin/AIRPACT-Fire-Website
+cd /home/admin/Website
 ```
 
 *No Logs*
 ```bash
-sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application # in the same directory as `manage.py`
+sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application # In the same directory as `manage.py`
 ```
 
 *Log to master_log file*
@@ -32,13 +32,45 @@ sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application # in the same dire
 sudo gunicorn --bind 0.0.0.0:80 --log-level debug --log-file master_log AIRPACT_Fire.wsgi:application
 ```
 
-# Restarting Server
+# Updating Server Code
+
+After you've committed your changes locally and pushed them to this repository
+under the `master` branch, do the following.
+
+## Step 1: Stop server
+
+Kill the server with
 
 ```bash
 ps -A # Find the process with the Gunicorn pid
-sudo kill[pid] # Kill that process
-sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application # In the same directory as manage.py
+sudo kill [pid] # Kill that process
 ```
+
+## Step 3: Pull down changes
+
+Now move to the website directory with
+
+```bash
+cd /home/admin/Website
+```
+
+and then pull your changes down from GitHub via
+
+```bash
+git pull
+```
+
+## Step 3: Restart server
+
+At last you can start the server again
+
+```bash
+sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application
+```
+
+# Restarting Server
+
+Run through the Updating Server Code section, but skip step 3.
 
 # Log Script
 
