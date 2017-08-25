@@ -28,7 +28,7 @@
         var mapDiv = document.getElementById('map');
         var map = new google.maps.Map(mapDiv, {
           center: {lat: 47.0902, lng: -100.7129 },
-          zoom: 5
+          zoom: 6
         });
 
         for(i=0; i < pictures.length; i++)
@@ -54,6 +54,20 @@
           })(content));
         }
       }
+
+      function adjustMap() {
+        $("#map").width($(window).width());
+        $("#map").height($(window).height() * .80);
+      }
+
+      // TODO: More universal placement of resize function?
+      $( window ).resize(function() {
+        adjustMap();
+      });
+
+
+      // Loading adjustment
+      adjustMap();
 
 
     </script>

@@ -3,7 +3,9 @@
 
 Restore development environment for Python 2.7 on Ubuntu:
 
-`pip2 install -r requirements.txt`
+```bash
+pip2 install -r requirements.txt
+```
 
 This will install all the same packages we used to develop the website and
 backend.
@@ -77,13 +79,13 @@ Run through the Updating Server Code section, but skip step 3.
 Usage:
 
 ```bash
-sudo ./log_script[log_file][url_to_post]
+sudo ./log_script [log_file] [url_to_post]
 ```
 
 or with nohup (so script doesn't die when server is off):
 
 ```bash
-sudo nohup ./log_script[file][url] &
+sudo nohup ./log_script [file] [url] &
 ```
 
 Example:

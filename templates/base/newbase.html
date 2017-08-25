@@ -9,7 +9,7 @@ All rights reserved.
 <head>
 	<title>AIRPACT-Fire | Research Platform</title>
 	<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link rel="icon" type="image/png" href="/static/media/decoration/logo_small.png" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -33,7 +33,7 @@ All rights reserved.
 				<a href="#" class="navbar-left"><img id = "the_logo" class="img-responsive" style="height:50px; padding-top:0px; text-align: middle" src="{% static '/static/media/decoration/banner_large.png' %}" ></a>
 	    </div>
 	    <ul class="nav navbar-nav" style="padding-left: 1em;">
-	      <li class="active"><a href="{% url 'home' %}">Home</a></li>
+	      <li><a href="{% url 'home' %}">Home</a></li>
 	      <li><a href="{% url 'gallery' %}">Gallery</a></li>
 	      <li><a href="{% url 'index' %}">Upload</a></li>
 	      <li><a href="{% url 'about' %}">About</a></li>
@@ -53,35 +53,8 @@ All rights reserved.
 	  </div>
 	</nav>
 
-<!-- TODO: Restore this navbar style soon
-<nav class="navbar" style = "z-index: 100" role="navigation" id="main-nav">
-		<div id = "main_nav_div" class= "topnav" style=" color:#FFF; position:fixed; min-width:100%" >
-			<div class="navbar-header" style="background-color: #FFF; padding-left:25px;">
-				<a href="#" class="navbar-left" style="background-color: #FFF;"> <img id = "the_logo" class="img-responsive" style="height:50px; padding-top:0px; text-align: middle" src="{% static '/static/media/decoration/banner_large.png' %}" >
-				</a>
-			</div>
-			<a  href= "{% url 'home' %}" > Home </a>
-			<a  href="{% url 'gallery' %}"> Gallery </a>
-			<a  href="{% url 'index' %}"> Upload </a>
-			<a  href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire"> Download </a>
-			<a  href="/forum/"> Forum <div id ="forum_notification"> </div></a>
-			<a  href="{% url 'about' %}"> About </a>
-				{% if user.is_custom_admin and user.is_authenticated %}
-					<a  href="{% url 'adminPage' %}"> Admin Page </a>
-				{% endif %}
-
-				{% if user.is_authenticated %}
-				 	<a href="{% url 'view_profile' user %}"> {{ user }} 's Profile </a>
-				 	<a href="{% url 'logout' %}"> Logout </a>
-				{% else %}
-					<a href="{% url 'login' %}"> Login </a> or <a href="{% url 'register' %}"> Register </a>
-				{% endif %}
-		</div>
-</nav>
--->
-
 <div class="container-fluid" style = " display: inline; position:relative" >
-	<div id = "body_container_main" class="content" style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0); padding-top:0px; padding-bottom:0px; display: inline-block;">
+	<div id = "body_container_main" class="content"> <!--style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0); padding-top:0px; padding-bottom:0px; display: inline-block;"-->
 			{% block airpact-content %}
 			{% endblock %}
 	</div>
@@ -89,9 +62,9 @@ All rights reserved.
 
 <div class="container-fluid" style = " display: inline; position:relative" >
 	<div style = "text-align: center;">
-	Copyright © 2017,
-	Laboratory for Atmospheric Research at Washington State University,
-	All rights reserved. <br>
+	Copyright © 2016-2017,
+	<a href="http://lar.wsu.edu">Laboratory for Atmospheric Research</a> at Washington State University,
+	All rights reserved.
 	</div>
 </div>
 
@@ -99,30 +72,29 @@ All rights reserved.
 
 <script>
 
+	$("#forum_notification").load("/forum_notifications/");
 
-$("#forum_notification").load("/forum_notifications/");
 
+	// Make the main container and nav links have the appropriate css for the current screen
+	function resize_check() {
 
-// Make the main container and nav links have the appropriate css for the current screen
-function resize_check(){
-
-	// WARNING: The numbers here are constantly changing
-	if($(window).width() > 800){
-		$("#body_container_main").css({"top" : "0px" , "left":"0" });
-		$("#main_nav_div.topnav a").css({ "font-size": "16px", "padding":"16px 16px" });
-		$("#the_logo").css({"height" : 50});
-	}else {
-		$("#body_container_main").css({"top" : "0px" , "left":"0" } );
-		$("#main_nav_div.topnav a").css({ "font-size": "10px", "padding":"10px 8px" });
-		$("#the_logo").css({"height" : 30});
+		// WARNING: The numbers here are constantly changing
+		if ($(window).width() > 800) {
+			$("#body_container_main").css({"top" : "0px" , "left":"0" });
+			$("#main_nav_div.topnav a").css({ "font-size": "16px", "padding":"16px 16px" });
+			$("#the_logo").css({"height" : 50});
+		} else {
+			$("#body_container_main").css({"top" : "0px" , "left":"0" } );
+			$("#main_nav_div.topnav a").css({ "font-size": "10px", "padding":"10px 8px" });
+			$("#the_logo").css({"height" : 30});
+		}
 	}
-}
 
-resize_check();
-
-$(window).resize(function(){
 	resize_check();
-})
+
+	$(window).resize(function() {
+		resize_check();
+	});
 
 
 </script>
