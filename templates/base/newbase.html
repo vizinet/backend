@@ -39,6 +39,8 @@ All rights reserved.
 	      <li><a href="{% url 'about' %}">About</a></li>
 				<li><a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire">Download</a></li>
 				<li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
+	    </ul>
+			<ul class="nav navbar-nav navbar-right">
 				{% if user.is_custom_admin and user.is_authenticated %}
 					<li><a  href="{% url 'adminPage' %}"> Admin Control </a></li>
 				{% endif %}
@@ -49,7 +51,7 @@ All rights reserved.
 					<li><a href="{% url 'login' %}">Login</a></li>
 					<li><a href="{% url 'register' %}">Register</a></li>
 				{% endif %}
-	    </ul>
+			</ul>
 	  </div>
 	</nav>
 
@@ -61,7 +63,7 @@ All rights reserved.
 </div>
 
 <div class="container-fluid" style = " display: inline; position:relative" >
-	<div style = "text-align: center;">
+	<div style = "text-align: center; padding-bottom: 2em;">
 	Copyright © 2016-2017,
 	<a href="http://lar.wsu.edu">Laboratory for Atmospheric Research</a> at Washington State University,
 	All rights reserved.
