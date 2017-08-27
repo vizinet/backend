@@ -3,7 +3,7 @@
 # NOTE: A cron job has been setup to run this script every hour.
 
 # Kill gunicorn server instance
-pkill -f gunicorn
+sudo pkill -f gunicorn
 
 # Pull down most recent changes
 git pull
