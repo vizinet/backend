@@ -1,0 +1,325 @@
+[2017-08-26 23:07:44 +0000] [25713] [DEBUG] Current configuration:
+  proxy_protocol: False
+  worker_connections: 1000
+  statsd_host: None
+  max_requests_jitter: 0
+  post_fork: <function post_fork at 0x26a76e0>
+  pythonpath: None
+  enable_stdio_inheritance: False
+  worker_class: sync
+  ssl_version: 3
+  suppress_ragged_eofs: True
+  syslog: False
+  syslog_facility: user
+  when_ready: <function when_ready at 0x26a7410>
+  pre_fork: <function pre_fork at 0x26a7578>
+  cert_reqs: 0
+  preload_app: False
+  keepalive: 2
+  accesslog: None
+  group: 0
+  graceful_timeout: 30
+  do_handshake_on_connect: False
+  spew: False
+  workers: 1
+  proc_name: None
+  sendfile: None
+  pidfile: None
+  umask: 0
+  on_reload: <function on_reload at 0x26a72a8>
+  pre_exec: <function pre_exec at 0x26a7c80>
+  worker_tmp_dir: None
+  post_worker_init: <function post_worker_init at 0x26a7848>
+  limit_request_fields: 100
+  on_exit: <function on_exit at 0x26aa398>
+  config: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  proxy_allow_ips: ['127.0.0.1']
+  pre_request: <function pre_request at 0x26a7de8>
+  post_request: <function post_request at 0x26a7ed8>
+  user: 0
+  forwarded_allow_ips: ['127.0.0.1']
+  worker_int: <function worker_int at 0x26a79b0>
+  threads: 1
+  max_requests: 0
+  limit_request_line: 4094
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  certfile: None
+  worker_exit: <function worker_exit at 0x26aa0c8>
+  chdir: /home/admin/Website
+  paste: None
+  default_proc_name: AIRPACT_Fire.wsgi:application
+  errorlog: master_log
+  loglevel: debug
+  logconfig: None
+  syslog_addr: udp://localhost:514
+  syslog_prefix: None
+  daemon: False
+  ciphers: TLSv1
+  on_starting: <function on_starting at 0x26a7140>
+  worker_abort: <function worker_abort at 0x26a7b18>
+  bind: ['0.0.0.0:80']
+  raw_env: []
+  reload: False
+  check_config: False
+  limit_request_field_size: 8190
+  nworkers_changed: <function nworkers_changed at 0x26aa230>
+  timeout: 30
+  ca_certs: None
+  django_settings: None
+  tmp_upload_dir: None
+  keyfile: None
+  backlog: 2048
+  logger_class: gunicorn.glogging.Logger
+  statsd_prefix: 
+[2017-08-26 23:07:44 +0000] [25713] [INFO] Starting gunicorn 19.4.5
+[2017-08-26 23:07:44 +0000] [25713] [DEBUG] Arbiter booted
+[2017-08-26 23:07:44 +0000] [25713] [INFO] Listening at: http://0.0.0.0:80 (25713)
+[2017-08-26 23:07:44 +0000] [25713] [INFO] Using worker: sync
+[2017-08-26 23:07:44 +0000] [25719] [INFO] Booting worker with pid: 25719
+[2017-08-26 23:07:44 +0000] [25713] [DEBUG] 1 workers
+[2017-08-26 23:08:05 +0000] [25713] [INFO] Handling signal: int
+[2017-08-26 23:08:05 +0000] [25719] [INFO] Worker exiting (pid: 25719)
+[2017-08-26 23:08:05 +0000] [25713] [INFO] Shutting down: Master
+[2017-08-26 23:08:09 +0000] [25728] [DEBUG] Current configuration:
+  proxy_protocol: False
+  worker_connections: 1000
+  statsd_host: None
+  max_requests_jitter: 0
+  post_fork: <function post_fork at 0x14d66e0>
+  pythonpath: None
+  enable_stdio_inheritance: False
+  worker_class: sync
+  ssl_version: 3
+  suppress_ragged_eofs: True
+  syslog: False
+  syslog_facility: user
+  when_ready: <function when_ready at 0x14d6410>
+  pre_fork: <function pre_fork at 0x14d6578>
+  cert_reqs: 0
+  preload_app: False
+  keepalive: 2
+  accesslog: None
+  group: 0
+  graceful_timeout: 30
+  do_handshake_on_connect: False
+  spew: False
+  workers: 1
+  proc_name: None
+  sendfile: None
+  pidfile: None
+  umask: 0
+  on_reload: <function on_reload at 0x14d62a8>
+  pre_exec: <function pre_exec at 0x14d6c80>
+  worker_tmp_dir: None
+  post_worker_init: <function post_worker_init at 0x14d6848>
+  limit_request_fields: 100
+  on_exit: <function on_exit at 0x14d9398>
+  config: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  proxy_allow_ips: ['127.0.0.1']
+  pre_request: <function pre_request at 0x14d6de8>
+  post_request: <function post_request at 0x14d6ed8>
+  user: 0
+  forwarded_allow_ips: ['127.0.0.1']
+  worker_int: <function worker_int at 0x14d69b0>
+  threads: 1
+  max_requests: 0
+  limit_request_line: 4094
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  certfile: None
+  worker_exit: <function worker_exit at 0x14d90c8>
+  chdir: /home/admin/Website
+  paste: None
+  default_proc_name: AIRPACT_Fire.wsgi:application
+  errorlog: master_log
+  loglevel: debug
+  logconfig: None
+  syslog_addr: udp://localhost:514
+  syslog_prefix: None
+  daemon: False
+  ciphers: TLSv1
+  on_starting: <function on_starting at 0x14d6140>
+  worker_abort: <function worker_abort at 0x14d6b18>
+  bind: ['0.0.0.0:80']
+  raw_env: []
+  reload: False
+  check_config: False
+  limit_request_field_size: 8190
+  nworkers_changed: <function nworkers_changed at 0x14d9230>
+  timeout: 30
+  ca_certs: None
+  django_settings: None
+  tmp_upload_dir: None
+  keyfile: None
+  backlog: 2048
+  logger_class: gunicorn.glogging.Logger
+  statsd_prefix: 
+[2017-08-26 23:08:09 +0000] [25728] [INFO] Starting gunicorn 19.4.5
+[2017-08-26 23:08:09 +0000] [25728] [DEBUG] Arbiter booted
+[2017-08-26 23:08:09 +0000] [25728] [INFO] Listening at: http://0.0.0.0:80 (25728)
+[2017-08-26 23:08:09 +0000] [25728] [INFO] Using worker: sync
+[2017-08-26 23:08:09 +0000] [25733] [INFO] Booting worker with pid: 25733
+[2017-08-26 23:08:09 +0000] [25728] [DEBUG] 1 workers
+[2017-08-26 23:08:13 +0000] [25733] [DEBUG] GET /
+[2017-08-26 23:08:14 +0000] [25733] [DEBUG] GET /static/bootstrap.css
+[2017-08-26 23:08:14 +0000] [25733] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-26 23:08:14 +0000] [25733] [DEBUG] GET /static/main.css
+[2017-08-26 23:08:15 +0000] [25733] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-26 23:08:15 +0000] [25733] [DEBUG] GET /forum_notifications/
+[2017-08-26 23:08:16 +0000] [25733] [DEBUG] GET /static/media/decoration/logo_small.png
+[2017-08-26 23:08:19 +0000] [25733] [DEBUG] GET /gallery/
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/bootstrap.css
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/vendor/select2/dist/css/select2.css
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/select2.css
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/main.css
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/jquery.init.js
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/forward.js
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/vendor/select2/dist/js/select2.full.js
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/select2.js
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /static/autocomplete_light/autocomplete.init.js
+[2017-08-26 23:08:20 +0000] [25733] [DEBUG] GET /forum_notifications/
+[2017-08-26 23:11:28 +0000] [25733] [DEBUG] POST /user/appauth
+[2017-08-26 23:11:28 +0000] [25733] [DEBUG] POST /file_upload/upload
+[2017-08-27 00:17:13 +0000] [25733] [DEBUG] GET /
+[2017-08-27 00:28:12 +0000] [25733] [DEBUG] GET /
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] Closing connection. 
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] Closing connection. 
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] Closing connection. 
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] Closing connection. 
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] Closing connection. 
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] Closing connection. 
+[2017-08-27 01:01:07 +0000] [25733] [DEBUG] POST /gallery/8/
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/main.css
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/select2.css
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/vendor/select2/dist/css/select2.css
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/jquery.init.js
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/autocomplete.init.js
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/select2.js
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/vendor/select2/dist/js/select2.full.js
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /static/autocomplete_light/forward.js
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-24_153800.877155.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-24_153234.001766_TbCdaUr.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-24_152930.899073.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-24_152249.068195.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-24_151140.373901.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-24_150711.648601.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/20170703_1955151_zJ1vedS.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/32759486783_4f7af4e524_o_omloPd8.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-11_110502.981342.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-11_105232.485451.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-11_104846.043821.jpg
+[2017-08-27 01:01:08 +0000] [25733] [DEBUG] GET /media/thumbnails/2017-07-11_102136.139552.jpg
+[2017-08-27 01:01:22 +0000] [25733] [DEBUG] GET /picture/view/40/
+[2017-08-27 01:01:22 +0000] [25733] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:01:22 +0000] [25733] [DEBUG] GET /static/main.css
+[2017-08-27 01:01:22 +0000] [25733] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:01:22 +0000] [25733] [DEBUG] GET /resources/demos/style.css
+[2017-08-27 01:01:23 +0000] [25733] [DEBUG] GET /media/pictures/2017-07-24_153234.001766.jpg
+[2017-08-27 01:01:23 +0000] [25733] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:01:23 +0000] [25733] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:01:23 +0000] [25733] [DEBUG] GET /comments/40/1/
+[2017-08-27 01:02:01 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:25733)
+[2017-08-27 01:02:01 +0000] [25733] [INFO] Worker exiting (pid: 25733)
+[2017-08-27 01:02:01 +0000] [26268] [INFO] Booting worker with pid: 26268
+[2017-08-27 01:02:32 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:26268)
+[2017-08-27 01:02:32 +0000] [26268] [INFO] Worker exiting (pid: 26268)
+[2017-08-27 01:02:32 +0000] [26273] [INFO] Booting worker with pid: 26273
+[2017-08-27 01:03:03 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:26273)
+[2017-08-27 01:03:03 +0000] [26273] [INFO] Worker exiting (pid: 26273)
+[2017-08-27 01:03:03 +0000] [26279] [INFO] Booting worker with pid: 26279
+[2017-08-27 01:03:34 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:26279)
+[2017-08-27 01:03:34 +0000] [26279] [INFO] Worker exiting (pid: 26279)
+[2017-08-27 01:03:34 +0000] [26284] [INFO] Booting worker with pid: 26284
+[2017-08-27 01:04:01 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:04:01 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:17:26 +0000] [26284] [DEBUG] GET /
+[2017-08-27 01:29:27 +0000] [26284] [DEBUG] GET /picture/view/37/
+[2017-08-27 01:29:28 +0000] [26284] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:29:28 +0000] [26284] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:29:28 +0000] [26284] [DEBUG] GET /static/main.css
+[2017-08-27 01:29:28 +0000] [26284] [DEBUG] GET /resources/demos/style.css
+[2017-08-27 01:29:28 +0000] [26284] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:29:28 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_151140.373901.jpg
+[2017-08-27 01:29:29 +0000] [26284] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:29:29 +0000] [26284] [DEBUG] GET /comments/37/1/
+[2017-08-27 01:29:33 +0000] [26284] [DEBUG] GET /static/media/slideShowArrows/left-arrow.png
+[2017-08-27 01:29:33 +0000] [26284] [DEBUG] GET /static/media/slideShowArrows/right-arrow.png
+[2017-08-27 01:29:35 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_150711.648601.jpg
+[2017-08-27 01:29:39 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_152249.068195.jpg
+[2017-08-27 01:29:42 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_152930.899073.jpg
+[2017-08-27 01:29:47 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_153800.877155.jpg
+[2017-08-27 01:29:51 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_154308.877172.jpg
+[2017-08-27 01:29:55 +0000] [26284] [DEBUG] GET /media/pictures/2017-07-24_154626.030422.jpg
+[2017-08-27 01:30:06 +0000] [26284] [DEBUG] GET /picture/view/34/
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /static/main.css
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /resources/demos/style.css
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /media/pictures/32759486783_4f7af4e524_o.jpg
+[2017-08-27 01:30:08 +0000] [26284] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:30:09 +0000] [26284] [DEBUG] GET /comments/34/1/
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /picture/34/
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /user/
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /static/main.css
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:30:12 +0000] [26284] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:30:18 +0000] [26284] [DEBUG] GET /picture/location/34/
+[2017-08-27 01:30:18 +0000] [26284] [DEBUG] GET /user/
+[2017-08-27 01:30:18 +0000] [26284] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:30:18 +0000] [26284] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:30:18 +0000] [26284] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:30:18 +0000] [26284] [DEBUG] GET /static/main.css
+[2017-08-27 01:30:19 +0000] [26284] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:30:33 +0000] [26284] [DEBUG] POST /user/auth
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /user/profile/lukedottec/1
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /user/profile/lukedottec/1/
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /static/main.css
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /media/thumbnails/2017-07-24_154308.877172.jpg
+[2017-08-27 01:30:34 +0000] [26284] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:30:52 +0000] [26284] [DEBUG] GET /user/
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] Closing connection. 
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /picture/view/34/
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /static/bootstrap.css
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /static/bootstrap-theme.css
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /static/main.css
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /resources/demos/style.css
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /static/media/decoration/banner_small.png
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /forum_notifications/
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /comments/34/1/
+[2017-08-27 01:31:02 +0000] [26284] [DEBUG] GET /static/media/decoration/logo_small.png
+[2017-08-27 01:31:40 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:26284)
+[2017-08-27 01:31:40 +0000] [26284] [INFO] Worker exiting (pid: 26284)
+[2017-08-27 01:31:40 +0000] [26395] [INFO] Booting worker with pid: 26395
+[2017-08-27 01:32:11 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:26395)
+[2017-08-27 01:32:11 +0000] [26395] [INFO] Worker exiting (pid: 26395)
+[2017-08-27 01:32:11 +0000] [26400] [INFO] Booting worker with pid: 26400
+[2017-08-27 01:54:48 +0000] [26400] [DEBUG] GET /robots.txt
+[2017-08-27 01:54:52 +0000] [26400] [DEBUG] GET /picture/view/123/
+[2017-08-27 02:11:55 +0000] [25728] [CRITICAL] WORKER TIMEOUT (pid:26400)
+[2017-08-27 02:11:55 +0000] [26400] [INFO] Worker exiting (pid: 26400)
+[2017-08-27 02:11:55 +0000] [26585] [INFO] Booting worker with pid: 26585
+[2017-08-27 03:39:19 +0000] [26585] [DEBUG] GET /
+[2017-08-27 04:56:32 +0000] [26585] [DEBUG] POST /login.action
+[2017-08-27 05:18:17 +0000] [26585] [DEBUG] GET /login.action
+[2017-08-27 06:26:17 +0000] [26585] [DEBUG] GET /robots.txt
+[2017-08-27 06:26:21 +0000] [26585] [DEBUG] GET /user/profile/test/1/
+[2017-08-27 07:09:50 +0000] [26585] [DEBUG] GET /x
+[2017-08-27 07:23:20 +0000] [26585] [DEBUG] GET /
+[2017-08-27 08:24:47 +0000] [26585] [DEBUG] GET /

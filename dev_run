@@ -1,3 +1,7 @@
 #!/bin/bash
 
-python2.7 manage.py runserver
+# Kill gunicorn server instance
+sudo pkill -f gunicorn
+
+# Restart server with logs
+sudo gunicorn --bind 0.0.0.0:80 --log-level debug --log-file master_log AIRPACT_Fire.wsgi:application
