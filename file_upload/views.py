@@ -451,7 +451,7 @@ def upload(request):
             # Grab time
             if 'time' in s:
                 try:
-                    timeTaken = datetime.strptime(
+                    timeTaken = datetime.datetime.strptime(
                         s['time'], "%Y.%m.%d.%H.%M.%S")
                 except Exception as e:
                     print(e.message)
