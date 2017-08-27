@@ -1,3 +1,12 @@
 #!/bin/bash
 
-python2.7 manage.py runserver
+# NOTE: A cron job has been setup to run this script every hour.
+
+# Kill gunicorn server instance
+pkill -f gunicorn
+
+# Pull down most recent changes
+git pull
+
+# Restart server
+sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application
