@@ -38,9 +38,12 @@ All rights reserved.
 	          <span class="icon-bar"></span>
 	          <span class="icon-bar"></span>
         </button>
-				<a href="#" class="navbar-brand"><img id = "the_logo" src="{% static '/static/media/decoration/banner_small.png' %}" alt="AIRPACT-Fire"></a>
+				<a class="navbar-brand" href="#">
+		    <img src="{% static '/static/media/decoration/logo_small.png' %}" width="30" height="30" alt="">
+		    AIRPACT-Fire
+		  </a>
 	    </div>
-			<div class="navbar-collapse collapse">
+			<div id="navbar1" class="navbar-collapse collapse">
 		    <ul class="nav navbar-nav">
 		      <li><a href="{% url 'home' %}">Home</a></li>
 		      <li><a href="{% url 'gallery' %}">Gallery</a></li>
@@ -56,9 +59,9 @@ All rights reserved.
 						{% endif %}
 						<ul class="dropdown-menu" role="menu">
 							{% if user.is_custom_admin and user.is_authenticated %}
-							<li class="divider"></li>
 							<li class="dropdown-header">Admin Controls</li>
-								<li><a  href="{% url 'adminPage' %}"> User Dashboard </a></li>
+							<li><a  href="{% url 'adminPage' %}"> User Dashboard </a></li>
+							<li class="divider"></li>
 							{% endif %}
 							{% if user.is_authenticated %}
 							 	<li><a href="{% url 'view_profile' user %}"> My Profile </a></li>
