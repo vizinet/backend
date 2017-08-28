@@ -3,8 +3,8 @@
 Copyright © 2017,
 Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
-
 """
+
 from __future__ import unicode_literals
 
 # Django libraries
@@ -21,11 +21,9 @@ from PIL import Image, ImageOps, ImageDraw
 import datetime
 import math
 import os
-from io import StringIO
+from cStringIO import StringIO
 
 # The picture model
-
-
 class Picture(models.Model):
 
     # The image itself
@@ -58,7 +56,6 @@ class Picture(models.Model):
 
     # GPS locations of where picture was taken, defaults to pullman
     geoX = models.FloatField(default=46.7298)
-
     geoY = models.FloatField(default=-117.181738)
 
     # Scale image to be a thumbnail
