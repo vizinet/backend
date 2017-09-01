@@ -1,0 +1,116 @@
+[2017-08-31 22:59:10 +0000] [24702] [DEBUG] Current configuration:
+  proxy_protocol: False
+  worker_connections: 1000
+  statsd_host: None
+  max_requests_jitter: 0
+  post_fork: <function post_fork at 0x26186e0>
+  pythonpath: None
+  enable_stdio_inheritance: False
+  worker_class: sync
+  ssl_version: 3
+  suppress_ragged_eofs: True
+  syslog: False
+  syslog_facility: user
+  when_ready: <function when_ready at 0x2618410>
+  pre_fork: <function pre_fork at 0x2618578>
+  cert_reqs: 0
+  preload_app: False
+  keepalive: 2
+  accesslog: None
+  group: 0
+  graceful_timeout: 30
+  do_handshake_on_connect: False
+  spew: False
+  workers: 1
+  proc_name: None
+  sendfile: None
+  pidfile: None
+  umask: 0
+  on_reload: <function on_reload at 0x26182a8>
+  pre_exec: <function pre_exec at 0x2618c80>
+  worker_tmp_dir: None
+  post_worker_init: <function post_worker_init at 0x2618848>
+  limit_request_fields: 100
+  on_exit: <function on_exit at 0x261b398>
+  config: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  proxy_allow_ips: ['127.0.0.1']
+  pre_request: <function pre_request at 0x2618de8>
+  post_request: <function post_request at 0x2618ed8>
+  user: 0
+  forwarded_allow_ips: ['127.0.0.1']
+  worker_int: <function worker_int at 0x26189b0>
+  threads: 1
+  max_requests: 0
+  limit_request_line: 4094
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  certfile: None
+  worker_exit: <function worker_exit at 0x261b0c8>
+  chdir: /home/admin/Website/scripts
+  paste: None
+  default_proc_name: AIRPACT_Fire.wsgi:application
+  errorlog: master_log
+  loglevel: debug
+  logconfig: None
+  syslog_addr: udp://localhost:514
+  syslog_prefix: None
+  daemon: False
+  ciphers: TLSv1
+  on_starting: <function on_starting at 0x2618140>
+  worker_abort: <function worker_abort at 0x2618b18>
+  bind: ['0.0.0.0:80']
+  raw_env: []
+  reload: False
+  check_config: False
+  limit_request_field_size: 8190
+  nworkers_changed: <function nworkers_changed at 0x261b230>
+  timeout: 30
+  ca_certs: None
+  django_settings: None
+  tmp_upload_dir: None
+  keyfile: None
+  backlog: 2048
+  logger_class: gunicorn.glogging.Logger
+  statsd_prefix: 
+[2017-08-31 22:59:10 +0000] [24702] [INFO] Starting gunicorn 19.4.5
+[2017-08-31 22:59:10 +0000] [24702] [DEBUG] Arbiter booted
+[2017-08-31 22:59:10 +0000] [24702] [INFO] Listening at: http://0.0.0.0:80 (24702)
+[2017-08-31 22:59:10 +0000] [24702] [INFO] Using worker: sync
+[2017-08-31 22:59:10 +0000] [24708] [INFO] Booting worker with pid: 24708
+[2017-08-31 22:59:10 +0000] [24708] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+ImportError: No module named AIRPACT_Fire.wsgi
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+ImportError: No module named AIRPACT_Fire.wsgi
+[2017-08-31 22:59:10 +0000] [24708] [INFO] Worker exiting (pid: 24708)
+[2017-08-31 22:59:10 +0000] [24702] [DEBUG] 1 workers
+[2017-08-31 22:59:10 +0000] [24702] [INFO] Shutting down: Master
+[2017-08-31 22:59:10 +0000] [24702] [INFO] Reason: Worker failed to boot.

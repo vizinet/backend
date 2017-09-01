@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ../
+
 # Kill gunicorn server instance
 sudo pkill -f gunicorn
 
