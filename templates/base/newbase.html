@@ -6,6 +6,8 @@ All rights reserved.
 -->
 <HTML lang="en">
 
+<!-- TODO: Possibly use outside imports of bootstrap css/js. -->
+
 <head>
 	<title>AIRPACT-Fire | Research Platform</title>
 	<meta charset="utf-8">
@@ -27,6 +29,46 @@ All rights reserved.
 	<div class="bg-warning text-white" style="font-size: 1em; padding: 1em; text-align: center">
 			Site is currently been redesigned and is in the alpha stage. Found a bug? Email <a href="mailto:lukedottec@gmail.com">lukedottec@gmail.com</a>.
 	</div>
+
+
+<!-- Navbar -->
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
+	          <span class="sr-only">Toggle navigation</span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+        </button>
+				<a class="navbar-brand" href="#">
+		    <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt="">
+		  </a>
+	    </div>
+			<div id="navbar1" class="navbar-collapse collapse">
+		    <ul class="nav navbar-nav">
+		      <li><a href="{% url 'home' %}">Home</a></li>
+		      <li><a href="{% url 'gallery' %}">Gallery</a></li>
+		      <!--<li><a href="{% url 'about' %}">About</a></li>-->
+					<li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
+		    </ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Profile <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+								<li><a href="{% url 'login' %}">Login</a></li>
+								<li><a href="{% url 'register' %}">Register</a></li>
+						</ul>
+				</li>
+        <li>
+          <p class="navbar-btn">
+            <a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire" class="btn btn-default">Download</a>
+          </p>
+        </li>
+				</ul>
+			</div>
+	  </div>
+	</nav>
 
 	<!-- Navbar -->
 	<nav class="navbar navbar-default">

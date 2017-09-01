@@ -1,3 +1,5 @@
 #!/bin/bash
 
-python2.7 manage.py runserver
+cd ..
+
+python2 manage.py runserver
