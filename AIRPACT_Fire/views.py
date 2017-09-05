@@ -31,7 +31,8 @@ from dal import autocomplete
 # The Home Page
 # URL: /
 def index(request):
-    newestPictures = Picture.objects.all().order_by("-uploadTime")[:20]
+    #newestPictures = Picture.objects.all().order_by("-uploadTime")[:20]
+    newestPictures = Picture.objects.all().order_by("-uploadTime")
     return render_to_response('index2.html',
                               {'newestPictures': newestPictures},
                               context_instance=RequestContext(request))

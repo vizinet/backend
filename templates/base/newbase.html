@@ -31,7 +31,7 @@ All rights reserved.
 	</div>
 
 
-<!-- Navbar -->
+	<!-- Navbar -->
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
@@ -45,84 +45,44 @@ All rights reserved.
 		    <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt="">
 		  </a>
 	    </div>
-			<div id="navbar1" class="navbar-collapse collapse">
+		
+	    <div id="navbar1" class="navbar-collapse collapse">
 		    <ul class="nav navbar-nav">
 		      <li><a href="{% url 'home' %}">Home</a></li>
 		      <li><a href="{% url 'gallery' %}">Gallery</a></li>
+		      <li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
 		      <!--<li><a href="{% url 'about' %}">About</a></li>-->
-					<li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
 		    </ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Profile <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-								<li><a href="{% url 'login' %}">Login</a></li>
-								<li><a href="{% url 'register' %}">Register</a></li>
-						</ul>
-				</li>
-        <li>
-          <p class="navbar-btn">
-            <a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire" class="btn btn-default">Download</a>
-          </p>
-        </li>
-				</ul>
-			</div>
-	  </div>
-	</nav>
-
-	<!-- Navbar -->
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
-	          <span class="sr-only">Toggle navigation</span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-        </button>
-				<a class="navbar-brand" href="#">
-		    <img src="{% static '/static/media/decoration/logo_small.png' %}" width="30" height="30" alt="">
-		    AIRPACT-Fire
-		  </a>
-	    </div>
-			<div id="navbar1" class="navbar-collapse collapse">
-		    <ul class="nav navbar-nav">
-		      <li><a href="{% url 'home' %}">Home</a></li>
-		      <li><a href="{% url 'gallery' %}">Gallery</a></li>
-		      <!--<li><a href="{% url 'about' %}">About</a></li>-->
-					<li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
-		    </ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown">
-						{% if user.is_authenticated %}
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user }} <span class="caret"></span></a>
-						{% else %}
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Profile <span class="caret"></span></a>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					{% if user.is_authenticated %}
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user }} <span class="caret"></span></a>
+					{% else %}
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Profile <span class="caret"></span></a>
+					{% endif %}
+					<ul class="dropdown-menu" role="menu">
+						{% if user.is_custom_admin and user.is_authenticated %}
+						<li class="dropdown-header">Admin Controls</li>
+						<li><a  href="{% url 'adminPage' %}"> User Dashboard </a></li>
+						<li class="divider"></li>
 						{% endif %}
-						<ul class="dropdown-menu" role="menu">
-							{% if user.is_custom_admin and user.is_authenticated %}
-							<li class="dropdown-header">Admin Controls</li>
-							<li><a  href="{% url 'adminPage' %}"> User Dashboard </a></li>
-							<li class="divider"></li>
-							{% endif %}
-							{% if user.is_authenticated %}
-							 	<li><a href="{% url 'view_profile' user %}"> My Profile </a></li>
-					      <li><a href="{% url 'index' %}">Upload Photo</a></li>
-							 	<li><a href="{% url 'logout' %}">Logout</a></li>
-							{% else %}
-								<li><a href="{% url 'login' %}">Login</a></li>
-								<li><a href="{% url 'register' %}">Register</a></li>
-							{% endif %}
-						</ul>
+						{% if user.is_authenticated %}
+							<li><a href="{% url 'view_profile' user %}"> My Profile </a></li>
+				      <li><a href="{% url 'index' %}">Upload Photo</a></li>
+							<li><a href="{% url 'logout' %}">Logout</a></li>
+						{% else %}
+							<li><a href="{% url 'login' %}">Login</a></li>
+							<li><a href="{% url 'register' %}">Register</a></li>
+						{% endif %}
+				      </ul>
 				</li>
-        <li>
-          <p class="navbar-btn">
-            <a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire" class="btn btn-default">Download</a>
-          </p>
-        </li>
-				</ul>
-			</div>
-	  </div>
+				<li>
+				  <p class="navbar-btn">
+				    <a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire" class="btn btn-default">Download</a>
+				  </p>
+				</li>
+			</ul>
+		</div>
 	</nav>
 
 <div class="container-fluid" style = " display: inline; position:relative" >
