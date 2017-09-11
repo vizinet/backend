@@ -53,8 +53,8 @@
           );
           var br = "<br />";
           var anchor1 = '<a href="'+pictures[i].link+'">';
-          var content = anchor1 +' <img  class="img-responsive" src="' + pictures[i].thumbnailUrl + '" alt="{{ picture.pic.url}}" align = "middle" id ="mainPicture" /> </a>'+
-          'User: <a href="user/profile/'+pictures[i].user+'/">'+pictures[i].user +"</a><br> Description: " + pictures[i].description;
+          var content = '<b>'+pictures[i].user +"</b><br>" + anchor1 +' <img class="img-responsive" src="' + pictures[i].thumbnailUrl + '" alt="{{ picture.pic.url}}" align = "middle" id ="mainPicture" /> </a>'+
+          'Posted by: <a href="user/profile/'+pictures[i].user+'/">'+pictures[i].user +"</a><br> Description: " + pictures[i].description;
           google.maps.event.addListener(markerList[i], 'click', (function(content){
             return function(){
            infoWindow.setPosition(this.getPosition());
@@ -64,6 +64,14 @@
 
           })(content));
         }
+
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function (position) {
+		     initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		     map.setCenter(initialLocation);
+		});
+	}
+
       }
 
       function adjustMap() {

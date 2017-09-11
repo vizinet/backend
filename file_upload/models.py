@@ -21,13 +21,15 @@ from PIL import Image, ImageOps, ImageDraw
 import datetime
 import math
 import os
-from cStringIO import StringIO
+from io import StringIO
 
 # The picture model
 class Picture(models.Model):
 
     # The image itself
     image = models.ImageField(upload_to='pictures/')
+
+    print "image: " + image
 
     # Thumbnail of the picture
     thumbnail = models.ImageField(
