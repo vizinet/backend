@@ -17,7 +17,7 @@
 						<img class="img-responsive" style="max-height: 250px;" src="{{p.thumbnail.url}}" class="img-responsive" > </td>
 					<td> {{p.uploaded}} </td>
 					<td> {{p.description}} </td>
-					<td> <a href="{% url 'delete_picture' id=p.id %}"> Delete </a> / <a href="{% url 'view_picture' picId=picture.id %}"> Edit </a> </td>
+					<td> <a href="{% url 'delete_picture' id=p.id %}"> Delete </a> / <a href="{% url 'view_picture' picId=p.id %}"> Edit </a> </td>
 				</tr>
 			{% endfor %}
 
