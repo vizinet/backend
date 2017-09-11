@@ -8,9 +8,19 @@
     var pictures = [];
     var markerList = [];
     var infoWindow;
+
+    // Collect posts and calculate their GPS center-point
+    var centerLat = 0;
+    var centerLong = 0;
     {% for picture in newestPictures %}
-      pictures.push(new picture ("{{picture.thumbnail.url}}", {{picture.geoX}},{{picture.geoY}}, "","{{picture.user}}","{{picture.description}}","/picture/view/" + {{picture.id}}+"/"));
+      pictures.push(new picture("{{picture.thumbnail.url}}",
+        {{picture.geoX}},{{picture.geoY}}, "", "{{picture.user}}",
+        "{{picture.description}}", "/picture/view/" + {{picture.id}} + "/"));
+      centerLat += {{picture.lat}};
+      centerLong += {{picture.long}};
     {% endfor %}
+    centerLat /= pictures.length;
+    centerLong /= pictures.length;
 
     function picture(thumbnailUrl, lat, long, location, user, description, link)
     {
@@ -27,7 +37,7 @@
         infoWindow = new google.maps.InfoWindow({ content: "hello" });
         var mapDiv = document.getElementById('map');
         var map = new google.maps.Map(mapDiv, {
-          center: {lat: 47.0902, lng: -100.7129 },
+          center: {lat: centerLat, lng: centerLong },
           zoom: 6,
           mapTypeId: 'hybrid'
         });
