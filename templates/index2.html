@@ -16,8 +16,8 @@
       pictures.push(new picture("{{picture.thumbnail.url}}",
         {{picture.geoX}},{{picture.geoY}}, "", "{{picture.user}}",
         "{{picture.description}}", "/picture/view/" + {{picture.id}} + "/"));
-      centerLat += {{picture.lat}};
-      centerLong += {{picture.long}};
+      centerLat += {{picture.geoX}};
+      centerLong += {{picture.geoY}};
     {% endfor %}
     centerLat /= pictures.length;
     centerLong /= pictures.length;
