@@ -3,8 +3,8 @@
 Copyright © 2017,
 Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
-
 """
+
 # Django Libraries
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
@@ -29,18 +29,12 @@ import json
 
 # TODO:
 # Create time taken field in picture table
-#
-
-# Are we debuggin?
-
 
 def debugging():
     return True
 
 # Returns list of algorithm objects given its picture *Note the list should contain
 # Only one value
-
-
 def retreive_algorithm_object(Picture):
     return {
         "AlgorithmOne": AlgorithmOne.objects.filter(picture=Picture),
@@ -48,8 +42,6 @@ def retreive_algorithm_object(Picture):
     }[Picture.algorithmType]
 
 # Retreives am algorithm form given a picture
-
-
 def retreive_algorithm_form(Picture, postData=None, fileData=None):
     if postData is None:
         return {
@@ -63,8 +55,6 @@ def retreive_algorithm_form(Picture, postData=None, fileData=None):
         }[Picture.algorithmType]
 
 # Creates an algorithm one object
-
-
 def create_algorithm_one_object_json(Picture, json):
 
     # create a new alg1 object, Default 50 radius circles
@@ -88,8 +78,6 @@ def create_algorithm_one_object_json(Picture, json):
     return True
 
 # Creates an algorithm one object
-
-
 def create_algorithm_one_object(Picture, form):
 
     # create a new alg1 object
@@ -110,8 +98,6 @@ def create_algorithm_one_object(Picture, form):
     return False
 
 # Creates an algorithm Two object.
-
-
 def create_algorithm_two_object_json(Picture, json):
     # create a new alg1 object, Default 50 radius circles
     try:
@@ -136,8 +122,6 @@ def create_algorithm_two_object_json(Picture, json):
 
 # Creates an algorithm one object. File Data comes in the form
 # request.FILES
-
-
 def create_algorithm_two_object(Picture, form, fileData):
 
     # Create a new alg1 object
@@ -181,8 +165,6 @@ def edit_algorithm_one_object(form, algorithmOneObject):
     return False
 
 # Edits an algorithm obe object based off given form data
-
-
 def edit_algorithm_two_object(form, algorithmTwoObject, FileData):
 
     if form.is_valid():
@@ -201,8 +183,6 @@ def edit_algorithm_two_object(form, algorithmTwoObject, FileData):
 
 # Creates an appropriate algorithm form object given a picture object and
 # its form
-
-
 def apply_create_form(Picture, form, Data=None):
     return {
         'AlgorithmOne': create_algorithm_one_object(Picture, form),
@@ -210,8 +190,6 @@ def apply_create_form(Picture, form, Data=None):
     }[Picture.algorithmType]
 
 # Edits an appropriate algorithm object based off given form
-
-
 def apply_edit_form(form, algorithmObject, Data=None):
     return {
         "AlgorithmOne": edit_algorithm_one_object(form, algorithmObject),
@@ -219,8 +197,6 @@ def apply_edit_form(form, algorithmObject, Data=None):
     }[algorithmObject.picture.algorithmType]
 
 # Retreives the appropriate html page given a picture object
-
-
 def retreive_html_page(Picture):
     return {
         "AlgorithmOne": 'algorithm_one.html',
@@ -228,8 +204,6 @@ def retreive_html_page(Picture):
     }[Picture.algorithmType]
 
 # Edit an algorithm given a picture
-
-
 def edit_algorithm(request, Picture, algorithmObject, html_page):
     file_data = None
 
@@ -265,8 +239,6 @@ def edit_algorithm(request, Picture, algorithmObject, html_page):
 
 # Apply de algorithm
 # URL /picture/<picId>/
-
-
 @login_required
 def apply_algorithm(request, picId=-1):
     if request.user.is_certified is False:

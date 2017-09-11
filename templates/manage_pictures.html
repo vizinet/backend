@@ -2,7 +2,7 @@
 {% block airpact-content %}
 
 <div class="row">
-	<div class="col-lg-7">
+	<div class="col-lg-12">
 		<h3> Manage Pictures </h3>
 		<table class="table table-striped">
 			<tr>
@@ -13,10 +13,11 @@
 			</tr>
 			{% for p in pictures %}
 				<tr>
-					<td> <img class="img-responsive" style="max-height: 250px;" src="{{p.pic.url}}" class="img-responsive" > </td>
-					<td> {{ p.uploaded }} </td>
+					<td>
+						<img class="img-responsive" style="max-height: 250px;" src="{{p.thumbnail.url}}" class="img-responsive" > </td>
+					<td> {{p.uploaded}} </td>
 					<td> {{p.description}} </td>
-					<td> <a href="{% url 'delete_picture' id=p.id %}"> Delete </a> / <a href=""> Edit </a> </td> 
+					<td> <a href="{% url 'delete_picture' id=p.id %}"> Delete </a> / <a href=""> Edit </a> </td>
 				</tr>
 			{% endfor %}
 
