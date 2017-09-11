@@ -1,0 +1,379 @@
+[2017-09-11 16:15:12 +0000] [4161] [DEBUG] Current configuration:
+  proxy_protocol: False
+  worker_connections: 1000
+  statsd_host: None
+  max_requests_jitter: 0
+  post_fork: <function post_fork at 0x28587d0>
+  pythonpath: None
+  enable_stdio_inheritance: False
+  worker_class: sync
+  ssl_version: 3
+  suppress_ragged_eofs: True
+  syslog: False
+  syslog_facility: user
+  when_ready: <function when_ready at 0x2858500>
+  pre_fork: <function pre_fork at 0x2858668>
+  cert_reqs: 0
+  preload_app: False
+  keepalive: 2
+  accesslog: None
+  group: 0
+  graceful_timeout: 30
+  do_handshake_on_connect: False
+  spew: False
+  workers: 3
+  proc_name: None
+  sendfile: None
+  pidfile: None
+  umask: 0
+  on_reload: <function on_reload at 0x2858398>
+  pre_exec: <function pre_exec at 0x2858d70>
+  worker_tmp_dir: None
+  post_worker_init: <function post_worker_init at 0x2858938>
+  limit_request_fields: 100
+  on_exit: <function on_exit at 0x285b488>
+  config: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  proxy_allow_ips: ['127.0.0.1']
+  pre_request: <function pre_request at 0x2858ed8>
+  post_request: <function post_request at 0x285b050>
+  user: 0
+  forwarded_allow_ips: ['127.0.0.1']
+  worker_int: <function worker_int at 0x2858aa0>
+  threads: 1
+  max_requests: 0
+  limit_request_line: 4094
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  certfile: None
+  worker_exit: <function worker_exit at 0x285b1b8>
+  chdir: /home/admin/Website
+  paste: None
+  default_proc_name: AIRPACT_Fire.wsgi:application
+  errorlog: master_log
+  loglevel: debug
+  logconfig: None
+  syslog_addr: udp://localhost:514
+  syslog_prefix: None
+  daemon: False
+  ciphers: TLSv1
+  on_starting: <function on_starting at 0x2858230>
+  worker_abort: <function worker_abort at 0x2858c08>
+  bind: ['0.0.0.0:80']
+  raw_env: []
+  reload: False
+  check_config: False
+  limit_request_field_size: 8190
+  nworkers_changed: <function nworkers_changed at 0x285b320>
+  timeout: 30
+  ca_certs: None
+  django_settings: None
+  tmp_upload_dir: None
+  keyfile: None
+  backlog: 2048
+  logger_class: gunicorn.glogging.Logger
+  statsd_prefix: 
+[2017-09-11 16:15:12 +0000] [4161] [INFO] Starting gunicorn 19.4.5
+[2017-09-11 16:15:12 +0000] [4161] [DEBUG] Arbiter booted
+[2017-09-11 16:15:12 +0000] [4161] [INFO] Listening at: http://0.0.0.0:80 (4161)
+[2017-09-11 16:15:12 +0000] [4161] [INFO] Using worker: sync
+[2017-09-11 16:15:12 +0000] [4167] [INFO] Booting worker with pid: 4167
+[2017-09-11 16:15:12 +0000] [4168] [INFO] Booting worker with pid: 4168
+[2017-09-11 16:15:12 +0000] [4169] [INFO] Booting worker with pid: 4169
+[2017-09-11 16:15:12 +0000] [4161] [DEBUG] 3 workers
+[2017-09-11 16:15:18 +0000] [4168] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+  File "/home/admin/Website/AIRPACT_Fire/wsgi.py", line 19, in <module>
+    application = DjangoWhiteNoise(get_wsgi_application())
+  File "/usr/lib/python2.7/site-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/lib/python2.7/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python2.7/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python2.7/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib64/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/admin/Website/file_upload/models.py", line 27, in <module>
+    class Picture(models.Model):
+  File "/home/admin/Website/file_upload/models.py", line 32, in Picture
+    print "image: " + image
+TypeError: coercing to Unicode: need string or buffer, ImageField found
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+  File "/home/admin/Website/AIRPACT_Fire/wsgi.py", line 19, in <module>
+    application = DjangoWhiteNoise(get_wsgi_application())
+  File "/usr/lib/python2.7/site-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/lib/python2.7/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python2.7/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python2.7/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib64/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/admin/Website/file_upload/models.py", line 27, in <module>
+    class Picture(models.Model):
+  File "/home/admin/Website/file_upload/models.py", line 32, in Picture
+    print "image: " + image
+TypeError: coercing to Unicode: need string or buffer, ImageField found
+[2017-09-11 16:15:18 +0000] [4168] [INFO] Worker exiting (pid: 4168)
+[2017-09-11 16:15:18 +0000] [4169] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+  File "/home/admin/Website/AIRPACT_Fire/wsgi.py", line 19, in <module>
+    application = DjangoWhiteNoise(get_wsgi_application())
+  File "/usr/lib/python2.7/site-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/lib/python2.7/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python2.7/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python2.7/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib64/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/admin/Website/file_upload/models.py", line 27, in <module>
+    class Picture(models.Model):
+  File "/home/admin/Website/file_upload/models.py", line 32, in Picture
+    print "image: " + image
+TypeError: coercing to Unicode: need string or buffer, ImageField found
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+  File "/home/admin/Website/AIRPACT_Fire/wsgi.py", line 19, in <module>
+    application = DjangoWhiteNoise(get_wsgi_application())
+  File "/usr/lib/python2.7/site-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/lib/python2.7/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python2.7/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python2.7/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib64/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/admin/Website/file_upload/models.py", line 27, in <module>
+    class Picture(models.Model):
+  File "/home/admin/Website/file_upload/models.py", line 32, in Picture
+    print "image: " + image
+TypeError: coercing to Unicode: need string or buffer, ImageField found
+[2017-09-11 16:15:18 +0000] [4169] [INFO] Worker exiting (pid: 4169)
+[2017-09-11 16:15:18 +0000] [4167] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+  File "/home/admin/Website/AIRPACT_Fire/wsgi.py", line 19, in <module>
+    application = DjangoWhiteNoise(get_wsgi_application())
+  File "/usr/lib/python2.7/site-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/lib/python2.7/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python2.7/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python2.7/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib64/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/admin/Website/file_upload/models.py", line 27, in <module>
+    class Picture(models.Model):
+  File "/home/admin/Website/file_upload/models.py", line 32, in Picture
+    print "image: " + image
+TypeError: coercing to Unicode: need string or buffer, ImageField found
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/site-packages/gunicorn/arbiter.py", line 515, in spawn_worker
+    worker.init_process()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 122, in init_process
+    self.load_wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/workers/base.py", line 130, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 65, in load
+    return self.load_wsgiapp()
+  File "/usr/lib/python2.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/lib/python2.7/site-packages/gunicorn/util.py", line 357, in import_app
+    __import__(module)
+  File "/home/admin/Website/AIRPACT_Fire/wsgi.py", line 19, in <module>
+    application = DjangoWhiteNoise(get_wsgi_application())
+  File "/usr/lib/python2.7/site-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/lib/python2.7/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python2.7/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python2.7/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib64/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/admin/Website/file_upload/models.py", line 27, in <module>
+    class Picture(models.Model):
+  File "/home/admin/Website/file_upload/models.py", line 32, in Picture
+    print "image: " + image
+TypeError: coercing to Unicode: need string or buffer, ImageField found
+[2017-09-11 16:15:18 +0000] [4167] [INFO] Worker exiting (pid: 4167)
+[2017-09-11 16:17:06 +0000] [4231] [DEBUG] Current configuration:
+  proxy_protocol: False
+  worker_connections: 1000
+  statsd_host: None
+  max_requests_jitter: 0
+  post_fork: <function post_fork at 0x200e7d0>
+  pythonpath: None
+  enable_stdio_inheritance: False
+  worker_class: sync
+  ssl_version: 3
+  suppress_ragged_eofs: True
+  syslog: False
+  syslog_facility: user
+  when_ready: <function when_ready at 0x200e500>
+  pre_fork: <function pre_fork at 0x200e668>
+  cert_reqs: 0
+  preload_app: False
+  keepalive: 2
+  accesslog: None
+  group: 0
+  graceful_timeout: 30
+  do_handshake_on_connect: False
+  spew: False
+  workers: 3
+  proc_name: None
+  sendfile: None
+  pidfile: None
+  umask: 0
+  on_reload: <function on_reload at 0x200e398>
+  pre_exec: <function pre_exec at 0x200ed70>
+  worker_tmp_dir: None
+  post_worker_init: <function post_worker_init at 0x200e938>
+  limit_request_fields: 100
+  on_exit: <function on_exit at 0x2011488>
+  config: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  proxy_allow_ips: ['127.0.0.1']
+  pre_request: <function pre_request at 0x200eed8>
+  post_request: <function post_request at 0x2011050>
+  user: 0
+  forwarded_allow_ips: ['127.0.0.1']
+  worker_int: <function worker_int at 0x200eaa0>
+  threads: 1
+  max_requests: 0
+  limit_request_line: 4094
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  certfile: None
+  worker_exit: <function worker_exit at 0x20111b8>
+  chdir: /home/admin/Website
+  paste: None
+  default_proc_name: AIRPACT_Fire.wsgi:application
+  errorlog: master_log
+  loglevel: debug
+  logconfig: None
+  syslog_addr: udp://localhost:514
+  syslog_prefix: None
+  daemon: False
+  ciphers: TLSv1
+  on_starting: <function on_starting at 0x200e230>
+  worker_abort: <function worker_abort at 0x200ec08>
+  bind: ['0.0.0.0:80']
+  raw_env: []
+  reload: False
+  check_config: False
+  limit_request_field_size: 8190
+  nworkers_changed: <function nworkers_changed at 0x2011320>
+  timeout: 30
+  ca_certs: None
+  django_settings: None
+  tmp_upload_dir: None
+  keyfile: None
+  backlog: 2048
+  logger_class: gunicorn.glogging.Logger
+  statsd_prefix: 
+[2017-09-11 16:17:06 +0000] [4231] [INFO] Starting gunicorn 19.4.5
+[2017-09-11 16:17:06 +0000] [4231] [DEBUG] Arbiter booted
+[2017-09-11 16:17:06 +0000] [4231] [INFO] Listening at: http://0.0.0.0:80 (4231)
+[2017-09-11 16:17:06 +0000] [4231] [INFO] Using worker: sync
+[2017-09-11 16:17:06 +0000] [4236] [INFO] Booting worker with pid: 4236
+[2017-09-11 16:17:06 +0000] [4237] [INFO] Booting worker with pid: 4237
+[2017-09-11 16:17:06 +0000] [4238] [INFO] Booting worker with pid: 4238
+[2017-09-11 16:17:06 +0000] [4231] [DEBUG] 3 workers
+[2017-09-11 16:17:12 +0000] [4237] [DEBUG] GET /
+[2017-09-11 16:17:13 +0000] [4238] [DEBUG] GET /static/bootstrap.css
+[2017-09-11 16:17:13 +0000] [4236] [DEBUG] GET /static/bootstrap-theme.css
+[2017-09-11 16:17:13 +0000] [4237] [DEBUG] GET /static/main.css
+[2017-09-11 16:17:14 +0000] [4236] [DEBUG] GET /forum_notifications/
+[2017-09-11 16:17:14 +0000] [4237] [DEBUG] GET /static/media/decoration/logo_small.png
+[2017-09-11 16:17:20 +0000] [4236] [DEBUG] GET /static/bootstrap.css
+[2017-09-11 16:17:20 +0000] [4237] [DEBUG] GET /static/main.css
+[2017-09-11 16:17:20 +0000] [4238] [DEBUG] GET /static/bootstrap-theme.css
+[2017-09-11 16:17:20 +0000] [4237] [DEBUG] GET /static/bootstrap.min.css.map
+[2017-09-11 16:17:20 +0000] [4238] [DEBUG] GET /static/bootstrap-theme.min.css.map
+[2017-09-11 16:17:32 +0000] [4238] [DEBUG] GET /wp-admin/admin-ajax.php
+[2017-09-11 16:18:53 +0000] [4231] [INFO] Handling signal: int
+[2017-09-11 16:18:53 +0000] [4237] [INFO] Worker exiting (pid: 4237)
+[2017-09-11 16:18:53 +0000] [4238] [INFO] Worker exiting (pid: 4238)
+[2017-09-11 16:18:53 +0000] [4236] [INFO] Worker exiting (pid: 4236)
+[2017-09-11 16:18:53 +0000] [4231] [INFO] Shutting down: Master
