@@ -565,7 +565,8 @@ def delete_picture(request, id):
     img = Picture.objects.get(id=id)
     if request.user.id == img.user.id:
         img.delete()
-    return edit_profile(request)
+    return HttpResponseRedirect('/user/profile/manage_pictures/')
+    #return edit_profile(request)
 
 
 # View a specific picture from the gallery
