@@ -60,6 +60,7 @@ class Picture(models.Model):
 
     # Scale image to be a thumbnail
     def generateThumbnail(self):
+
         thumbnailSize = (200, 200)
 
         # See what kind of file we are dealing with
@@ -75,7 +76,8 @@ class Picture(models.Model):
         # Open big picture into PIL
         self.image.seek(0)
         OriginalImage = Image.open(StringIO(self.image.read()))
-        OriginalImage.thumbnail(thumbnailSize, Image.ANTIALIAS)
+        #OriginalImage.thumbnail(thumbnailSize, Image.ANTIALIAS)
+        OriginalImage = OriginalImage.crop((0, 0, 50, 50))
         tempHandle = StringIO()
         background = Image.new('RGBA', thumbnailSize, (255, 255, 255, 0))
         background.paste(OriginalImage,
