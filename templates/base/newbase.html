@@ -6,12 +6,11 @@ All rights reserved.
 -->
 <HTML lang="en">
 
-<!-- TODO: Possibly use outside imports of bootstrap css/js. -->
-
 <head>
-	<title>AIRPACT-Fire | Research Platform</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+	<title>AIRPACT-Fire | Research Platform</title>
 	<link rel="icon" type="image/png" href="/static/media/decoration/logo_small.png" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -26,7 +25,7 @@ All rights reserved.
 </head>
 
 <body>
-	<div class="bg-warning text-white" style="font-size: 1em; padding: 1em; text-align: center">
+	<div class="bg-warning text-white" style="font-size: 1em; padding: 0.5em; text-align: center">
 			Site is currently been redesigned and is in the alpha stage. Found a bug? Email <a href="mailto:lukedottec@gmail.com">lukedottec@gmail.com</a>.
 	</div>
 
@@ -45,7 +44,7 @@ All rights reserved.
 		    <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt="">
 		  </a>
 	    </div>
-		
+
 	    <div id="navbar1" class="navbar-collapse collapse">
 		    <ul class="nav navbar-nav">
 		      <li><a href="{% url 'home' %}">Home</a></li>
@@ -85,6 +84,10 @@ All rights reserved.
 		</div>
 	</nav>
 
+	<div class="bg-warning text-white" style="font-size: 1em; padding: 0.5em; text-align: left;">
+			Project under the Laboratory for Atmospheric Research at Washington State University.
+	</div>
+
 <div class="container-fluid" style = " display: inline; position:relative" >
 	<div id = "body_container_main" class="content"> <!--style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0); padding-top:0px; padding-bottom:0px; display: inline-block;"-->
 			{% block airpact-content %}
@@ -105,7 +108,6 @@ All rights reserved.
 <script>
 
 	$("#forum_notification").load("/forum_notifications/");
-
 
 	// Make the main container and nav links have the appropriate css for the current screen
 	function resize_check() {
