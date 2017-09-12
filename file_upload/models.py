@@ -80,7 +80,13 @@ class Picture(models.Model):
         origin_x = image_center_width - self._thumbnail_size[0] / 2
         origin_y = image_center_height - self._thumbnail_size[1] / 2
 
-        return (origin_x, origin_y, self._thumbnail_size[0], self._thumbnail_size[1])
+        # Final dimensions of crop
+        crop_dimens = (origin_x, origin_y, \
+            self._thumbnail_size[0], self._thumbnail_size[1])
+
+        print "crop dimens: " + crop_dimens
+
+        return crop_dimens
 
     def generateThumbnail(self):
         '''Generate a center-zoom square thumbnail of original image.'''
