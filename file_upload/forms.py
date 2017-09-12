@@ -3,8 +3,8 @@
 Copyright © 2017,
 Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
-
 """
+
 from django import forms
 from file_upload.models import Picture, Tag
 from dal import autocomplete

@@ -62,7 +62,7 @@ class Picture(models.Model):
     def generateThumbnail(self):
         thumbnailSize = (200, 200)
 
-        # see what kind of file we are dealing with
+        # See what kind of file we are dealing with
         if self.image.name.endswith(".jpg"):
             pilImageType = "jpeg"
             fileExtension = "jpg"
@@ -72,14 +72,13 @@ class Picture(models.Model):
             fileExtension = "png"
             djangoType = 'image/png'
 
-        # open big picture into PIL
+        # Open big picture into PIL
         self.image.seek(0)
         OriginalImage = Image.open(StringIO(self.image.read()))
         OriginalImage.thumbnail(thumbnailSize, Image.ANTIALIAS)
         tempHandle = StringIO()
         background = Image.new('RGBA', thumbnailSize, (255, 255, 255, 0))
-        background.paste(
-            OriginalImage,
+        background.paste(OriginalImage,
             ((thumbnailSize[0] - OriginalImage.size[0]) / 2,
              (thumbnailSize[1] - OriginalImage.size[1]) / 2))
         background.save(tempHandle, pilImageType)
@@ -87,12 +86,8 @@ class Picture(models.Model):
         suf = SimpleUploadedFile(os.path.split(
             self.image.name)[-1], tempHandle.read(), content_type=djangoType)
         self.thumbnail.save(
-            '%s.%s' %
-            (os.path.splitext(
-                suf.name)[0],
-                fileExtension),
-            suf,
-            save=False)
+            '%s.%s' % (os.path.splitext(suf.name)[0], fileExtension),
+            suf, save=False)
 
     # Escapes special characters that can affect javascript
     def cleanDescription(self):
@@ -122,9 +117,6 @@ class Picture(models.Model):
 
     def __str__(self):
         return self.description
-
-#
-
 
 class Tag(models.Model):
     picture = models.ForeignKey(Picture, on_delete=models.CASCADE)
