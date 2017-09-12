@@ -68,6 +68,7 @@ class Picture(models.Model):
         image_width, image_height = image.size
 
         # Check if image size is unreasonable
+        # TODO: See if this error check can be tossed
         if image_width < self._thumbnail_size[0] \
             or image_height < self._thumbnail_size[1]:
             return (0, 0, 5, 5)
@@ -76,14 +77,14 @@ class Picture(models.Model):
         image_center_width = image_width / 2
         image_center_height = image_height /2
 
-        # Get origin point (top-left) of crop
+        # Get origin and end point of crop
         origin_x = image_center_width - self._thumbnail_size[0] / 2
         origin_y = image_center_height - self._thumbnail_size[1] / 2
+        end_x = origin_x + self._thumbnail_size[0]
+        end_y = origin_y + self._thumbnail_size[1]
 
         # Final dimensions of crop
-        crop_dimens = (origin_x, origin_y, \
-            self._thumbnail_size[0], self._thumbnail_size[1])
-
+        crop_dimens = (origin_x, origin_y, end_x, end_y)
         print "crop dimens: " + ','.join([str(cd) for cd in crop_dimens])
 
         return crop_dimens
