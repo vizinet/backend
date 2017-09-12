@@ -68,8 +68,8 @@ class Picture(models.Model):
         image_width, image_height = image.size
 
         # Check if image size is unreasonable
-        if image_width < _thumbnail_size[0] \
-            or image_height < _thumbnail_size[1]:
+        if image_width < self._thumbnail_size[0] \
+            or image_height < self._thumbnail_size[1]:
             return (0, 0, 5, 5)
 
         # Get image center point
@@ -77,10 +77,10 @@ class Picture(models.Model):
         image_center_height = image_height /2
 
         # Get origin point (top-left) of crop
-        origin_x = image_center_width - _thumbnail_size[0] / 2
-        origin_y = image_center_height - _thumbnail_size[1] / 2
+        origin_x = image_center_width - self._thumbnail_size[0] / 2
+        origin_y = image_center_height - self._thumbnail_size[1] / 2
 
-        return (origin_x, origin_y, _thumbnail_size[0], _thumbnail_size[1])
+        return (origin_x, origin_y, self._thumbnail_size[0], self._thumbnail_size[1])
 
     def generateThumbnail(self):
         '''Generate a center-zoom square thumbnail of original image.'''
@@ -106,10 +106,10 @@ class Picture(models.Model):
 
         # Save image
         tempHandle = StringIO()
-        background = Image.new('RGBA', _thumbnail_size, (255, 255, 255, 0))
+        background = Image.new('RGBA', self._thumbnail_size, (255, 255, 255, 0))
         background.paste(OriginalImage,
-            ((_thumbnail_size[0] - OriginalImage.size[0]) / 2,
-             (_thumbnail_size[1] - OriginalImage.size[1]) / 2))
+            ((self._thumbnail_size[0] - OriginalImage.size[0]) / 2,
+             (self._thumbnail_size[1] - OriginalImage.size[1]) / 2))
         background.save(tempHandle, pilImageType)
         tempHandle.seek(0)
         suf = SimpleUploadedFile(os.path.split(
