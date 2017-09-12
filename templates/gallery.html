@@ -31,13 +31,14 @@
           alt="{{ picture.url }}" />
         <div class="caption">
           <h3>{{ picture.user }}</h3>
-          <p>{{ picture.eVisualRange }}</p>
-          <p>{{ picture.description }}</p>
+          <p><strong>Estimated visual range:</strong> {{ picture.eVisualRange }} KM</p>
+          <p><strong>Description:</strong> {{ picture.description }}</p>
+          <p><small>Posted by {{ picture.user }} on {{ picture.uploadTime }}.</small></p>
           <p>
             <a href="{% url 'view_picture' picId=picture.id %}"
               class="btn btn-primary" role="button">View details</a>
             <a href="#" class="btn btn-default"
-            role="button">{{ picture.eVisualRange }}</a>
+            role="button">Similar posts</a>
           </p>
         </div>
       </div>

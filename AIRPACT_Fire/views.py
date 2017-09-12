@@ -27,7 +27,6 @@ import urllib
 from datetime import datetime
 from dal import autocomplete
 
-
 # The Home Page
 # URL: /
 def index(request):
@@ -37,19 +36,15 @@ def index(request):
                               {'newestPictures': newestPictures},
                               context_instance=RequestContext(request))
 
-
 def main(request):
     return render_to_response('welcome.html',
                               context_instance=RequestContext(request))
-
 
 def forum(request):
     return render_to_response('forum.html',
                               context_instance=RequestContext(request))
 
 # URL /forum_notifications
-
-
 def forum_notifications(request):
     unread_messages = False
     number = 0
@@ -63,7 +58,6 @@ def forum_notifications(request):
                               {'unread_messages': unread_messages,
                                'number': number},
                               context_instance=RequestContext(request))
-
 
 @csrf_exempt
 @login_required
@@ -101,17 +95,13 @@ def admin_page(request):
 
     return render_to_response('custom_admin_page.html', {'users': users})
 
-
 def uncertified(request):
     return render_to_response('not_certified.html')
-
 
 def test(request):
     return render_to_response('hello.html', RequestContext(request))
 
 # The autocomplete function for tabs
-
-
 class LocationAutocomplete(autocomplete.Select2ListView):
 
     def get_list(self):
@@ -187,8 +177,6 @@ def gallery(request, page=1):
             'pictures': pictures, 'form': form}, context_instance=RequestContext(request))
 
 # function to order the pictures based off the form value
-
-
 def order_pictures(x, pictures):
     return {
         '0': pictures.order_by("-uploadTime"),
@@ -198,8 +186,6 @@ def order_pictures(x, pictures):
     }[x]
 
 # A switch statement for finding the pictures based on visual range
-
-
 def find_pictures_vr(x, pictures):
     return {
         '0': pictures,
@@ -212,8 +198,6 @@ def find_pictures_vr(x, pictures):
 
 # Find pictures by tag, warning, returns a list of pictures
 # as opposed to a picture object
-
-
 def find_pictures_tag(location, pictures, alltags):
 
     foundpictures = []
@@ -228,14 +212,11 @@ def find_pictures_tag(location, pictures, alltags):
 
     return foundpictures
 
-
 def downloads(request):
     return render_to_response("downloads.html",
                               context_instance=RequestContext(request))
 
 # URL /about/
-
-
 def about(request):
     newestPictures = Picture.objects.all().order_by("-uploadTime")[:4]
     print("Newest pictures: ")
@@ -243,7 +224,6 @@ def about(request):
     return render_to_response("about.html",
                               {'newestPictures': newestPictures},
                               context_instance=RequestContext(request))
-
 
 @csrf_exempt
 def getPythonScripts(request):
