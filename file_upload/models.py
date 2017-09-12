@@ -84,7 +84,7 @@ class Picture(models.Model):
         crop_dimens = (origin_x, origin_y, \
             self._thumbnail_size[0], self._thumbnail_size[1])
 
-        print "crop dimens: " + ','.join(crop_dimens)
+        print "crop dimens: " + ','.join([str(cd) for cd in crop_dimens])
 
         return crop_dimens
 
