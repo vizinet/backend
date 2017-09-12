@@ -31,7 +31,15 @@
           alt="{{ picture.url }}" />
         <div class="caption">
           <h3>{{ picture.user }}</h3>
-          <p><strong>Estimated visual range:</strong> {{ picture.eVisualRange }} KM</p>
+
+          <p>
+            <span class="label label-default">
+              <strong>Estimated visual range:</strong> {{ picture.eVisualRange }} KM
+            </span>
+            <span class="label label-primary">
+              <strong>Computed visual range:</strong> 0.0 KM
+            </span>
+          </p>
           <p><strong>Description:</strong> {{ picture.description }}</p>
           <p><small>Posted by {{ picture.user }} on {{ picture.uploadTime }}.</small></p>
           <p>
