@@ -58,15 +58,34 @@ class Picture(models.Model):
     geoX = models.FloatField(default=46.7298)
     geoY = models.FloatField(default=-117.181738)
 
-    # Scale image to be a thumbnail
-    def generateThumbnail(self):
+    def _get_inner_crop_dimens(self, image):
+        '''Return tuple of dimensions for inner crop of thumnail image.'''
 
-        thumbnailSize = (200, 200)
+        # (width, height) of thumbnail
+        thumbnail_size = (241, 200)
+        image_width, image_height = image.size
+
+        # Check if image size is unreasonable 
+        if image_width < thumbnail_size[0] or image_height < thumbnail_size[1]:
+            return (0, 0, 5, 5)
+
+        # Get image center point
+        image_center_width = image_width / 2
+        image_center_height = image_height /2
+
+        # Get origin point (top-left) of crop
+        origin_x = image_center_width - thumbnail_size[0] / 2
+        origin_y = image_center_height - thumbnail_size[1] / 2
+
+        return (origin_x, origin_y, thumbnail_size[0], thumbnail_size[1])
+
+    def generateThumbnail(self):
+        '''Generate a center-zoom square thumbnail of original image.'''
 
         # See what kind of file we are dealing with
-        if self.image.name.endswith(".jpg"):
-            pilImageType = "jpeg"
-            fileExtension = "jpg"
+        if self.image.name.endswith('.jpg'):
+            pilImageType = 'jpeg'
+            fileExtension = 'jpg'
             djangoType = 'image/jpeg'
         elif self.image.name.endswith(".png"):
             pilImageType = "png"
@@ -76,8 +95,13 @@ class Picture(models.Model):
         # Open big picture into PIL
         self.image.seek(0)
         OriginalImage = Image.open(StringIO(self.image.read()))
+
+        # Crop image
+        inner_crop_dimens = self._get_inner_crop_dimens(OriginalImage)
+        OriginalImage = OriginalImage.crop(inner_crop_dimens)
         #OriginalImage.thumbnail(thumbnailSize, Image.ANTIALIAS)
-        OriginalImage = OriginalImage.crop((0, 0, 50, 50))
+
+        # Save image
         tempHandle = StringIO()
         background = Image.new('RGBA', thumbnailSize, (255, 255, 255, 0))
         background.paste(OriginalImage,
