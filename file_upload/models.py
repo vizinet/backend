@@ -58,14 +58,16 @@ class Picture(models.Model):
     geoX = models.FloatField(default=46.7298)
     geoY = models.FloatField(default=-117.181738)
 
+    # (width, height) of thumbnail
+    thumbnail_size = (241, 200)
+
     def _get_inner_crop_dimens(self, image):
         '''Return tuple of dimensions for inner crop of thumnail image.'''
 
-        # (width, height) of thumbnail
-        thumbnail_size = (241, 200)
+        # Get dimensions of image
         image_width, image_height = image.size
 
-        # Check if image size is unreasonable 
+        # Check if image size is unreasonable
         if image_width < thumbnail_size[0] or image_height < thumbnail_size[1]:
             return (0, 0, 5, 5)
 
@@ -105,8 +107,8 @@ class Picture(models.Model):
         tempHandle = StringIO()
         background = Image.new('RGBA', thumbnailSize, (255, 255, 255, 0))
         background.paste(OriginalImage,
-            ((thumbnailSize[0] - OriginalImage.size[0]) / 2,
-             (thumbnailSize[1] - OriginalImage.size[1]) / 2))
+            ((thumbnail_size[0] - OriginalImage.size[0]) / 2,
+             (thumbnail_size[1] - OriginalImage.size[1]) / 2))
         background.save(tempHandle, pilImageType)
         tempHandle.seek(0)
         suf = SimpleUploadedFile(os.path.split(
