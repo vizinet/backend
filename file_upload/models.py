@@ -26,6 +26,9 @@ from cStringIO import StringIO
 # The picture model
 class Picture(models.Model):
 
+    # (width, height) of thumbnail
+    _thumbnail_size = (241, 200)
+
     # The image itself
     image = models.ImageField(upload_to='pictures/')
 
@@ -58,9 +61,6 @@ class Picture(models.Model):
     geoX = models.FloatField(default=46.7298)
     geoY = models.FloatField(default=-117.181738)
 
-    # (width, height) of thumbnail
-    thumbnail_size = (241, 200)
-
     def _get_inner_crop_dimens(self, image):
         '''Return tuple of dimensions for inner crop of thumnail image.'''
 
@@ -68,7 +68,8 @@ class Picture(models.Model):
         image_width, image_height = image.size
 
         # Check if image size is unreasonable
-        if image_width < thumbnail_size[0] or image_height < thumbnail_size[1]:
+        if image_width < _thumbnail_size[0] \
+            or image_height < _thumbnail_size[1]:
             return (0, 0, 5, 5)
 
         # Get image center point
@@ -76,10 +77,10 @@ class Picture(models.Model):
         image_center_height = image_height /2
 
         # Get origin point (top-left) of crop
-        origin_x = image_center_width - thumbnail_size[0] / 2
-        origin_y = image_center_height - thumbnail_size[1] / 2
+        origin_x = image_center_width - _thumbnail_size[0] / 2
+        origin_y = image_center_height - _thumbnail_size[1] / 2
 
-        return (origin_x, origin_y, thumbnail_size[0], thumbnail_size[1])
+        return (origin_x, origin_y, _thumbnail_size[0], _thumbnail_size[1])
 
     def generateThumbnail(self):
         '''Generate a center-zoom square thumbnail of original image.'''
@@ -105,10 +106,10 @@ class Picture(models.Model):
 
         # Save image
         tempHandle = StringIO()
-        background = Image.new('RGBA', thumbnailSize, (255, 255, 255, 0))
+        background = Image.new('RGBA', _thumbnail_size, (255, 255, 255, 0))
         background.paste(OriginalImage,
-            ((thumbnail_size[0] - OriginalImage.size[0]) / 2,
-             (thumbnail_size[1] - OriginalImage.size[1]) / 2))
+            ((_thumbnail_size[0] - OriginalImage.size[0]) / 2,
+             (_thumbnail_size[1] - OriginalImage.size[1]) / 2))
         background.save(tempHandle, pilImageType)
         tempHandle.seek(0)
         suf = SimpleUploadedFile(os.path.split(
