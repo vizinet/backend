@@ -1,6 +1,6 @@
 {% extends "base/newbase.html" %}
 {% block airpact-content %}
-{% load index %}
+{% load custom_index %}
 
 <head>
   {{ form.media }}
@@ -31,7 +31,7 @@
         <img style="width: 100%;" src="{{ picture.thumbnail.url }}"
           alt="{{ picture.url }}" />
         <div class="caption">
-          <h3>{{ tags|index:forloop.counter0 }}</h3>
+          <h3>{{ tags|custom_index:forloop.counter0 }}</h3>
           <p>
             <span class="label label-default">
               <strong>Estimated visual range:</strong> {{ picture.eVisualRange }} KM
