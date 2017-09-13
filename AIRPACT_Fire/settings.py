@@ -42,7 +42,6 @@ INSTALLED_APPS.extend([
     'file_upload',
     'user_profile',
     'convos',
-    'AIRPACT_Fire.templatetags',
 
     # comment apps
     #'threadedcomments',
