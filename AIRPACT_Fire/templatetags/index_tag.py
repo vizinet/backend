@@ -2,5 +2,5 @@ from django import template
 register = template.Library()
 
 @register.filter
-def custom_index(List, i):
+def index_tag(List, i):
     return List[int(i)]
