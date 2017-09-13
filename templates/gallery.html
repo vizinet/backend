@@ -24,7 +24,7 @@
   </div>
 </div>
 
-	{% for i, picture in iter(pictures) %}
+	{% for i, picture in enumerate(pictures) %}
 		<div class="col-xs-6 col-md-4 col-lg-2">
       <div class="thumbnail">
         <img style="width: 100%;" src="{{ picture.thumbnail.url }}"
