@@ -24,13 +24,13 @@
   </div>
 </div>
 
-	{% for i, picture in enumerate(pictures) %}
+	{% for picture in pictures %}
 		<div class="col-xs-6 col-md-4 col-lg-2">
       <div class="thumbnail">
         <img style="width: 100%;" src="{{ picture.thumbnail.url }}"
           alt="{{ picture.url }}" />
         <div class="caption">
-          <h3>{{ tags[i][0].text }}</h3>
+          <h3>{{ tags[i][forloop.counter0].text }}</h3>
 
           <p>
             <span class="label label-default">
