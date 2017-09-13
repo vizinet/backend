@@ -131,7 +131,7 @@ def gallery(request, page=1):
         form = GallerySortForm(request.POST)
         if form.is_valid():
 
-                # Order by
+            # Order by
             if form.cleaned_data.get("ascending") != "":
                 allpictures = order_pictures(
                     form.cleaned_data.get("ascending"), allpictures)
@@ -172,9 +172,17 @@ def gallery(request, page=1):
     except EmptyPage:
         pictures = paginator.page(paginator.num_pages)
 
+    # Tell the tag db to get alist of tags from the picture
+    tags = []
+    for pic in pictures:
+        cur_tag = Tag.objects.filter(picture=pic)
+        tags.append(cur_tag)
+
     return render_to_response(
         'gallery.html', {
-            'pictures': pictures, 'form': form}, context_instance=RequestContext(request))
+            'pictures': pictures,
+            'form': form,
+            'tags': tags }, context_instance=RequestContext(request))
 
 # function to order the pictures based off the form value
 def order_pictures(x, pictures):

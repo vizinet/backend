@@ -3,8 +3,8 @@
 Copyright © 2017,
 Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
-
 """
+
 """AIRPACT_Fire URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
