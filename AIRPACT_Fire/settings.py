@@ -32,7 +32,6 @@ SECRET_KEY = 'et20@fybnrzon4b77v5yg*&19ozx*)#gpjhkly*u6u*52!x*1o'
 DEBUG = True
 
 # Application definition
-
 INSTALLED_APPS.extend([
     'dal',
     'dal_select2',
