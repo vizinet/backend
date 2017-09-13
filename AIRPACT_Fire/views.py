@@ -176,7 +176,7 @@ def gallery(request, page=1):
     tags = []
     for pic in pictures:
         cur_tag = Tag.objects.filter(picture=pic)
-        tags.append(cur_tag)
+        tags.append(cur_tag[0].text)
 
     return render_to_response(
         'gallery.html', {
