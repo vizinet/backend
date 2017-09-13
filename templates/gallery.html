@@ -31,7 +31,7 @@
         <img style="width: 100%;" src="{{ picture.thumbnail.url }}"
           alt="{{ picture.url }}" />
         <div class="caption">
-          <h5>{{ tags|index_tag:forloop.counter0 }}</h5>
+          <h4><strong>{{ tags|index_tag:forloop.counter0 }}<strong></h4>
           <p>
             <span class="label label-default">
               <strong>Estimated visual range:</strong> {{ picture.eVisualRange }} KM

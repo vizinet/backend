@@ -36,9 +36,9 @@ All rights reserved.
 	          <span class="icon-bar"></span>
 	          <span class="icon-bar"></span>
         </button>
-				<a class="navbar-brand" href="#">
-		    <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt="">
-		  </a>
+				<a class="navbar-brand" href="{% url 'home' %}">
+			    <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt="">
+			  </a>
 	    </div>
 
 	    <div id="navbar1" class="navbar-collapse collapse">
@@ -46,7 +46,6 @@ All rights reserved.
 		      <li><a href="{% url 'home' %}">Home</a></li>
 		      <li><a href="{% url 'gallery' %}">Gallery</a></li>
 		      <li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
-		      <!--<li><a href="{% url 'about' %}">About</a></li>-->
 		    </ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
@@ -62,6 +61,7 @@ All rights reserved.
 						<li class="divider"></li>
 						{% endif %}
 						{% if user.is_authenticated %}
+							<li class="dropdown-header">Admin Controls</li>
 							<li><a href="{% url 'view_profile' user %}"> My Profile </a></li>
 				      <li><a href="{% url 'index' %}">Upload Photo</a></li>
 							<li><a href="{% url 'logout' %}">Logout</a></li>
