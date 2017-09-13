@@ -31,17 +31,17 @@
         <img style="width: 100%;" src="{{ picture.thumbnail.url }}"
           alt="{{ picture.url }}" />
         <div class="caption">
-          <h4><strong>{{ tags|index_tag:forloop.counter0 }}<strong></h4>
+          <h4><strong>{{ tags|index_tag:forloop.counter0 }}</strong></h4>
           <p>
-            <span class="label label-default">
-              <strong>Estimated visual range:</strong> {{ picture.eVisualRange }} KM
+            <span class="label label-default" style="width: 100%;">
+              <strong>Estimated VR:</strong> {{ picture.eVisualRange }} KM
             </span>
-            <span class="label label-primary">
-              <strong>Computed visual range:</strong> 0.0 KM
+            <span class="label label-primary" style="width: 100%;">
+              <strong>Computed VR:</strong> 0.0 KM
             </span>
           </p>
           <p><strong>Description:</strong> {{ picture.description }}</p>
-          <p><small>Posted by <a href="#">{{ picture.user }}</a> on {{ picture.uploadTime }}.</small></p>
+          <p><small>Posted by <a href="{% url 'view_profile' name=picture.user %}">{{ picture.user }}</a> on {{ picture.uploadTime }}.</small></p>
           <p>
             <a href="{% url 'view_picture' picId=picture.id %}"
               class="btn btn-primary" role="button">Details</a>

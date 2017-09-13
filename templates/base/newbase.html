@@ -61,7 +61,7 @@ All rights reserved.
 						<li class="divider"></li>
 						{% endif %}
 						{% if user.is_authenticated %}
-							<li class="dropdown-header">Admin Controls</li>
+							<li class="dropdown-header">User Controls</li>
 							<li><a href="{% url 'view_profile' user %}"> My Profile </a></li>
 				      <li><a href="{% url 'index' %}">Upload Photo</a></li>
 							<li><a href="{% url 'logout' %}">Logout</a></li>
