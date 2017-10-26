@@ -30,6 +30,11 @@ body {
   font-size: 1em;
 }
 
+nav > .active {
+  background: none;
+  color: black;
+}
+
 footer {
    position:absolute;
    bottom:0;
