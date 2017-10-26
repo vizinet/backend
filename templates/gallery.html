@@ -69,19 +69,21 @@
     -->
 	{% endfor %}
 
-<nav class="col-lg-24" aria-label="Page navigation">
-  <ul class="pagination">
-    {% if pictures.paginator.num_pages > 1 %}
-				{% for num in pictures.paginator.page_range %}
-					{% if pictures.number == num %}
-						<li class="active pagination_submit"><a href="" >{{ num }}</a></li>
-					{% else %}
-						<li><a class="pagination_submit">{{ num }}</a></li>
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-  </ul>
-</nav>
+<div class= "col-lg-24;">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      {% if pictures.paginator.num_pages > 1 %}
+  				{% for num in pictures.paginator.page_range %}
+  					{% if pictures.number == num %}
+  						<li class="active pagination_submit"><a href="" >{{ num }}</a></li>
+  					{% else %}
+  						<li><a class="pagination_submit">{{ num }}</a></li>
+  					{% endif %}
+  				{% endfor %}
+  			{% endif %}
+    </ul>
+  </nav>
+</div>
 
 <!--
 	<div class= "col-lg-24;">
