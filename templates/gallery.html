@@ -102,6 +102,10 @@
 -->
 
 <script>
+
+// Show this page as active
+$("#nav-gallery-link").css("color", "black");
+
 // When num link is clicked, re-fire form submit
 $(".pagination_submit").click(function() {
 	page_num = $.trim($(this).text());

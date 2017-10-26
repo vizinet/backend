@@ -43,10 +43,10 @@ All rights reserved.
 
 	    <div id="navbar1" class="navbar-collapse collapse">
 		    <ul class="nav navbar-nav">
-		      <li class="active"><a href="{% url 'home' %}">Home</a></li><!-- TODO: Turn this into our home/about page -->
-		      <li><a href="{% url 'home' %}">Map</a></li>
-		      <li><a href="{% url 'gallery' %}">Gallery</a></li>
-		      <li><a href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
+		      <li><a id="nav-home-link" href="{% url 'home' %}">Home</a></li><!-- TODO: Turn this into our home/about page -->
+		      <li><a id="nav-map-link" href="{% url 'home' %}">Map</a></li>
+		      <li><a id="nav-gallery-link" href="{% url 'gallery' %}">Gallery</a></li>
+		      <li><a id="nav-forum-link" href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
 		    </ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
