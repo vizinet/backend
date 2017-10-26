@@ -40,7 +40,10 @@
               <strong>Computed VR:</strong> 0.0 KM
             </span>
           </p>
+
+          <!--
           <p><strong>Description:</strong> {{ picture.description }}</p>
+          -->
           <p><small>Posted by <a href="{% url 'view_profile' name=picture.user %}">{{ picture.user }}</a> on {{ picture.uploadTime }}.</small></p>
           <p>
             <a href="{% url 'view_picture' picId=picture.id %}"
