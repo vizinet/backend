@@ -15,7 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
 # Custom Django
-from file_upload.models import Picture, Tag, AlgorithmOne
+from file_upload.models import Picture, Tag, AlgorithmOne, AlgorithmTwo
 from file_upload.forms import GallerySortForm
 from django.contrib.auth.decorators import login_required
 from user_profile.models import AirpactUser
@@ -26,6 +26,14 @@ import json
 import urllib
 from datetime import datetime
 from dal import autocomplete
+
+# Returns list of algorithm objects given its picture *Note the list should contain
+# Only one value
+def retreive_algorithm_object(Picture):
+    return {
+        "AlgorithmOne": AlgorithmOne.objects.filter(picture=Picture),
+        "AlgorithmTwo": AlgorithmTwo.objects.filter(picture=Picture)
+    }[Picture.algorithmType]
 
 # The Home Page
 # URL: /
@@ -174,16 +182,25 @@ def gallery(request, page=1):
 
     # Tell the tag db to get alist of tags from the picture
     tags = []
+    computed_vrs = []
     for pic in pictures:
         cur_tag = Tag.objects.filter(picture=pic)
         tags.append(cur_tag[0].text.upper())
+
+        # Get computed visual range for this picture
+        alg = retreive_algorithm_object(pic)
+        if len(alg) > 0: # should always be the case
+            computed_vr = alg[0].calculatedVisualRange
+            computed_vrs.append(computed_vr)
+
     print tags
 
     return render_to_response(
         'gallery.html', {
             'pictures': pictures,
             'form': form,
-            'tags': tags }, context_instance=RequestContext(request))
+            'tags': tags,
+            'computed_vrs', computed_vrs}, context_instance=RequestContext(request))
 
 # function to order the pictures based off the form value
 def order_pictures(x, pictures):
