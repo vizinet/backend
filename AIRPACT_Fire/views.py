@@ -192,9 +192,9 @@ def gallery(request, page=1):
         if len(alg) > 0:
             # Picture has a computed visual range
             computed_vr = alg[0].calculatedVisualRange
-            computed_vrs.append(computed_vr)
+            computed_vrs.append(str(round(computed_vr, 2)))
         else:
-            computed_vrs.append(0)
+            computed_vrs.append(str(0))
 
     print tags
     print computed_vrs
