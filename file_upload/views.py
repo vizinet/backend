@@ -574,8 +574,6 @@ def view_picture(request, picId=-1, comment_num=1):
         if len(alg) > 0:
             computed_vr = alg[0].calculatedVisualRange
 
-        print "computed_vr: " + computed_vr
-
         this_comment_form = comment_form()
 
         # Setup range of image numbers for the
