@@ -194,6 +194,7 @@ def gallery(request, page=1):
             computed_vrs.append(computed_vr)
 
     print tags
+    print computed_vrs
 
     return render_to_response(
         'gallery.html', {
