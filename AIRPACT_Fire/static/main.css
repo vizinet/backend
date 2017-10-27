@@ -321,6 +321,7 @@ textarea#id_comment {height:50px; }
 }
 
 .imageAndText { position: relative; }
+.imageAndText img { opacity: 0.8; }
 .imageAndText .col { padding-top: 2em; position: absolute; z-index: 1; top: 0; left: 0;}
 .imageAndText h1 { font-size: 3em; font-weight: bold; }
 .imageAndText h3 { padding-bottom: 2em; }
