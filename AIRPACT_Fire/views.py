@@ -188,12 +188,10 @@ def gallery(request, page=1):
         tags.append(cur_tag[0].text.upper())
 
         # Get computed visual range for this picture
-        #alg = retreive_algorithm_object(pic)
-        """
+        alg = retreive_algorithm_object(pic)
         if len(alg) > 0: # should always be the case
             computed_vr = alg[0].calculatedVisualRange
             computed_vrs.append(computed_vr)
-        """
 
     print tags
 
@@ -202,7 +200,7 @@ def gallery(request, page=1):
             'pictures': pictures,
             'form': form,
             'tags': tags,
-            'computed_vrs', computed_vrs}, context_instance=RequestContext(request))
+            'computed_vrs': computed_vrs}, context_instance=RequestContext(request))
 
 # function to order the pictures based off the form value
 def order_pictures(x, pictures):
