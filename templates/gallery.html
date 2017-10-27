@@ -37,7 +37,7 @@
               <strong>Estimated VR:</strong> {{ picture.eVisualRange }} KM
             </span>
             <span class="label label-primary" style="width: 100%;">
-              <strong>Computed VR:</strong> 0.0 KM
+              <strong>Computed VR:</strong> {{ computed_vrs|index_tag:forloop.counter0 }} KM
             </span>
           </p>
           <!--

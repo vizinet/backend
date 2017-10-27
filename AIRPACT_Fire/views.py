@@ -189,9 +189,12 @@ def gallery(request, page=1):
 
         # Get computed visual range for this picture
         alg = retreive_algorithm_object(pic)
-        if len(alg) > 0: # should always be the case
+        if len(alg) > 0:
+            # Picture has a computed visual range
             computed_vr = alg[0].calculatedVisualRange
             computed_vrs.append(computed_vr)
+        else:
+            computed_vrs.append(0)
 
     print tags
     print computed_vrs
