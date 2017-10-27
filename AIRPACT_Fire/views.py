@@ -40,8 +40,12 @@ def retreive_algorithm_object(Picture):
 def index(request):
     #newestPictures = Picture.objects.all().order_by("-uploadTime")[:20]
     newestPictures = Picture.objects.all().order_by("-uploadTime")
-    return render_to_response('index2.html',
+    return render_to_response('home.html',
                               {'newestPictures': newestPictures},
+                              context_instance=RequestContext(request))
+
+def map(request):
+    return render_to_response('map.html',
                               context_instance=RequestContext(request))
 
 def main(request):

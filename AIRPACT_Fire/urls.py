@@ -36,6 +36,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^$', views.index, name="home"),
+    url(r'^map/$', views.map, name="map"),
     url(r'^tag-autocomplete/$', LocationAutocomplete.as_view(), name='location-autocomplete'),
     url(r'^admin_page$', views.admin_page, name="adminPage"),
     url(r'^uncertified$', views.uncertified, name="uncertified"),
