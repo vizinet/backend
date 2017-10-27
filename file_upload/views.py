@@ -22,6 +22,7 @@ from file_upload.forms import picture_upload_form, edit_location_form, algorithm
 from convos.forms import comment_form
 
 # Other
+from utils.db_utils import *
 from base64 import b64decode
 from time import time
 import datetime
@@ -35,11 +36,13 @@ def debugging():
 
 # Returns list of algorithm objects given its picture *Note the list should contain
 # Only one value
+'''
 def retreive_algorithm_object(Picture):
     return {
         "AlgorithmOne": AlgorithmOne.objects.filter(picture=Picture),
         "AlgorithmTwo": AlgorithmTwo.objects.filter(picture=Picture)
     }[Picture.algorithmType]
+'''
 
 # Retreives am algorithm form given a picture
 def retreive_algorithm_form(Picture, postData=None, fileData=None):
