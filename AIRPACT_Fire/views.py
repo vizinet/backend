@@ -188,6 +188,7 @@ def gallery(request, page=1):
         tags.append(cur_tag[0].text.upper())
 
         # Get computed visual range for this picture
+        print pic
         alg = retreive_algorithm_object(pic)
         if len(alg) > 0:
             # Picture has a computed visual range
