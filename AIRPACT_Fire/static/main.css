@@ -320,5 +320,7 @@ textarea#id_comment {height:50px; }
 
 }
 
-.imageAndText {position: relative;} 
+.imageAndText { position: relative; }
 .imageAndText .col {position: absolute; z-index: 1; top: 0; left: 0;}
+.imageAndText h1 { font-size: 3em; font-weight: bold; }
+.imageAndText { text-align: center;}
