@@ -31,18 +31,12 @@ import json
 import random
 import string
 
-
-# TODO:
-# Log in with either username or email
-#
-
 # Are we debugging?
 def debugging():
     return True
 
 # Generate a random string with characters and intigers to act as a new
 # password
-
 
 def random_password(
         size=6,
@@ -264,6 +258,7 @@ def register_success(request):
 
 # Authentication for the app
 
+# TODO: encrypt incoming data
 
 @csrf_exempt
 def user_app_auth(request):

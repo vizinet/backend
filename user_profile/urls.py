@@ -3,8 +3,8 @@
 Copyright © 2017,
 Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
-
 """
+
 from django.conf.urls import url
 from . import views
 
