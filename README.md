@@ -10,6 +10,12 @@ pip2 install -r requirements.txt
 This will install all the same packages we used to develop the website and
 backend.
 
+# How We Run
+
+Gunicorn runs on the server at `localhost:8080` with Nginx on top as a reverse-proxy, handling everything from port 80 (HTTP traffic).
+
+The config for the Nginx server can be found in `/etc/nginx/nginx.conf` and the service config for Gunicorn can be found under `/etc/systemd/system/gunicorn.service`.
+
 # Getting Started
 
 ## Step 1: SSH into the thing!
