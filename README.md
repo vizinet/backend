@@ -12,9 +12,11 @@ backend.
 
 # How We Run
 
-Gunicorn runs on the server at `localhost:8080` with Nginx on top as a reverse-proxy, handling everything from port 80 (HTTP traffic).
+Gunicorn runs on the server at `localhost:8080` with <a href='https://www.nginx.com/'>Nginx</a> on top as a reverse-proxy, handling everything from port 80 (HTTP traffic).
 
 The config for the Nginx server can be found in `/etc/nginx/nginx.conf` and the service config for Gunicorn can be found under `/etc/systemd/system/gunicorn.service`.
+
+Our SSL certificates are obtained using <a href='https://letsencrypt.org/'>Let's Encrypt</a> are are auto-renewed every 90 days using a CRON job.
 
 # Getting Started
 
