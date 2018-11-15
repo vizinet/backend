@@ -10,6 +10,18 @@ pip2 install -r requirements.txt
 This will install all the same packages we used to develop the website and
 backend.
 
+# How We Run
+
+Gunicorn runs on the server at `localhost:8080` with <a href='https://www.nginx.com/'>Nginx</a> on top as a reverse-proxy, handling everything from port 80 (HTTP traffic).
+
+The config for the Nginx server can be found in `/etc/nginx/nginx.conf` and the service config for Gunicorn can be found under `/etc/systemd/system/gunicorn.service`.
+
+Our SSL certificates are obtained using <a href='https://letsencrypt.org/'>Let's Encrypt</a> are are auto-renewed every 90 days using a CRON job. This checks twice daily, and it's suggested to pick a random minute within the scheduled hour to renew on:
+
+```bash
+0 0,12 * * * python -c 'import random; import time; time.sleep(random.random() * 3600)' && ./path/to/certbot-auto renew 
+```
+
 # Getting Started
 
 ## Step 1: SSH into the thing!
