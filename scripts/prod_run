@@ -9,4 +9,4 @@ sudo pkill -f gunicorn
 git pull
 
 # Restart server
-sudo gunicorn --bind 0.0.0.0:80 AIRPACT_Fire.wsgi:application
+sudo gunicorn --bind localhost:8080 AIRPACT_Fire.wsgi:application

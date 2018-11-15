@@ -9,73 +9,92 @@ All rights reserved.
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+	
 	<title>AIRPACT-Fire | Research Platform</title>
 	<link rel="icon" type="image/png" href="/static/media/decoration/logo_small.png" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+	<!--
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	-->
+
+	<!-- -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<!-- -->
 
 	{% load static from staticfiles %}
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<!--
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap-theme.css' %}">
+	-->
 	<link rel="stylesheet" type="text/css" href="{% static '/static/main.css' %}">
 </head>
 
 <body>
-
 	<!-- Navbar -->
-	<nav class="navbar navbar-default">
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 	  <div class="container-fluid">
-	    <div class="navbar-header">
-	        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
-	          <span class="sr-only">Toggle navigation</span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-        </button>
-				<a class="navbar-brand" href="{% url 'home' %}">
-			    <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt="">
-			  </a>
-	    </div>
+		<a class="navbar-brand" href="{% url 'home' %}">
+			<!-- <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt=""> -->
+			<img src="https://github.com/AIRPACT-Fire/Design/blob/master/logo/v3/png/logo_small.png?raw=true" width="30" height="30" alt="">
+		</a>
+	        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar1" aria-controls="navbar1" aria-expanded="false" aria-label="Toggle navigation">
+	          	<span class="navbar-toggler-icon"></span>
+        	</button>
 
 	    <div id="navbar1" class="navbar-collapse collapse">
-		    <ul class="nav navbar-nav">
-		      <li><a id="nav-home-link" href="{% url 'home' %}">Home</a></li><!-- TODO: Turn this into our home/about page -->
-		      <li><a id="nav-map-link" href="{% url 'map' %}">Map</a></li>
-		      <li><a id="nav-gallery-link" href="{% url 'gallery' %}">Gallery</a></li>
-		      <li><a id="nav-forum-link" href="/forum/">Forum<div id ="forum_notification"> </div></a></li>
-		    </ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
+			<ul class="navbar-nav">
+				<li class="nav-item"><a id="nav-home-link" class="nav-link" href="{% url 'home' %}">Home</a></li><!-- TODO: Turn this into our home/about page -->
+				<li class="nav-item"><a id="nav-map-link" class="nav-link" href="{% url 'map' %}">Map</a></li>
+				<li class="nav-item"><a id="nav-stats-link" class="nav-link disabled" href="#">Stats</a></li>
+				<li class="nav-item"><a id="nav-stats-link" class="nav-link disabled" href="#">Laboratory</a></li>
+				<li class="nav-item"><a id="nav-gallery-link" class="nav-link" href="{% url 'gallery' %}">Gallery</a></li>
+				<li class="nav-item"><a id="nav-forum-link" class="nav-link" href="/forum/">Forum<div id ="forum_notification"></div></a></li>
+				<li class="nav-item"><a id="nav-about-link" class="nav-link" href="/about/">Our Mission<div id ="forum_notification"></div></a></li>
+			</ul>
+			<ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+				<li class"nav-item">
+					<form class="form-inline my-2 my-lg-0">
+						<input class="form-control mr-sm-2" type="search" placeholder="Search locations" aria-label="Search">
+						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+					</form>
+				</li>
+				<li class="nav-item dropdown">
 					{% if user.is_authenticated %}
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user }} <span class="caret"></span></a>
+						<a href="#" id="navbarDropdownMenuLink" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user }}</a>
 					{% else %}
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Profile <span class="caret"></span></a>
+						<a href="#" id="navbarDropdownMenuLink" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
 					{% endif %}
-					<ul class="dropdown-menu" role="menu">
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 						{% if user.is_custom_admin and user.is_authenticated %}
-						<li class="dropdown-header">Admin Controls</li>
-						<li><a  href="{% url 'adminPage' %}"> User Dashboard </a></li>
-						<li class="divider"></li>
+							<a class="dropdown-item" href="{% url 'adminPage' %}"> User Dashboard </a>
 						{% endif %}
 						{% if user.is_authenticated %}
-							<li class="dropdown-header">User Controls</li>
-							<li><a href="{% url 'view_profile' user %}"> My Profile </a></li>
-				      <li><a href="{% url 'index' %}">Upload Photo</a></li>
-							<li><a href="{% url 'logout' %}">Logout</a></li>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{% url 'view_profile' user %}"> My Profile </a>
+					        	<a class="dropdown-item" href="{% url 'index' %}">Upload Photo</a>
+							<a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
 						{% else %}
-							<li><a href="{% url 'login' %}">Login</a></li>
-							<li><a href="{% url 'register' %}">Register</a></li>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{% url 'login' %}">Login</a>
+							<a class="dropdown-item" href="{% url 'register' %}">Register</a>
 						{% endif %}
-				      </ul>
+				      </div>
 				</li>
-				<li>
-				  <p class="navbar-btn">
-				    <a href="https://play.google.com/store/apps/details?id=lar.wsu.edu.airpact_fire" class="btn btn-default">Download</a>
-				  </p>
+				<li class="nav-item">
+				  <!-- TODO: use variable for app location -->
+				  <a class="nav-link p-2" href="https://play.google.com/store/apps/details?id=edu.wsu.lar.airpact_fire" aria-label="Google Play Store">
+				    <img src="http://www.aps.edu/students-parents/images/downloadOnTheGooglePlayStoreBadge.png/image_preview" width="auto" height="30" alt="">
+				  </a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link p-2" href="https://github.com/AIRPACT-Fire" aria-label="GitHub">
+				    <img src="https://camo.githubusercontent.com/7710b43d0476b6f6d4b4b2865e35c108f69991f3/68747470733a2f2f7777772e69636f6e66696e6465722e636f6d2f646174612f69636f6e732f6f637469636f6e732f313032342f6d61726b2d6769746875622d3235362e706e67" width="30" height="30" alt="">
+				  </a>
 				</li>
 			</ul>
 		</div>

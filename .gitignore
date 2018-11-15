@@ -48,9 +48,12 @@ db.sqlite3
 # Rope
 .ropeproject
 
-# Django stuff:
+# Django stuff
 *.log
 *.pot
+
+# Project media
+AIRPACT_Fire/media/*
 
 # Sphinx documentation
 docs/_build/
