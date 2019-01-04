@@ -4,107 +4,121 @@
 
 <div id= "overlay"></div>
 
-<div style = "max-width:100%; max-height:100%;">
-
-<!-- The Image -->
-<div class="col-lg-3">
-	<p><img class="img-responsive" style = "position:relative;"  src="{{ picture.image.url }}" alt="{{ picture.image.url}}" align = "middle" id ="mainPicture" /> </p>
-</div>
-
-<!-- Buttons -->
-<div class = "col-lg-9" style ="position:relative">
-	<table class = "table">
-		<tr>
-			<td>
-				<button type = "submit" class = "btn btn-info" id ="timeline"> View Timeline </button>
-
-				<form action="/picture/{{ picture.id }}/" method="get">
-    				<input class = "btn btn-info" type="submit" value="Edit Image Algorithm" 
-        	 		name="Edit image" id="edit_image" /></input>
-				</form>
-
-				<form action="/picture/location/{{ picture.id }}/" method="get">
-    				<input class = "btn btn-info" type="submit" value="Edit Image Location" 
-        	 		name="Edit image location" id="edit_image" /></input>
-				</form>
-
-			</td>
-		</tr>
-	</table>	 
-	<table class="table table-striped">
-		<tr>
-			<td> Estimated Visual Range: {{ picture.eVisualRange }} </td>
-		</tr>
-		<tr>
-			<td> Computed Visual Range: {{ computed_vr }} <br > Algorithm: {{ picture.algorithmType }} </td>
-		</tr>
-		<tr>
-			<td> User:  <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
-		</tr>
-		<tr>
-			<td> Description: {{ picture.description }} </td>
-		</tr>
-		<tr>
-			<td> Location: {{ tag.text }}</td>
-		</tr>
-	</table>
-</div>
-
-
-<!-- Slideshow -->
-<div id = "slideShowWrapper">
-<div class="slideShowContainer" id="slideShowContainer">
-	<div id="slideShowMainPicture"> 
-		<div id="slideShowBottomInfoPanel"> 
-			<table class="table">
-			<thead>
-				<th> Date </th>
-				<th> Location </th>
-				<th> Visual Range </th>
-				<th> Algorithm Type:
-				<th> Description </th>
-			</thead>
-			</tr>
-				<td id="slideShowDate">{{ picture.uploaded }}</td>
-				<td id="slideShowLocation"> {{tag.text}} </td>
-				<td id="slideShowVr"> {{ picture.eVisualRange }} </td>
-				<td> Algorithm: {{ picture.algorithmType }}</td>
-				<td id="slideShowDesc"> {{ picture.description }}</td>
-
-			</tr>
-			</table>
+<div class="container">
+	<div class="row">
+		<!-- The image -->
+		<div class="col-sm-12 col-md-6">
+			<img class="img-thumbnail" style="width:100%" src="{{ picture.image.url }}" alt="{{ picture.image.url}}" id ="mainPicture" /> 
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<div class="row">
+				<div class="col">
+					<div id="map" class="img-thumbnail"></div>
+				</div>
+			</div>
+			<!-- Image fields. -->
+			<div class="row">
+				<div class="col">
+					<table class="table table-striped">
+						<tr>
+							<td><b>Estimated Visual Range:</b> {{ picture.eVisualRange }} </td>
+						</tr>
+						<tr>
+							<td><b>Computed Visual Range:</b> {{ computed_vr }} <br /> <b>Algorithm</b>: {{ picture.algorithmType }} </td>
+						</tr>
+						<tr>
+							<td><b>User:</b> <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </td>
+						</tr>
+						<tr>
+							<td><b>Description:</b> {{ picture.description }} </td>
+						</tr>
+						<tr>
+							<td><b>Location:</b> {{ tag.text }}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- Buttons. -->
+			<div class="row">
+				<div class="col">
+					<div class="btn-group" role="group" aria-label="Basic example">   
+						<button id="timeline" type="submit" class="btn btn-primary">View Timeline</button>   
+						<button type="button" class="btn btn-secondary">Edit Location</button> 
+						<button type="button" class="btn btn-dark">Edit Image</button>   
+					</div>
+				</div>
+				<!-- TODO: Incorporate the actions from below with style above (buttons).
+				<div class="col">
+					<button type = "submit" class = "btn btn-info" id ="timeline"> View Timeline </button>
+				</div>
+				<div class="col">
+					<form action="/picture/{{ picture.id }}/" method="get">
+						<input class = "btn btn-info" type="submit" value="Edit Image Algorithm" name="Edit image" id="edit_image" /></input>
+					</form>
+				</div>
+				<div class="col">
+					<form action="/picture/location/{{ picture.id }}/" method="get">
+						<input class = "btn btn-info" type="submit" value="Edit Image Location" name="Edit image location" id="edit_image" /></input>
+					</form>
+				</div>
+				-->
+			</div>
 		</div>
 	</div>
-	<div id="slideShowLeftNavArrow"> </div>
-	<div id="slideShowRightNavArrow"> </div>
-</div>
-</div>
+	<div class="row">
+		<!-- Comments. -->
+		<div class="col-lg-12">
 
-<!-- Comments -->
-<div class="col-lg-12">
+			<div class = "comment_form">
+			{% if user.is_authenticated %}
+			<form action = "comments/{{ picture.id }}/1" method="POST">	
+				{% csrf_token %}
+				{{ comment_form }}
+				<button id="post_comment" type="submit" class="button-submit">post</button>
+			</form>
 
-	<div class = "comment_form">
-	{% if user.is_authenticated %}
-	<form action = "comments/{{ picture.id }}/1" method="POST">	
-		{% csrf_token %}
-		{{ comment_form }}
-		<button id="post_comment" type="submit" class="button-submit">post</button>
-	</form>
+			{% else %}
+				<p> Please log in to comment </p>
+			{% endif %}
+			</div>
 
-	{% else %}
-		<p> Please log in to comment </p>
-	{% endif %}
+			<div id = "comment_list"></div>
+			<a name="comment_start"></a>
+			</div>
+		</div>
 	</div>
+	<!-- Slideshow. -->
+	<div id = "slideShowWrapper">
+		<div class="slideShowContainer" id="slideShowContainer">
+			<div id="slideShowMainPicture"> 
+				<div id="slideShowBottomInfoPanel"> 
+					<table class="table">
+					<thead>
+						<th> Date </th>
+						<th> Location </th>
+						<th> Visual Range </th>
+						<th> Algorithm Type:
+						<th> Description </th>
+					</thead>
+					</tr>
+						<td id="slideShowDate">{{ picture.uploaded }}</td>
+						<td id="slideShowLocation"> {{tag.text}} </td>
+						<td id="slideShowVr"> {{ picture.eVisualRange }} </td>
+						<td> Algorithm: {{ picture.algorithmType }}</td>
+						<td id="slideShowDesc"> {{ picture.description }}</td>
 
-	<div id = "comment_list"></div>
-	<a name="comment_start"></a>
+					</tr>
+					</table>
+				</div>
+			</div>
+			<div id="slideShowLeftNavArrow"> </div>
+			<div id="slideShowRightNavArrow"> </div>
+		</div>
 	</div>
-</div>
 </div>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
-
 
 <script type="text/javascript">
 "use strict";
@@ -139,8 +153,7 @@ $("#post_comment").on('click', function(e) {
 	pictures.push(new picture ({{ picture.id }}, "{{ picture.uploadTime }}", {{ picture.eVisualRange }}, "{{picture.description}}", "{{ picture.image.url }}"));
 {% endfor %}
 
-
-function picture (id, date, vr, description, url){
+function picture(id, date, vr, description, url){
 	this.id = id;
 	this.date = date;
 	this.vr= vr;
@@ -260,4 +273,80 @@ $(document).ready(function(){
 });
 
 </script>
+
+<script>
+
+    // TODO: update this hard-coding?
+    var centerLat = 45.84921;
+    var centerLong = -116.73317;
+
+    var pictures = [];
+    var markerList = [];
+    var infoWindow;
+
+    let pic = new picture2("{{picture.thumbnail.url}}",
+        {{picture.geoY}},{{picture.geoX}}, "", "{{picture.user}}",
+        "{{picture.description}}", "/picture/view/" + {{picture.id}} + "/");
+
+    function picture2(thumbnailUrl, lat, lng, location, user, description, link)
+    {
+      this.thumbnailUrl = thumbnailUrl;
+      this.lat = lat;
+      this.lng = lng;
+      this.location = location;
+      this.user = user;
+      this.description = description;
+      this.link = link;
+    }
+
+function initMap() {
+        infoWindow = new google.maps.InfoWindow({ content: "hello" });
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+           center: {lat: centerLat, lng: centerLong},
+           zoom: 7,
+           mapTypeId: 'hybrid'
+        });
+
+	  let pos = {lat: pic.lat, lng: pic.lng};
+	  let marker = new google.maps.Marker({
+	      position: pos,
+	      map: map,
+	      title: 'Hello, World!'
+	  });
+	  console.log(pos);
+
+        map.setCenter(pos);
+
+/*
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function (position) {
+		     initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		     map.setCenter(initialLocation);
+		});
+	}
+*/
+}
+
+function adjustMap() {
+/*
+        $("#map").width($(window).width());
+        $("#map").height($(window).height() * .20);
+*/
+        $("#map").css("width", "auto");
+        $("#map").css("height", "20em");
+      }
+
+      // TODO: More universal placement of resize function?
+      $( window ).resize(function() {
+        adjustMap();
+      });
+
+
+      // Loading adjustment
+      adjustMap();
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCp587g3ut0dYnLfl2gfeWTc0fAxujtVcw&callback=initMap"></script>
+
 {% endblock %}

@@ -15,6 +15,7 @@ All rights reserved.
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.bundle.min.js"></script>
 
 	<!--
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -32,11 +33,12 @@ All rights reserved.
 	<link rel="stylesheet" type="text/css" href="{% static '/static/bootstrap-theme.css' %}">
 	-->
 	<link rel="stylesheet" type="text/css" href="{% static '/static/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static '/static/gallery.css' %}">
 </head>
 
 <body>
 	<!-- Navbar -->
-	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	  <div class="container-fluid">
 		<a class="navbar-brand" href="{% url 'home' %}">
 			<!-- <img src="https://github.com/AIRPACT-Fire/Design/blob/master/banner/v1/png/banner_small.png?raw=true" width="auto" height="30" alt=""> -->
@@ -100,13 +102,7 @@ All rights reserved.
 		</div>
 	</nav>
 
-	<div class="alert-info" style="font-size: 1em; padding: 0.5em; text-align: left; margin: 0em;">
-			<strong>Welcome!</strong> This is a project under the Laboratory for
-			Atmospheric Research at Washington State University. To learn more,
-			visit <a href="{% url 'about' %}">here</a>.
-	</div>
-
-<div class="container-fluid" style = "display: inline; position: relative; top: -1.5em;" >
+<div class="container-fluid" style = "display: inline; position: relative;" >
 	<div id = "body_container_main" class="content"> <!--style="position: relative; width: auto; background-color: rgba(255, 255, 255, 0); padding-top:0px; padding-bottom:0px; display: inline-block;"-->
 			{% block airpact-content %}
 			{% endblock %}

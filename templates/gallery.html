@@ -6,100 +6,98 @@
   {{ form.media }}
 </head>
 
-<div class="col-lg-12" style="padding-top: 1em; padding-bottom: 1em;">
-  <div id = "menu">
-  	<p><button type="submit" class="btn btn-info" >Search Options</button></p>
-  </div>
+<div class="container">
+	<!-- Search -->
+	<div class="col-lg-12">
+	  <div id="menu">
+		<p><button type="submit" class="btn btn-info" >Search Options</button></p>
+	  </div>
 
-  <div id = "collapsible" style="display:none">
-  	<div class="col-lg-12" style="padding-bottom: 5px;">
-  		<form class="form-inline" method="POST" id = "search_form">
-  		Search by: <br/>
-  			{% csrf_token %}
-  			<div class="form-group">
-  			{{ form.as_p }}
-  		<button type="submit" class="btn btn-default" id = "search_submit"> Search </button>
-  		</form>
-    	</div>
-    </div>
-  </div>
-</div>
+	  <div id = "collapsible" style="display:none">
+		<div class="col-lg-8" style="padding-bottom: 5px;">
+			<form class="form-inline" method="POST" id = "search_form">
+			Search by: <br/>
+				{% csrf_token %}
+				<div class="form-group">
+				{{ form.as_p }}
+			<button type="submit" class="btn btn-default" id = "search_submit">Search</button>
+			<button type="submit" class="btn btn-info" id = "">Reset</button>
+			</form>
+		</div>
+	    </div>
+	  </div>
+	</div>
 
-	{% for picture in pictures %}
+	<!-- Pictures -->
+	<div class="row">
+		{% for picture in pictures %}
+		<!--
 		<div class="col-xs-6 col-md-4 col-lg-2">
-      <div class="thumbnail">
-        <img style="width: 100%;" src="{{ picture.thumbnail.url }}"
-          alt="{{ picture.url }}" />
-        <div class="caption">
-          <h4><strong>{{ tags|index_tag:forloop.counter0 }}</strong></h4>
-          <p>
-            <span class="label label-default" style="width: 100%;">
-              <strong>Estimated VR:</strong> {{ picture.eVisualRange }} KM
-            </span>
-            <span class="label label-primary" style="width: 100%;">
-              <strong>Computed VR:</strong> {{ computed_vrs|index_tag:forloop.counter0 }} KM
-            </span>
-          </p>
-          <!--
-          <p><strong>Description:</strong> {{ picture.description }}</p>
-          -->
-          <p><small>Posted by <a href="{% url 'view_profile' name=picture.user %}">{{ picture.user }}</a> on {{ picture.uploadTime }}.</small></p>
-          <p>
-            <a href="{% url 'view_picture' picId=picture.id %}"
-              class="btn btn-primary" role="button">Details</a>
-            <a href="#" class="btn btn-default"
-            role="button">More</a>
-          </p>
-        </div>
-      </div>
-    </div>
+		-->
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+			<div class="thumbnail">
+				<h6>{{ tags|index_tag:forloop.counter0 }}</h6>
+				<p><small>{{ picture.uploadTime }}</small></p>
+				<a href="{% url 'view_picture' picId=picture.id %}" title="View details">
+					<img style="width: 100%;" src="{{ picture.thumbnail.url }}" alt="{{ picture.url }}" />
+				</a>
 
-    <!--
-			<a href="{% url 'view_picture' picId=picture.id %}">
-        <img style="width: 100%;" class="img-thumbnail" src="{{ picture.thumbnail.url }}" alt="{{ picture.url}}" />
-      </a>
-			<div>
-        <br />
-				<article><b>Date</b>: {{ picture.uploadTime }} </article>
-				<div><b>Estimated VR</b>: {{ picture.eVisualRange }} </div>
-				<article><b>Uploaded by</b>: <a href="{% url 'view_profile' name=picture.user %}"> {{ picture.user }} </a> </article>
-        <br />
+				<div class="caption">
+					<small>
+						<!--
+						<span class="label label-default" style="width: 100%;">
+							<strong>Estimated VR:</strong> {{ picture.eVisualRange }} KM
+						</span>
+						<span class="label label-primary" style="width: 100%;">
+							<strong>Computed VR:</strong> {{ computed_vrs|index_tag:forloop.counter0 }} KM
+						</span>
+						-->
+					</small>
+					<!--
+					<p><strong>Description:</strong> {{ picture.description }}</p>
+					-->
+					<p>
+						<small>Posted by <a href="{% url 'view_profile' name=picture.user %}">{{ picture.user }}</a></small>
+					</p>
+				</div>
 			</div>
 		</div>
-    -->
-	{% endfor %}
+		{% endfor %}
+	</div>
 
-<div class= "col-lg-24;">
-  <nav aria-label="Page navigation">
-    <ul class="pagination" style="display: table; margin: 0 auto;">
-      {% if pictures.paginator.num_pages > 1 %}
-  				{% for num in pictures.paginator.page_range %}
-  					{% if pictures.number == num %}
-  						<li class="active pagination_submit"><a href="" >{{ num }}</a></li>
-  					{% else %}
-  						<li><a class="pagination_submit">{{ num }}</a></li>
-  					{% endif %}
-  				{% endfor %}
-  			{% endif %}
-    </ul>
-  </nav>
+	<!-- Pagination -->
+	<div class= "col-lg-24;">
+	  <nav aria-label="Page navigation">
+	    <ul class="pagination" style="display: table; margin: 0 auto;">
+	      {% if pictures.paginator.num_pages > 1 %}
+					{% for num in pictures.paginator.page_range %}
+						{% if pictures.number == num %}
+							<li class="active pagination_submit"><a href="" >{{ num }}</a></li>
+						{% else %}
+							<li><a class="pagination_submit">{{ num }}</a></li>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+	    </ul>
+	  </nav>
+	</div>
 </div>
 
-<!--
-	<div class= "col-lg-24;">
-		<ul class="pagination" style="display: table; margin: 0 auto;">
-			{% if pictures.paginator.num_pages > 1 %}
-				{% for num in pictures.paginator.page_range %}
-					{% if pictures.number == num %}
-						<li class="active pagination_submit"> <a href="" > {{ num }} </a> </li>
-					{% else %}
-						<li> <button class = "pagination_submit"> {{ num }} </button> </li>
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-		</ul>
-	</div>
--->
+	<!--
+		<div class= "col-lg-24;">
+			<ul class="pagination" style="display: table; margin: 0 auto;">
+				{% if pictures.paginator.num_pages > 1 %}
+					{% for num in pictures.paginator.page_range %}
+						{% if pictures.number == num %}
+							<li class="active pagination_submit"> <a href="" > {{ num }} </a> </li>
+						{% else %}
+							<li> <button class = "pagination_submit"> {{ num }} </button> </li>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+	-->
 
 <script>
 // Show this page as active
@@ -116,10 +114,10 @@ $(".pagination_submit").click(function() {
 	$("#search_submit").trigger("click");
 });
 $(function(){
-	$('#date1').datepicker();
+	$('#date1').datepicker({ uiLibrary: 'bootstrap4' });
 });
 $(function(){
-	$('#date2').datepicker();
+	$('#date2').datepicker({ uiLibrary: 'bootstrap4' });
 });
 $('#menu').click(function(){
     $(this).next().slideToggle();
