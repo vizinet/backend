@@ -235,7 +235,7 @@ def register_user(request):
     captcha_score_threshold = 0.5
 
     admin_subject_template = '[AIRPACT-Fire] New User Registration'
-    user_subject_template = '[AIRPACT-Fire] New User Registration'
+    user_subject_template = 'Welcome to AIRPACT-Fire'
 
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -257,52 +257,47 @@ def register_user(request):
 	
 	# Filter out users that drop below score threshold.
         if captcha_success and captcha_score >= captcha_score_threshold:
+	    # Save user and grab fields.
             form.save()
-	    new_username = form.cleaned_data['username'] 
-	    new_email = form.cleaned_data['email'] 
-
+	    username = form.cleaned_data['username'] 
+	    user_email = form.cleaned_data['email'] 
 	    # Attempt to snag user IP.
 	    ip, is_routable = get_client_ip(request)	     
-
             # Notify admins of new user registration. 
-	    admin_usernames = ['lukedottec']
-	    admin_emails = ['lukedottec@gmail.com']
-	    # TODO: admin_emails = [admin.email for admin in AirpactUser.objects.filter(is_custom_admin=True)],
-	    # TODO: admin_usernames = [admin.username for admin in AirpactUser.objects.filter(is_custom_admin=True)],
-
-	    admin_html_content = render_to_string('admin_email_template.html', \
+	    admins = list(AirpactUser.objects.filter(is_custom_admin=True))
+	    admin_emails = [admin.email for admin in admins]
+	    admin_usernames = [admin.username for admin in admins]
+	    admin_html_content = render_to_string('email/admin_email_template.html', \
 					    {
 						'admins': admin_usernames, 
-						'username': new_username, 
-						'email': new_email, 
+						'username': username, 
+						'email': user_email, 
 						'captcha_ts': captcha_ts, 
-						'captcha_score': captcha_score 
-						'ip': ip 
+						'captcha_score': captcha_score,
+						'ip': ip,
 						'is_routable': is_routable 
 					    })  
 	    admin_text_content = strip_tags(admin_html_content) 
-
-	    # Create the email, and attach the HTML version as well. 
-	    msg = EmailMultiAlternatives(admin_subject_template.format(new_username), \
+	    msg = EmailMultiAlternatives(admin_subject_template.format(username), \
 					 admin_text_content, airpact_fire_email, admin_emails) 
             msg.attach_alternative(admin_html_content, "text/html") 
   	    msg.send() 
-
 	    # Send user confirmation of registration. 
-	    '''
-	    send_mail(
-	        email_subject_template.format(username),
-	        email_body_template.format(catpcha_score),
-	        airpact_fire_email, 
-	        [admin.email for admin in AirpactUser.objects.filter(is_custom_admin=True)],
-	        fail_silently=False,
-	    )
-	    '''
-
-
+	    admin_entries = ['{} - {}'.format(admin.username, admin.email) for admin in admins]
+	    user_html_content = render_to_string('email/user_email_template.html', \
+					    {
+						'username': username, 
+						'admins': admin_entries, 
+					    })  
+	    user_text_content = strip_tags(user_html_content) 
+	    msg = EmailMultiAlternatives(user_subject_template, user_text_content, \
+					 airpact_fire_email, [user_email]) 
+            msg.attach_alternative(user_html_content, "text/html") 
+  	    msg.send() 
+	    
             return HttpResponseRedirect('/user/')
         else:
-	    # TODO: Do nothing? At this point, we think the requester is a bot.
+	    # TODO: Do nothing? At this point, we think the requester is a bot. Could blacklist the IP.
 	    pass
 
     form = UserCreationForm()

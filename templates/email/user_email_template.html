@@ -1,0 +1,34 @@
+<html>
+
+<!-- NOTE: Gmail only allows embedded styles. -->
+
+<h1 style="text-align: center; color: #333333;">YOU HAVE REGISTERED AT AIRPACT-FIRE</h1>
+
+<section>
+Welcome {{ username }},
+</section>
+
+<br />
+
+<section>
+You've become a registered user at <a href="http://airpactfire.eecs.wsu.edu">AIRPACT-Fire</a>. That's a step towards furthering important research. You might not know what we're about. Learn more about the mission of this research initiative <a href="http://airpactfire.eecs.wsu.edu/about/">here</a>.
+</section>
+
+<br />
+
+<section>
+What's next? The admins have been notified. Before you're authorized to contribute (or sign in to the app), one of them must certify you. Please contact any one of the following admins for further assistance: 
+<ul>
+{% for admin in admins %} 
+	<li>{{ admin }}</li> 
+{% endfor %} 
+</ul>
+</section>
+
+<br />
+
+<section>
+While you're waiting, go ahead and install the Android app <a href="https://play.google.com/store/apps/details?id=edu.wsu.lar.airpact_fire">here</a>. After you're certified you're free to start collecting data! For science!
+</section>
+
+</html>
