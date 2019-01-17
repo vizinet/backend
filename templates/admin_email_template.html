@@ -1,0 +1,58 @@
+<html>
+
+<style> 
+table {   
+	font-family: arial, sans-serif;   
+	border-collapse: collapse;   
+	width: 100%; 
+}  
+
+td, th {   
+	border: 1px solid #dddddd;   
+	text-align: left;   
+	padding: 8px; 
+}  
+
+tr:nth-child(even) {   
+	background-color: #dddddd; 
+} 
+
+h3 {
+	text-align: center;
+	font-color: #6666666;	
+}
+</style>
+
+<h3>A NEW USER HAS REGISTERED</h3>
+
+A new user has registered on the <a href="http://airpactfire.eecs.wsu.edu">AIRPACT-Fire website</a>. They have passed the <a href="https://developers.google.com/recaptcha/">reCAPTCHA test</a>. 
+
+You are being notified because you are one of the following admins: 
+<ul>
+{% for admin in admins %} 
+	<li>{{ admin }}</li>
+{% endfor %}
+</ul>
+
+Here are the fields from this registered user:
+<table>
+	<tr>
+		<td><b>Username</b></td>
+		<td><b>Email</b></td>
+		<td><b>Verification Timestamp</b></td>
+		<td><b>reCAPTCHA (v3) Score</b></td>
+		<td><b>User IP Address</b></td>
+		<td><b>Public IP</b></td>
+	</tr>
+	<tr>
+		<td>{{ username }}</td>
+		<td>{{ email }}</td>
+		<td>{{ captcha_ts }}</td>
+		<td>{{ captcha_score }}</td>
+		<td>{{ ip }}</td>
+		<td>{{ is_routable }}</td>
+	</tr>
+</table>
+
+Please take action <a href="https://airpactfire.eecs.wsu.edu/user/admin_page">here</a>. Before the user can contribute to the project, they must be certified. However, if you do not want this user to contribute, you may delete them.
+</html>

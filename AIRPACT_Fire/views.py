@@ -45,7 +45,10 @@ def index(request):
                               context_instance=RequestContext(request))
 
 def map(request):
-    return render_to_response('map.html',
+    num_recent = 50
+    newestPictures = Picture.objects.all().order_by("-uploadTime")[:num_recent]
+    return render_to_response("map.html",
+                              {'newestPictures': newestPictures},
                               context_instance=RequestContext(request))
 
 def main(request):
@@ -176,7 +179,7 @@ def gallery(request, page=1):
                     form.cleaned_data.get("location"), allpictures, alltags)
                 #page = 1
 
-    paginator = Paginator(allpictures, 12)  # Show 12 per page
+    paginator = Paginator(allpictures, 24)  # Show 12 per page
     try:
         pictures = paginator.page(page)
     except PageNotAnInteger:

@@ -28,6 +28,7 @@ from user_profile import views as user_view
 from convos import views as convos_view
 from file_upload import views as file_upload_views
 from user_profile import views as user_profile_views
+from app_report import views as app_report_views
 from convos import views as comment_views
 from django_comments.models import Comment
 from . import views
@@ -61,6 +62,7 @@ urlpatterns = [
     url(r'^forum/', include('spirit.urls'), name="forum"),
     url(r'^forum_notifications/', views.forum_notifications, name="forum_notifications"),
     url(r'^getPythonScripts/', views.getPythonScripts, name="getPythonScripts"),
+    url(r'^report/', include('app_report.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

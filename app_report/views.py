@@ -22,6 +22,10 @@ from django.core.mail import send_mail
 # TODO: Write our notification system, classes and all.
 
 
+developer_emails = ['lukedottec@gmail.com']
+airpact_fire_email = 'airpactfire@gmail.com'
+
+
 @csrf_exempt
 def send(request):
     """Send app crash report to the specified email."""
@@ -31,12 +35,15 @@ def send(request):
     try:
         # Grab email from JSON body.
         body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-        email = body['email'] 
-	platform = body['platform']
-	message = body.get('message', '')
-        send_mail('[AIRPACT-Fire][{platform}] App has Crashed', message, \
-		'airpactfire@gmail.com', [email])
+	root = json.loads(body_unicode)
+        indented_json_text = json.dumps(root, sort_keys=True, indent=4)
+	username = root['CUSTOM_DATA'].get('username', None) 
+	if username is not None:
+	    subject = 'APP HAS CRASHED FOR %s' % username.upper()
+	else:
+	    subject = 'APP CRASH PRIOR TO LOGIN'
+        send_mail('[AIRPACT-Fire][CrashReport] %s' % subject, indented_json_text, 
+		  airpact_fire_email, developer_emails)
         return HttpResponse(status=204)
     except:
         return HttpResponse(traceback.format_exc(), status=404)

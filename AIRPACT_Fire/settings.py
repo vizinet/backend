@@ -37,10 +37,11 @@ INSTALLED_APPS.extend([
     'dal_select2',
     'spirit',
 
-    # custom apps
+    # Custom Apps
     'file_upload',
     'user_profile',
     'convos',
+    'app_report',
 
     # comment apps
     #'threadedcomments',

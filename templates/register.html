@@ -10,10 +10,26 @@
 	<form class = "" saction ="register" method = "post"> 
 		{% csrf_token %}
 		{{ form.as_p }}	
+		<div class="g-recaptcha" data-sitekey="6LdMJYoUAAAAAH_VfhCVp36q8jA29qF-EeXtOdiT"></div>
 		<button type="submit" class="btn btn-default"> Submit </button>		
 	</form>
-	
-</div>
+	<script src='https://www.google.com/recaptcha/api.js?render=6LdMJYoUAAAAAH_VfhCVp36q8jA29qF-EeXtOdiT'></script>
+	<script> 
+		$('form').submit(function() {         
+			event.preventDefault();
+			grecaptcha.ready(function() { 
+				grecaptcha.execute('6LdMJYoUAAAAAH_VfhCVp36q8jA29qF-EeXtOdiT', {
+					action: 'register_user'
+				}).then(function(token) { 
+					// Verify the token on the server. 
+					console.log(token);
+					$('form').prepend('<input type="hidden" name="g-captcha-response" value="' + token + '">');
+					$('form').unbind('submit').submit();
+				}); 
+			}); 
+		});
+	</script>
 
+</div>
 
 {% endblock %}
