@@ -36,7 +36,7 @@
 		-->
 		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
 			<a href="{% url 'view_picture' picId=picture.id %}" title="View details">
-				<img src="{{ picture.thumbnail.url }}" alt="{{ picture.url }}" />
+				<img class="rounded" src="{{ picture.thumbnail.url }}" alt="{{ picture.url }}" />
 			</a>
 			<!--
 			<div class="thumbnail">
