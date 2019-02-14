@@ -12,12 +12,33 @@
 	<source src="//i.imgur.com/lpkIUHB.mp4" type="video/mp4"></source> 
     </video>
 </div>
-<!--<img src="https://raw.githubusercontent.com/AIRPACT-Fire/design/master/feature_graphic/png/feature_graphic.png" width="100%">-->
+
+<span id="math-ex">
+	Whut whut
+</span>
+
+<span class="katex">c = \\pm\\sqrt{a^2 + b^2}</span>
+
+<!-- -->
+
+<script>         document.addEventListener("DOMContentLoaded", function() {             renderMathInElement(document.body,                 {                   delimiters: [                       {left: "<math>", right: "</math>", display: false},                       {left: "$$", right: "$$", display: true},                       {left: "$", right: "$", display: false},                       {left: "\\[", right: "\\]", display: true},                       {left: "\\(", right: "\\)", display: false},                   ]                 }             );         });     </script>
 
 <script>
-    // Show this page as active
-    $("#nav-home-link").addClass("active");
-    if (window.chrome)     $("[type=video\\\/mp4]").each(function()     {         $(this).attr('src', $(this).attr('src').replace(".mp4", "_c.mp4"));     });
+	
+
+
+	// Show this page as active.
+	$("#nav-home-link").addClass("active");
+
+	// Video stuff	
+	if (window.chrome)     $("[type=video\\\/mp4]").each(function()     {         $(this).attr('src', $(this).attr('src').replace(".mp4", "_c.mp4"));     });
+	
+	// Katex stuff
+	let el = $("#math-ex");
+	katex.render("c = \\pm\\sqrt{a^2 + b^2}", el, {     
+		throwOnError: false 
+	});
 </script>
+<!-- -->
 
 {% endblock %}
