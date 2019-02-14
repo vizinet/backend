@@ -10,7 +10,7 @@ All rights reserved.
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	
-	<title>AIRPACT-Fire | Research Platform</title>
+	<title>AIRPACT-Fire | Computer Vision Lab</title>
 	<link rel="icon" type="image/png" href="/static/media/decoration/logo_small.png" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -26,6 +26,7 @@ All rights reserved.
 </head>
 
 <body>
+	<div class="alert alert-warning" role="alert">Site is under construction - some features will not work.</div>
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  <div class="container-fluid">
@@ -40,9 +41,10 @@ All rights reserved.
 			<ul class="navbar-nav">
 				<li class="nav-item"><a id="nav-map-link" class="nav-link" href="{% url 'map' %}">Dashboard</a></li>
 				<li class="nav-item"><a id="nav-gallery-link" class="nav-link" href="{% url 'gallery' %}">Gallery</a></li>
-				<li class="nav-item"><a id="nav-stats-link" class="nav-link disabled" href="#">Laboratory</a></li>
+				<li class="nav-item"><a id="nav-colab-link" class="nav-link" href="/colab/">CoLab (beta)</a></li>
 				<li class="nav-item"><a id="nav-blog-link" class="nav-link" href="/blog/">Blog</a></li>
 				<li class="nav-item"><a id="nav-forum-link" class="nav-link" href="/forum/">Forum<div id ="forum_notification"></div></a></li>
+				<li class="nav-item"><a id="nav-forum-link" class="nav-link disabled" href="/docs/">Docs<div id ="forum_notification"></div></a></li>
 				<li class="nav-item"><a id="nav-about-link" class="nav-link" href="/about/">Our Mission<div id ="forum_notification"></div></a></li>
 			</ul>
 			<ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
@@ -102,7 +104,7 @@ All rights reserved.
 				<a href="#">Back to top</a>
 			</p>
 			<p>
-				<a>GitHub</a> | <a>Slack</a> | <a>Google Play</a>
+				<a>GitHub <img class="footer-site-logo" src="https://www.iconsdb.com/icons/preview/gray/github-9-xxl.png" alt="GitHub"></a> | <a>Google Play <img class="footer-site-logo" src="https://www.iconsdb.com/icons/preview/gray/android-6-xxl.png" alt="Slack"></a> | <a>Slack</a>
 			</p>
 			<p>
 				Copyright © <span id="copyright-date-range">2016</span>,
@@ -113,6 +115,13 @@ All rights reserved.
 	</footer>
 
 </body>
+
+<style>
+	.footer-site-logo {
+		width: 1em;
+		height: 1em;
+	}
+</style>
 
 <script>
 
