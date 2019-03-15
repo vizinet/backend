@@ -5,7 +5,12 @@ Laboratory for Atmospheric Research at Washington State University,
 All rights reserved.
 """
 
-# Django pre-built libraries
+
+import json
+import urllib
+from datetime import datetime
+from dal import autocomplete
+
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
@@ -14,18 +19,12 @@ from django.core.context_processors import csrf
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
-# Custom Django
 from file_upload.models import Picture, Tag, AlgorithmOne, AlgorithmTwo
 from file_upload.forms import GallerySortForm
 from django.contrib.auth.decorators import login_required
 from user_profile.models import AirpactUser
 from spirit.topic.notification.models import TopicNotification
 
-# Other
-import json
-import urllib
-from datetime import datetime
-from dal import autocomplete
 
 # Returns list of algorithm objects given its picture *Note the list should contain
 # Only one value
@@ -137,7 +136,7 @@ class LocationAutocomplete(autocomplete.Select2ListView):
 def gallery(request, page=1):
     allpictures = Picture.objects.all().order_by("-uploadTime")
     alltags = Tag.objects.all()
-
+ 
     # Gallery search form
     form = GallerySortForm()
     if request.method == 'POST':
@@ -190,7 +189,9 @@ def gallery(request, page=1):
     # Tell the tag db to get alist of tags from the picture
     tags = []
     computed_vrs = []
+    
     for pic in pictures:
+	
         cur_tag = Tag.objects.filter(picture=pic)
         tags.append(cur_tag[0].text.upper())
 
@@ -252,6 +253,20 @@ def find_pictures_tag(location, pictures, alltags):
 
 def downloads(request):
     return render_to_response("downloads.html",
+                              context_instance=RequestContext(request))
+
+def blog(request):
+    """Serve blog posts."""
+    return render_to_response("blog.html",
+                              context_instance=RequestContext(request))
+def colab(request):
+    """Serve CoLab page."""
+    return render_to_response("colab.html",
+                              context_instance=RequestContext(request))
+
+def docs(request):
+    """Project documentation."""
+    return render_to_response("docs.html",
                               context_instance=RequestContext(request))
 
 # URL /about/

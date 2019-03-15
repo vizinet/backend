@@ -32,7 +32,6 @@ All rights reserved.
 	<div class="alert alert-warning" role="alert">Site is under construction - some features will not work.</div>
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	  <div class="container-fluid">
 		<a class="navbar-brand" href="{% url 'home' %}">
 			<img src="https://github.com/AIRPACT-Fire/Design/blob/master/logo/v3/png/logo_small.png?raw=true" width="30" height="30" style="filter: drop-shadow(.085em .085em .085em #999999)" alt="">
 		</a>
@@ -40,23 +39,25 @@ All rights reserved.
 	          	<span class="navbar-toggler-icon"></span>
         	</button>
 
-	    <div id="navbar1" class="navbar-collapse collapse">
+	    	<div id="navbar1" class="navbar-collapse collapse">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a id="nav-map-link" class="nav-link" href="{% url 'map' %}">Dashboard</a></li>
-				<li class="nav-item"><a id="nav-gallery-link" class="nav-link" href="{% url 'gallery' %}">Gallery</a></li>
+				<li class="nav-item"><a id="nav-gallery-link" class="nav-link" href="{% url 'gallery' %}">Data</a></li>
 				<li class="nav-item"><a id="nav-colab-link" class="nav-link" href="{% url 'colab' %}">CoLab<sup>&beta;</sup></a></li>
 				<li class="nav-item"><a id="nav-blog-link" class="nav-link" href="{% url 'blog' %}">Blog</a></li>
 				<li class="nav-item"><a id="nav-forum-link" class="nav-link" href="/forum/">Forum <span class="badge badge-pill badge-dark">5</span><div id ="forum_notification"></div></a></li>
 				<li class="nav-item"><a id="nav-docs-link" class="nav-link" href="{% url 'docs' %}">Docs<sup>&beta;</sup></a></li>
 				<li class="nav-item"><a id="nav-about-link" class="nav-link" href="{% url 'about' %}">Our Mission<div id ="forum_notification"></div></a></li>
 			</ul>
-			<ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+			<ul class="navbar-nav">
+				<!-- TODO: Implement post, algorithm, and user searching
 				<li class"nav-item">
 					<form class="form-inline my-2 my-lg-0">
 						<input class="form-control mr-sm-2" type="search" placeholder="Search locations" aria-label="Search">
 						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 					</form>
 				</li>
+				-->
 				<li class="nav-item dropdown">
 					{% if user.is_authenticated %}
 						<a href="#" id="navbarDropdownMenuLink" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user }}</a>
@@ -70,10 +71,9 @@ All rights reserved.
 						{% if user.is_authenticated %}
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="{% url 'view_profile' user %}"> My Profile </a>
-					        	<a class="dropdown-item" href="{% url 'index' %}">Upload Photo</a>
+					        	<!--<a class="dropdown-item" href="{% url 'index' %}">Upload Photo</a>-->
 							<a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
 						{% else %}
-							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="{% url 'login' %}">Login</a>
 							<a class="dropdown-item" href="{% url 'register' %}">Register</a>
 						{% endif %}
@@ -91,7 +91,6 @@ All rights reserved.
 				  </a>
 				</li>
 			</ul>
-		</div>
 	</nav>
 
 	<div class="container-fluid" style = "display: inline; position: relative;" >

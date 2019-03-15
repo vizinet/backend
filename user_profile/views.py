@@ -308,7 +308,7 @@ def register_user(request):
 
 def register_success(request):
     return render_to_response('register_success.html',
-                              {'message': "successfull registration! "},
+                              {'message': "Successfully registered! Please check your email."},
                               context_instance=RequestContext(request))
 
 # Authentication for the app
@@ -501,7 +501,7 @@ def admin_page(request):
             # Send duh email to duh person
             send_mail(
                 'Your account has been removed from airpacfire.eecs.wsu.edu',
-                'Due to unfortunate circumstances, your account is now removed from airpactfire. ' +
+                'Due to unfortunate circumstances, your account is now removed from airpactfire.' +
                 'Please contact your administrator for questions',
                 'airpactfire@gmail.com',
                 ["" + nuser.email],
