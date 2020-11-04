@@ -1,3 +1,7 @@
+# TODO
+
+- Fix issue with CAPTCHA v3 (as of Novemeber 3rd).
+- Fix issue with user registration saying username or email already exists (when it doesn't?).
 
 # Developing Locally
 
