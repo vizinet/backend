@@ -29,16 +29,21 @@ class UserCreationForm(forms.ModelForm):
     confirm_email = forms.EmailField(
         label='Confirm Email',
         required=True,
-        widget=forms.EmailInput)
+        widget=forms.EmailInput,
+        #attrs={'class': 'form-control'}
+    )
     password = forms.CharField(
         label='Password',
         required=True,
-        widget=forms.PasswordInput)
+        widget=forms.PasswordInput,
+        #attrs={'class': 'form-control'}
+    )
     confirm_password = forms.CharField(
         label='Confirm Password',
         required=True,
-        widget=forms.PasswordInput)
-
+        widget=forms.PasswordInput,
+        #attrs={'class': 'form-control'}
+    )
     class Meta:
         model = AirpactUser
 

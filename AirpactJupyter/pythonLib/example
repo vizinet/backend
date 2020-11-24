@@ -1,0 +1,18 @@
+'''
+This is an example of how you may use visra.py. Note that io.show() requires QT and may not work on python notebooks.
+Suggest looking into this so we can provide a better example, but I cant access my local python notebook for some reason.
+'''
+from skimage import io
+from skimage.viewer import ImageViewer
+import visra
+
+def loadAsSkimage(path):
+    return io.imread(path)
+
+if __name__ == "__main__":
+    strr = visra.PicStream(processFunc=loadAsSkimage)
+    while input("\'stop\' to stop, other to continue").lower() != "stop":
+        im = strr.next()
+        io.imshow(im) #queues images for show, i know why not just pass when showing? i didnt make it tho
+        io.show()
+    print('done')

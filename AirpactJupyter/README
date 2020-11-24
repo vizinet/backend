@@ -1,0 +1,29 @@
+Welcome to AIRPACT Visual Range research!
+
+We have made this document to help guide you when starting out, and to
+give you general information about the setup.
+
+Github:
+
+We have included a github extension in with JupyterHub! feel free to put your
+research in the public domain, and collaborate with others working on the
+visual range problem.
+
+I would like to suggest tagging your work with #AIRPACT_VISUAL_RANGE so that
+others working on this platform may find your work, and build on it!
+
+Python Library:
+
+We have created a library for easy data access. Supported on Python3, the
+AirpactVR library provides easy access to data! Simply import 'AirpactVR' and
+type help(AirpactVR) in your python interpreter for documentation.
+
+An example of how to use this library to view pictures should be in your home
+directory.
+
+Data Location:
+
+The datas location as of now (April 18th 2019) is
+/home/admin/website/AirpactJupyter/pythonLib/defaultVisualRangeDataLocation
+But this is subject to change. To get the most recent location, access it
+through the module AirpactVR by typing AirpactVR.GetDefaultFolder()

@@ -1,0 +1,14 @@
+from skimage import io
+from skimage.viewer import ImageViewer
+import visra
+
+def loadAsSkimage(path):
+    return io.imread(path)
+
+if __name__ == "__main__":
+    strr = visra.PicStream(processFunc=loadAsSkimage)
+    while input("\'stop\' to stop, other to continue").lower() != "stop":
+        im = strr.next()
+        viewable = ImageViewer(im)
+        viewable.show()
+    print('done')

@@ -1,0 +1,3 @@
+#!/bin/bash
+cp AirpactVR.py /srv/anaconda3/lib/python3.7/site-packages
+#similar for py2

@@ -36,7 +36,7 @@ from .views import LocationAutocomplete
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url(r'^$', views.index, name="home"),
+    url(r'^$', views.gallery, name="home"),
     url(r'^about/', views.about, name="about"),
     url(r'^admin/', admin.site.urls),
     url(r'^admin_page$', views.admin_page, name="adminPage"),

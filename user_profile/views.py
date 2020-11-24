@@ -230,7 +230,7 @@ def register_user(request):
     """View for registering user on website."""
 
     verification_url = 'https://www.google.com/recaptcha/api/siteverify'
-    captcha_secret_key = '6LdMJYoUAAAAAEKHg6aBzFUVk1M_h4xrvQWzSXfR'
+    captcha_secret_key = '6Lf1ot4ZAAAAAEuuEPb2vK_8SKhE5ilpY5s0IRZ5'
     airpact_fire_email = 'airpactfire@gmail.com'
     captcha_score_threshold = 0.5
 
@@ -240,12 +240,15 @@ def register_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
 
+	# TODO:  Reenable this validation here.
 	if not form.is_valid():
             return render_to_response('register.html', {'form': form}, \
 				      context_instance=RequestContext(request))
 
+	# TODO:  Reenable this validation soon.
+	'''	
         # Grab reCAPTCHA token.
-	response_token = form.data['g-captcha-response']
+	response_token = form.data.get('g-captcha-response')
 	
 	# Request human-score in range [0.0, 1.0] from Google regarding entity filling out 
 	# the registration form. 
@@ -257,10 +260,17 @@ def register_user(request):
 	
 	# Filter out users that drop below score threshold.
         if captcha_success and captcha_score >= captcha_score_threshold:
+	'''	
+	captcha_ts = '[empty]' 
+	captcha_score = 1
+	if True:
 	    # Save user and grab fields.
-            form.save()
+
+	    form.save()
+
 	    username = form.cleaned_data['username'] 
 	    user_email = form.cleaned_data['email'] 
+
 	    # Attempt to snag user IP.
 	    ip, is_routable = get_client_ip(request)	     
             # Notify admins of new user registration. 
@@ -454,7 +464,7 @@ def admin_page(request):
             # Send duh email to duh person
             send_mail(
                 'You are now airpact certified!',
-                'Congradulations! You are now a certified user of airpacfire@eecs.wsu.edu!',
+                'Congratulations! You are now a certified user of airpacfire@eecs.wsu.edu!',
                 'airpactfire@gmail.com',
                 ["" + nuser.email],
                 fail_silently=False,
@@ -479,7 +489,7 @@ def admin_page(request):
             # Send duh email to duh person
             send_mail(
                 'You are now an administrator to airpacfire.eecs.wsu.edu',
-                'Congradulations! You are now an administrator to airpacfire@eecs.wsu.edu!',
+                'Congratulations! You are now an administrator to airpacfire@eecs.wsu.edu!',
                 'airpactfire@gmail.com',
                 ["" + nuser.email],
                 fail_silently=False,

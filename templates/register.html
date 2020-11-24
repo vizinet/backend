@@ -2,23 +2,50 @@
 {% block airpact-content %}
 
 <div class="col-lg-3" style=" width:2000px; position:relative" >
+
+<!--
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+-->
+
+	
 	{% if form.errors %}
- 		<h3 style = "color:Red;">   Error Registering </h3>
+		<script>console.log('error.here', {{ form.errors }})</script>
+		<h3 style = "color: red;">Error Registering</h3>
 	{% endif %}
 
-	<h2> Register </h2>
-	<form class = "" saction ="register" method = "post"> 
+	<h2>Register (New)</h2>
+	<form saction ="register" method="post"> 
 		{% csrf_token %}
-		{{ form.as_p }}	
-		<div class="g-recaptcha" data-sitekey="6LdMJYoUAAAAAH_VfhCVp36q8jA29qF-EeXtOdiT"></div>
-		<button type="submit" class="btn btn-default"> Submit </button>		
+		{{ form.as_p }}
+		<!-- <div class="g-recaptcha" data-sitekey="6Lf1ot4ZAAAAAEuuEPb2vK_8SKhE5ilpY5s0IRZ5"></div>
+		<button type="submit" class="btn btn-default"> Submit </button>	-->
+		<button type="submit" class="btn btn-default"> Submit </button>
 	</form>
-	<script src='https://www.google.com/recaptcha/api.js?render=6LdMJYoUAAAAAH_VfhCVp36q8jA29qF-EeXtOdiT'></script>
+ 
+	<script src="https://www.google.com/recaptcha/api.js?render=6Lf1ot4ZAAAAAEuuEPb2vK_8SKhE5ilpY5s0IRZ5"></script>
 	<script> 
+		/*
 		$('form').submit(function() {         
-			event.preventDefault();
+			console.log('submission called');
+		//function onClick(e) {         
+			//e.preventDefault();
 			grecaptcha.ready(function() { 
-				grecaptcha.execute('6LdMJYoUAAAAAH_VfhCVp36q8jA29qF-EeXtOdiT', {
+				grecaptcha.execute('6Lf1ot4ZAAAAAEuuEPb2vK_8SKhE5ilpY5s0IRZ5', {
 					action: 'register_user'
 				}).then(function(token) { 
 					// Verify the token on the server. 
@@ -28,8 +55,8 @@
 				}); 
 			}); 
 		});
+		*/
 	</script>
-
 </div>
 
 {% endblock %}

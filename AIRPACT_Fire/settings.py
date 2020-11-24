@@ -181,6 +181,8 @@ STATICFILES_DIRS = [os.path.join(PROJECT_ROOT, 'static'), ]
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'airpactfire@gmail.com'
-EMAIL_HOST_PASSWORD = 'airpact@fire#16'
+# TODO:  Danger, danger. 
+EMAIL_HOST_PASSWORD = 'r8vrD0Qd#0M9wIRJ7e*j^&'
+#EMAIL_HOST_PASSWORD = 'airpact@fire#16'
 #EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
